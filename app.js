@@ -48,9 +48,15 @@ const watchVideo = () => {
   updateStats();
   const links = [
     "https://www.youtube.com/watch?v=ysz5S6PUM-U",
-    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "https://www.youtube.com/watch?v=oHg5SJYRHA0",
-    "https://www.youtube.com/watch?v=jNQXAC9IVRw"
+    "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+    "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+    "https://www.youtube.com/watch?v=ScMzIvxBSi4",
+    "https://www.youtube.com/watch?v=5NV6Rdv1a3I",
+    "https://www.youtube.com/watch?v=uelHwf8o7_U",
+    "https://www.youtube.com/watch?v=fLexgOxsZu0",
+    "https://www.youtube.com/watch?v=QtXby3twMmI",
+    "https://www.youtube.com/watch?v=8UVNT4wvIGY",
+    "https://www.youtube.com/watch?v=pRpeEdMmmQ0"
   ];
   const url = links[Math.floor(Math.random() * links.length)];
   window.open(url, "_blank");

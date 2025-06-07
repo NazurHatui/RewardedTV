@@ -3,18 +3,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>RewardedTV</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css">
+  <title>RewardedTV</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="nav">
-    <a href="index.html">Home</a>
-    <a href="store.html">Store</a>
-    <a href="videos.html">Videos</a>
-    <a href="profile.html">Profile</a>
-  </div>
-
+  <header>
+    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
   <div style="max-width: 700px; margin: 30px auto; background: #111; border: 2px solid #0f0; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 0 15px #0f0;">
     <img src="logo.png" alt="RewardedTV Logo" style="max-width: 100px; margin-bottom: 15px;">
     <h2 style="color: #00ff99;">Welcome to RewardedTV</h2>
@@ -23,5 +18,40 @@
       Select your own videos or explore a curated library. Log in to track stats, manage your account, and control how you earn.
     </p>
   </div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="store.html">Store</a>
+      <a href="videos.html">Videos</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>📺 Featured Video</h2>
+      <p>Watch a video to earn daily rewards</p>
+      <button onclick="watchVideo()">▶ Watch on YouTube</button>
+    </section>
+
+    <section class="card">
+      <h2>🎁 Rewards Summary</h2>
+      <p>Videos Watched: <span id="watched">0</span></p>
+      <p>Rewards Earned: $<span id="earned">0.00</span></p>
+      <p>Caps: <span id="caps">0</span></p>
+    </section>
+
+    <section class="card">
+      <h2>🔐 Login</h2>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <br />
+      <button onclick="login()">Login</button>
+      <button onclick="register()">Register</button>
+      <button onclick="logout()">Logout</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>

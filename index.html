@@ -3,63 +3,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>RewardedTV</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css">
+  <title>RewardedTV</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body style="background-color:black; color:#0f0; font-family:Arial,sans-serif;">
-
-  <header style="text-align:center; padding:20px;">
-    <h1 style="color:gold;">RewardedTV</h1>
+<body>
+  <header>
+    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
     <nav>
-      <a href="index.html" style="color:lime; margin:15px;">Home</a>
-      <a href="videos.html" style="color:lime; margin:15px;">Videos</a>
-      <a href="profile.html" style="color:lime; margin:15px;">Profile</a>
+      <a href="#">Home</a>
+      <a href="#">Videos</a>
+      <a href="profile.html">Profile</a>
     </nav>
   </header>
 
-  <main style="max-width: 600px; margin: auto; text-align: center;">
-    <section style="margin-bottom: 30px;">
-      <h2>🎯 Daily Stats</h2>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
-        <div style="background:#111; padding:10px; border:1px solid #0f0; border-radius:8px;">Videos Watched: <span id="watched">0</span></div>
-        <div style="background:#111; padding:10px; border:1px solid #0f0; border-radius:8px;">Video Length: <span id="length">0:00</span></div>
-        <div style="background:#111; padding:10px; border:1px solid #0f0; border-radius:8px;">Rewards Earned: <span id="earned">$0.00</span></div>
-        <div style="background:#111; padding:10px; border:1px solid #0f0; border-radius:8px;">Daily Cap: <span>$1.00</span></div>
-      </div>
-    </section>
-
-    <section style="margin-bottom: 30px;">
+  <main class="container">
+    <section class="card">
       <h2>📺 Featured Video</h2>
-      <img src="https://img.youtube.com/vi/ysz5S6PUM-U/mqdefault.jpg" alt="featured" style="width:100%; max-width:320px; border-radius:10px;">
-      <p>Watch this video to earn daily rewards</p>
-      <a href="https://youtube.com" target="_blank" style="display:inline-block; background:#0f0; color:#000; padding:10px 20px; font-weight:bold; border-radius:6px;">▶ Watch on YouTube</a>
+      <p>Watch a video to earn daily rewards</p>
+      <button onclick="watchVideo()">▶ Watch on YouTube</button>
     </section>
 
-    <section style="margin-bottom: 30px;">
-      <h2>💰 Rewards Summary</h2>
-      <div style="background:#111; padding:15px; border-radius:10px; border:1px solid #0f0;">
-        <p>Watch Earnings: <strong id="summaryEarned">$0.00</strong></p>
-        <p>Unclaimed Caps: <strong id="summaryCaps">0</strong></p>
-        <p>Unclaimed Earnings: <strong id="summaryUnclaimed">$0.00</strong></p>
-      </div>
+    <section class="card">
+      <h2>🎁 Rewards Summary</h2>
+      <p>Videos Watched: <span id="watched">0</span></p>
+      <p>Rewards Earned: $<span id="earned">0.00</span></p>
+      <p>Caps: <span id="caps">0</span></p>
+    </section>
+
+    <section class="card">
+      <h2>🔐 Login</h2>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <br />
+      <button onclick="login()">Login</button>
+      <button onclick="register()">Register</button>
+      <button onclick="logout()">Logout</button>
     </section>
   </main>
 
-  <script>
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-    let currentUser = localStorage.getItem("currentUser");
-
-    if (currentUser && users[currentUser]) {
-      const watched = users[currentUser].watched || 0;
-      const earned = watched * 20;
-      document.getElementById("watched").innerText = watched;
-      document.getElementById("earned").innerText = "$" + earned.toFixed(2);
-      document.getElementById("summaryEarned").innerText = "$" + earned.toFixed(2);
-      document.getElementById("summaryCaps").innerText = watched;
-      document.getElementById("summaryUnclaimed").innerText = "$" + earned.toFixed(2);
-    }
-  </script>
-
+  <script src="app.js"></script>
 </body>
 </html>

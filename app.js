@@ -52,21 +52,3 @@ const watchVideo = () => {
 };
 
 if (currentUser) updateStats();
-
-
-// User-specific balances
-const userBalances = {
-  "Maruko": 1000
-};
-
-function updateProfileBalance() {
-  const username = localStorage.getItem("currentUser");
-  const balance = userBalances[username] || 0;
-  const balanceElem = document.getElementById("balance");
-  if (balanceElem) {
-    balanceElem.innerText = `$${balance.toFixed(2)}`;
-  }
-}
-
-// Run when profile page loads
-document.addEventListener("DOMContentLoaded", updateProfileBalance);

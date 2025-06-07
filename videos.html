@@ -5,552 +5,982 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV – Videos</title>
-  <link rel="stylesheet" href="style.css">
   <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      color: gold;
+      text-align: center;
+      padding: 20px 0;
+    }
     .video-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
       padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .video-card {
-      background: #111;
-      color: #0f0;
+      background-color: #111;
       border: 1px solid #0f0;
-      margin: 10px;
-      padding: 15px;
-      width: 220px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #0f0;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    button {
+    .video-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px #0f0;
+    }
+    .video-thumb {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .video-info {
+      padding: 10px;
+      text-align: left;
+    }
+    .video-info strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff;
+      font-size: 14px;
+    }
+    .video-info em {
+      font-size: 12px;
+      color: #6f6;
+    }
+    .watch-btn {
+      display: block;
       background: #0f0;
       color: #000;
-      padding: 8px 16px;
-      margin-top: 10px;
-      border: none;
+      text-align: center;
+      padding: 8px;
+      margin: 10px;
       border-radius: 4px;
-      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <h1 style="color: gold;">🎬 RewardedTV Video Library</h1>
+  <h1>🎬 Explore RewardedTV Videos</h1>
   <div class="video-grid">
-    
+
     <div class="video-card">
-      <p><strong>Ed Sheeran – Perfect</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>The Weeknd – Blinding Lights</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=3JZ4pnNtyxQ')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>GoPro: On the Ice</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>iPhone 15 Review</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Minecraft Building</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Funny Cat Video</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 7</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 8</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 9</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 10</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 11</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 12</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 13</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 14</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 15</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 16</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 17</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 18</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 19</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 20</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 21</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 22</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 23</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 24</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 25</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 26</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 27</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 28</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 29</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 30</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 31</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 32</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 33</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 34</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 35</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 36</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 37</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 38</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 39</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 40</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 41</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 42</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 43</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 44</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 45</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 46</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 47</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 48</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 49</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 50</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 51</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 52</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 53</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 54</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 55</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 56</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 57</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 58</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 59</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 60</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 61</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 62</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 63</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 64</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 65</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 66</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 67</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 68</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 69</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 70</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 71</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 72</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 73</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 74</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 75</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 76</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 77</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 78</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 79</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 80</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 81</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 82</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 83</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 84</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 85</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 86</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 87</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 88</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 89</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 90</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 91</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 92</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 93</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 94</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 95</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Random Video 96</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Ed Sheeran – Perfect</strong>
+        <em>Music</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Music Video 97</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/Z0zConOPZ8Y/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>GoPro on Ice</strong>
+        <em>Adventure</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Adventure Video 98</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/V1qWb3oQ4gQ/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>iPhone 15 Review</strong>
+        <em>Tech</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Tech Video 99</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/rQvOAnNvcNw/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Minecraft Building</strong>
+        <em>Gaming</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</a>
     </div>
     
     <div class="video-card">
-      <p><strong>Gaming Video 100</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img class="video-thumb" src="https://img.youtube.com/vi/hY7m5jjJ9mM/mqdefault.jpg" alt="Thumbnail">
+      <div class="video-info">
+        <strong>Funny Cat Video</strong>
+        <em>Random</em>
+      </div>
+      <a class="watch-btn" href="#" onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</a>
     </div>
     
   </div>
-
   <script>
     const users = JSON.parse(localStorage.getItem("users") || "{}");
     let currentUser = localStorage.getItem("currentUser");
-
     function watchVideoFromList(url) {
       if (!currentUser) {
         alert("Please log in first to earn rewards.");
         return;
       }
       if (!users[currentUser]) return;
-
       users[currentUser].watched += 1;
       localStorage.setItem("users", JSON.stringify(users));
       window.open(url, "_blank");

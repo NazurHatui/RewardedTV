@@ -4,557 +4,521 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RewardedTV – Videos</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Videos</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
+    body {
+      background: #0d001a;
+      color: #c7a4ff;
+      font-family: Arial, sans-serif;
+    }
     .video-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
       padding: 20px;
     }
     .video-card {
-      background: #1a1a1a;
-      color: #8000ff;
+      background-color: #1a1a1a;
       border: 1px solid #8000ff;
-      margin: 10px;
-      padding: 15px;
-      width: 220px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #8000ff;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
     }
-    button {
-      background: #8000ff;
-      color: #0d001a;
-      padding: 8px 16px;
-      margin-top: 10px;
+    .video-card button {
+      background-color: #8000ff;
+      color: white;
       border: none;
-      border-radius: 4px;
+      padding: 8px 12px;
+      border-radius: 6px;
       cursor: pointer;
     }
-  
-      body {
-        background: #0d001a !important;
-      }
-    </style>
+  </style>
 </head>
 <body>
-  <h1 style="color: gold;">🎬 RewardedTV Video Library</h1>
+  <h1 style="text-align:center;">🎬 Watch Videos</h1>
   <div class="video-grid">
     
     <div class="video-card">
-      <p><strong>Ed Sheeran – Perfect</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=2Vv-BfVoq4g')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Hockey</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>The Weeknd – Blinding Lights</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=3JZ4pnNtyxQ')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Call of Duty</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>GoPro: On the Ice</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=Z0zConOPZ8Y')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Fortnite</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>iPhone 15 Review</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=V1qWb3oQ4gQ')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Basketball</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Minecraft Building</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=rQvOAnNvcNw')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Book Reading</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Funny Cat Video</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=hY7m5jjJ9mM')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>House Building</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 7</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Snow Removal</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 8</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Football Training</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 9</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Car Maintenance</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 10</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Drone Racing</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 11</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Yoga Session</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 12</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Gardening Tips</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 13</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Woodworking Projects</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 14</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Cooking Italian</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 15</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Baking Bread</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 16</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Car Restoration</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 17</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Tech Reviews</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 18</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Paintball Strategy</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 19</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Fitness Workout</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 20</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Martial Arts</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 21</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Travel Vlog</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 22</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Wildlife Documentary</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 23</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Chess Strategies</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 24</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Fishing Techniques</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 25</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Car Racing</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 26</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Skateboarding Tricks</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 27</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Rock Climbing</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 28</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Mountain Biking</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 29</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Drone Photography</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 30</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Home Organization</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 31</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Language Learning</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 32</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Financial Advice</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 33</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Gardening</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 34</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Auto Detailing</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 35</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Stand-up Comedy</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 36</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Product Unboxing</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 37</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Board Game Review</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 38</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Photography Tutorial</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 39</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Aerobics Class</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 40</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Boxing Training</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 41</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Mountain Hiking</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 42</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Astronomy Lecture</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 43</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Coding Tutorial</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 44</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Graphic Design Tips</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 45</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Public Speaking Tips</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 46</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Self-Defense</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 47</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Origami Workshop</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 48</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Home Brewing</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 49</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Motorcycle Maintenance</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 50</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Book Review</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 51</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Film Critique</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 52</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Meditation Guide</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 53</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Pet Training</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 54</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Aquarium Setup</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 55</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Home Decor DIY</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 56</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Candle Making</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 57</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>3D Printing Guide</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 58</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Cryptocurrency Explained</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 59</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Stock Market Analysis</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 60</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Blockchain Basics</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 61</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Woodturning Projects</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 62</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Leather Crafting</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 63</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Metalworking Basics</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 64</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Welding Tutorial</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 65</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Pottery Making</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 66</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Digital Painting</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 67</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Photography Gear Review</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 68</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Graphic Tablet Demo</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 69</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Fitness Nutrition</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 70</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Trail Running</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 71</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Surfing Compilation</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 72</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Triathlon Training</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 73</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Parkour Tutorial</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 74</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Scuba Diving</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 75</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Skiing Techniques</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 76</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Snowboarding Tricks</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 77</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Sailing Basics</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 78</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Kayaking Adventure</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 79</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Hiking Trails</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 80</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Travel Guide Japan</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 81</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Paris City Tour</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 82</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>RV Living Tips</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 83</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Minimalist Lifestyle</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 84</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Budget Travel</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 85</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Road Trip Vlog</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 86</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Urban Gardening</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 87</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Farm Life Documentary</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 88</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Wildlife Photography</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 89</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Bird Watching</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 90</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Volunteering Abroad</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 91</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>DIY Electronics</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Music Video 92</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Raspberry Pi Projects</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Adventure Video 93</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Drone Programming</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Tech Video 94</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Electric Car Review</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Gaming Video 95</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Solar Panel Installation</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
     <div class="video-card">
-      <p><strong>Random Video 96</strong><br><em>Random</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
+      <img src="assets/youtube-icon.jpg" alt="YouTube" style="height: 40px; margin-bottom: 6px;">
+      <p><strong>Home Security Systems</strong></p>
+      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
     </div>
-    
-    <div class="video-card">
-      <p><strong>Music Video 97</strong><br><em>Music</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
-    </div>
-    
-    <div class="video-card">
-      <p><strong>Adventure Video 98</strong><br><em>Adventure</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
-    </div>
-    
-    <div class="video-card">
-      <p><strong>Tech Video 99</strong><br><em>Tech</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
-    </div>
-    
-    <div class="video-card">
-      <p><strong>Gaming Video 100</strong><br><em>Gaming</em></p>
-      <button onclick="watchVideoFromList('https://www.youtube.com/watch?v=ysz5S6PUM-U')">▶ Watch</button>
-    </div>
-    
   </div>
-
-  <script>
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-    let currentUser = localStorage.getItem("currentUser");
-
-    function watchVideoFromList(url) {
-      if (!users[currentUser]) return;
-
-      users[currentUser].watched += 1;
-      localStorage.setItem("users", JSON.stringify(users));
-      window.open(url, "_blank");
-    }
-  </script>
 </body>
 </html>

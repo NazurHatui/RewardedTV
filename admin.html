@@ -1,67 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <title>RewardedTV - Admin Panel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header>
-    <div class="logo">ADMIN</div>
-    <nav>
-      <a href="index.html">Back to Site</a>
-    </nav>
-  </header>
-  <main class="container">
-    <section id="login-section" class="card">
+  <h1>🛠️ Admin Panel</h1>
+  <div class="profile-box" style="max-width:800px; margin:auto;">
+    <div id="adminLoginForm">
       <h2>Admin Login</h2>
-      <input type="text" id="admin-user" placeholder="Username"/><br/>
-      <input type="password" id="admin-pass" placeholder="Password"/><br/>
-      <button id="admin-login-btn">Login</button>
-    </section>
-    <section id="panel-section" class="card" style="display:none;">
-      <h2>User Management</h2>
-      <table id="users-table">
-        <thead><tr><th>User</th><th>Watched</th><th>Balance</th><th>Action</th></tr></thead>
+      <input type="text" id="adminUsername" placeholder="Username"/>
+      <input type="password" id="adminPassword" placeholder="Password"/>
+      <button onclick="adminLogin()">Login</button>
+    </div>
+    <div id="adminArea" style="display:none;">
+      <h2>Manage Users</h2>
+      <table id="usersTable" style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr><th>Username</th><th>Watched</th><th>Wallet</th><th>Actions</th></tr>
+        </thead>
         <tbody></tbody>
       </table>
-    </section>
-  </main>
-  <script>
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-    function saveUsers() { localStorage.setItem("users", JSON.stringify(users)); }
-    function loadUsers() {
-      const tbody = document.querySelector("#users-table tbody");
-      tbody.innerHTML = "";
-      for (const u in users) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${u}</td>
-          <td><input data-user="${u}" data-field="watched" type="number" value="${users[u].watched}"></td>
-          <td><input data-user="${u}" data-field="balance" type="number" step="0.01" value="${users[u].balance}"></td>
-          <td><button data-user="${u}" class="save-btn">Save</button></td>
-        `;
-        tbody.appendChild(tr);
-      }
-      tbody.querySelectorAll(".save-btn").forEach(btn => btn.onclick = () => {
-        const u = btn.dataset.user;
-        const row = btn.closest("tr");
-        users[u].watched = Number(row.querySelector("input[data-field='watched']").value);
-        users[u].balance = Number(row.querySelector("input[data-field='balance']").value);
-        saveUsers();
-        alert("Updated " + u);
-      });
-    }
-    document.getElementById("admin-login-btn").onclick = () => {
-      const u = document.getElementById("admin-user").value;
-      const p = document.getElementById("admin-pass").value;
-      if (u === "Admin" && p === "Admin123") {
-        document.getElementById("login-section").style.display = "none";
-        document.getElementById("panel-section").style.display = "block";
-        loadUsers();
-      } else alert("Invalid credentials");
-    };
-  </script>
+    </div>
+  </div>
+<script>
+ const ADMIN_USER="Admin",ADMIN_PASS="Admin123";
+ function adminLogin() {
+   const u=document.getElementById("adminUsername").value;
+   const p=document.getElementById("adminPassword").value;
+   if(u===ADMIN_USER&&p===ADMIN_PASS){
+     document.getElementById("adminLoginForm").style.display="none";
+     document.getElementById("adminArea").style.display="block";
+     loadUsers();
+   } else alert("Invalid admin credentials");
+ }
+ function loadUsers() {
+   const users=JSON.parse(localStorage.getItem("users")||"{}");
+   const tbody=document.getElementById("usersTable").querySelector("tbody");
+   tbody.innerHTML="";
+   for(let user in users){
+     const tr=document.createElement("tr");
+     tr.innerHTML=\`<td>\${user}</td>
+       <td><input type="number" value="\${users[user].watched||0}" style="width:60px;"/></td>
+       <td><input value="\${users[user].wallet||''}" style="width:200px;"/></td>
+       <td><button onclick="saveUser(this,'\${user}')">Save</button></td>\`;
+     tbody.appendChild(tr);
+   }
+ }
+ function saveUser(btn,username){
+   const row=btn.parentElement.parentElement;
+   const newWatched=row.cells[1].querySelector("input").value;
+   const newWallet=row.cells[2].querySelector("input").value;
+   const users=JSON.parse(localStorage.getItem("users")||"{}");
+   users[username].watched = parseInt(newWatched);
+   users[username].wallet = newWallet;
+   localStorage.setItem("users", JSON.stringify(users));
+   alert("User "+username+" updated");
+ }
+</script>
 </body>
 </html>

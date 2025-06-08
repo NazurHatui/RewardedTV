@@ -1,33 +1,25 @@
+
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(to bottom, #000000, #0a1a0f);
   color: #ccffcc;
+  text-align: center;
 }
 header {
   background: #101f13;
   padding: 15px 20px;
-  display: flex;
-  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,255,0,0.2);
 }
 .logo {
   font-size: 28px;
   font-weight: bold;
   color: #ffffff;
 }
-nav {
-  display: flex;
-  flex: 1;
-  align-items: center;
-}
 nav a {
   margin: 0 15px;
   color: #5fff5f;
   text-decoration: none;
-}
-#admin-link {
-  margin-left: auto;
-  color: #f00;
 }
 .container {
   padding: 30px 20px;
@@ -41,17 +33,14 @@ nav a {
   max-width: 450px;
   box-shadow: 0 0 20px rgba(38, 217, 38, 0.2);
 }
-.intro-logo {
-  display: block;
-  margin: 0 auto 15px;
-  width: 80px;
-}
-.intro-card h2 {
-  text-align: center;
+input {
+  padding: 10px;
+  margin: 8px;
+  width: 40%;
+  background: #1f1f1f;
   color: #0f0;
-}
-.intro-card p {
-  text-align: center;
+  border: 1px solid #0f0;
+  border-radius: 6px;
 }
 button {
   background-color: #0f0;
@@ -62,4 +51,9 @@ button {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  box-shadow: 0 0 10px #0f0;
 }
+
+/* Admin tab */
+.admin-tab {position: fixed; top: 10px; right: 10px; background: #0f0; color: #000; padding: 6px 12px; border-radius:4px; font-size:12px; z-index:1000; cursor:pointer;}
+.admin-tab a {color: #000; text-decoration: none; font-weight:bold;}

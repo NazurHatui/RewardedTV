@@ -1,54 +1,94 @@
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+  authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+  projectId: "rewardedtv-1e5b1",
+  storageBucket: "rewardedtv-1e5b1.firebasestorage.app",
+  messagingSenderId: "188103901236",
+  appId: "1:188103901236:web:4e968cbde9d01a03988a61",
+  measurementId: "G-3W0Y6BTS35"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-const users = JSON.parse(localStorage.getItem("users") || "{}");
-let currentUser = localStorage.getItem("currentUser");
+// Elements
+const emailIn = document.getElementById("email");
+const passIn  = document.getElementById("password");
+const loginBtn = document.getElementById("login-btn");
+const regBtn   = document.getElementById("register-btn");
+const logoutBtn= document.getElementById("logout-btn");
 
-const updateStats = () => {
-  if (!currentUser || !users[currentUser]) return;
-  document.getElementById("watched").innerText = users[currentUser].watched;
-  document.getElementById("earned").innerText = (users[currentUser].watched * 20).toFixed(2);
-  document.getElementById("caps").innerText = users[currentUser].watched;
+// Register
+regBtn.onclick = () => {
+  const email = emailIn.value.trim();
+  const pw = passIn.value;
+  auth.createUserWithEmailAndPassword(email, pw)
+    .then(({ user }) => {
+      return db.collection("users").doc(user.uid).set({
+        email: user.email,
+        watched: 0,
+        caps: 0,
+        balance: 0
+      });
+    })
+    .then(() => alert("✅ Registered!"))
+    .catch(e => alert("❌ Register failed: " + e.message));
 };
 
-const saveUsers = () => localStorage.setItem("users", JSON.stringify(users));
+// Login
+loginBtn.onclick = () => {
+  const email = emailIn.value.trim();
+  const pw = passIn.value;
+  auth.signInWithEmailAndPassword(email, pw)
+    .then(() => alert("✅ Logged in!"))
+    .catch(e => alert("❌ Login failed: " + e.message));
+};
 
-const login = () => {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
-  if (users[u] && users[u].password === p) {
-    currentUser = u;
-    localStorage.setItem("currentUser", currentUser);
-    updateStats();
-    alert("Login successful");
+// Logout
+logoutBtn.onclick = () => auth.signOut();
+
+// Auth state change
+auth.onAuthStateChanged(user => {
+  if (user) {
+    db.collection("users").doc(user.uid).get()
+      .then(doc => {
+        const d = doc.data();
+        document.getElementById("watched").innerText = d.watched;
+        document.getElementById("earned").innerText  = (d.watched * 20).toFixed(2);
+        document.getElementById("caps").innerText    = d.caps;
+        document.getElementById("balance").innerText= `$${d.balance.toFixed(2)}`;
+      })
+      .catch(console.error);
   } else {
-    alert("Invalid credentials");
+    document.getElementById("watched").innerText = 0;
+    document.getElementById("earned").innerText  = "0.00";
+    document.getElementById("caps").innerText    = 0;
+    document.getElementById("balance").innerText= "$0.00";
   }
-};
+});
 
-const register = () => {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
-  if (users[u]) return alert("User already exists");
-  users[u] = { password: p, watched: 0 };
-  saveUsers();
-  alert("Registered successfully");
-};
-
-const logout = () => {
-  currentUser = null;
-  localStorage.removeItem("currentUser");
-  document.getElementById("watched").innerText = 0;
-  document.getElementById("earned").innerText = "0.00";
-  document.getElementById("caps").innerText = 0;
-};
-
-const watchVideo = () => {
-  if (!currentUser) return alert("Please log in first.");
-  users[currentUser].watched += 1;
-  saveUsers();
-  updateStats();
-  const links = ['https://www.youtube.com/watch?v=2Vv-BfVoq4g', 'https://www.youtube.com/watch?v=3JZ4pnNtyxQ', 'https://www.youtube.com/watch?v=OPf0YbXqDm0', 'https://www.youtube.com/watch?v=kJQP7kiw5Fk', 'https://www.youtube.com/watch?v=ktvTqknDobU', 'https://www.youtube.com/watch?v=Z0zConOPZ8Y', 'https://www.youtube.com/watch?v=FzwgkSzkbTo', 'https://www.youtube.com/watch?v=VD6DJf-2hxg', 'https://www.youtube.com/watch?v=UxxajLWwzqY', 'https://www.youtube.com/watch?v=owZ3iJ9mD4k', 'https://www.youtube.com/watch?v=V1qWb3oQ4nQ', 'https://www.youtube.com/watch?v=VYOjWnS4cMY', 'https://www.youtube.com/watch?v=z3v3Ww2bMoo', 'https://www.youtube.com/watch?v=UJe7F2zQvPI', 'https://www.youtube.com/watch?v=0qP4l3R8UjI', 'https://www.youtube.com/watch?v=kcdxhubt0n0', 'https://www.youtube.com/watch?v=Zc8zvtX_GTc', 'https://www.youtube.com/watch?v=rQvOAnNvcNw', 'https://www.youtube.com/watch?v=Pf0I9qQeIPY', 'https://www.youtube.com/watch?v=Vr_L28Mle-s', 'https://www.youtube.com/watch?v=jNQXAC9IVRw', 'https://www.youtube.com/watch?v=ysz5S6PUM-U', 'https://www.youtube.com/watch?v=hY7m5jjJ9mM', 'https://www.youtube.com/watch?v=MtN1YnoL46Q', 'https://www.youtube.com/watch?v=G5qvSPqhFZk'];
+// Watch video logic (random links)
+function watchVideo() {
+  const user = auth.currentUser;
+  if (!user) return alert("Please log in first.");
+  const links = [
+    "https://www.youtube.com/watch?v=ysz5S6PUM-U",
+    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "https://www.youtube.com/watch?v=oHg5SJYRHA0",
+    "https://www.youtube.com/watch?v=jNQXAC9IVRw"
+  ];
   const url = links[Math.floor(Math.random() * links.length)];
+  // increment watched and caps
+  const docRef = db.collection("users").doc(user.uid);
+  db.runTransaction(tx => {
+    return tx.get(docRef).then(doc => {
+      const data = doc.data();
+      tx.update(docRef, {
+        watched: data.watched + 1,
+        caps: data.caps + 1
+      });
+    });
+  });
   window.open(url, "_blank");
-};
-
-if (currentUser) updateStats();
+}

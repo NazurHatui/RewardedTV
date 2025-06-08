@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RewardedTV Admin</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script type="module" src="app.js"></script>
 </head>
 <body>
-  <div class="container" style="max-width: 360px; margin:4rem auto; text-align:center;">
+  <header>
+    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
+  </header>
+  <main class="container">
     <section class="card">
       <h2>🔒 Admin Login</h2>
-      <input type="text" id="admin-username" placeholder="Username" />
-      <input type="password" id="admin-password" placeholder="Password" />
-      <br/>
-      <button onclick="loginAdmin()">Login</button>
+      <input type="email" id="admin-email"    placeholder="Admin Email"/><br/>
+      <input type="password" id="admin-pass"  placeholder="Admin Password"/><br/>
+      <button id="adminLoginBtn">Login as Admin</button>
     </section>
-  </div>
-  <script src="app.js"></script>
+  </main>
 </body>
 </html>

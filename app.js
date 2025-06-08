@@ -1,66 +1,132 @@
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+         createUserWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, updateDoc,
+         collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js';
 
-const users = JSON.parse(localStorage.getItem("users") || "{}");
-let currentUser = localStorage.getItem("currentUser");
-
-const updateStats = () => {
-  if (!currentUser || !users[currentUser]) return;
-  document.getElementById("watched").innerText = users[currentUser].watched;
-  document.getElementById("earned").innerText = (users[currentUser].watched * 20).toFixed(2);
-  document.getElementById("caps").innerText = users[currentUser].watched;
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+  authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+  projectId: "rewardedtv-1e5b1",
+  storageBucket: "rewardedtv-1e5b1.firebasestorage.app",
+  messagingSenderId: "188103901236",
+  appId: "1:188103901236:web:4e968cbde9d01a03988a61",
+  measurementId: "G-3W0Y6BTS35"
 };
 
-const saveUsers = () => localStorage.setItem("users", JSON.stringify(users));
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
-const login = () => {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
-  if (users[u] && users[u].password === p) {
-    currentUser = u;
-    localStorage.setItem("currentUser", currentUser);
-    updateStats();
-    alert("Login successful");
+// Admin credentials
+const ADMIN_EMAIL = "admin@rewardedtv.com";
+const ADMIN_PASS  = "Admin123";
+
+// UI elements
+const emailEl      = document.getElementById("email");
+const passEl       = document.getElementById("pass");
+const loginBtn     = document.getElementById("loginBtn");
+const signupBtn    = document.getElementById("signupBtn");
+const logoutBtn    = document.getElementById("logoutBtn");
+const watchBtn     = document.getElementById("watchBtn");
+const watchedEl    = document.getElementById("watched");
+const earnedEl     = document.getElementById("earned");
+const capsEl       = document.getElementById("caps");
+const balanceEl    = document.getElementById("balance");
+const adminEmailEl = document.getElementById("admin-email");
+const adminPassEl  = document.getElementById("admin-pass");
+const adminLoginBtn   = document.getElementById("adminLoginBtn");
+const adminLogoutBtn  = document.getElementById("adminLogoutBtn");
+const usersTableBody = document.querySelector("#usersTable tbody");
+
+// Auth state observer
+onAuthStateChanged(auth, async user => {
+  if (user) {
+    if (user.email === ADMIN_EMAIL && location.pathname.endsWith("admin-dashboard.html")) {
+      onSnapshot(collection(db, "users"), snap => {
+        usersTableBody.innerHTML = "";
+        snap.forEach(docSnap => {
+          const u = docSnap.data();
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${u.email}</td>
+            <td contenteditable data-field="watched">${u.watched}</td>
+            <td contenteditable data-field="caps">${u.caps}</td>
+            <td contenteditable data-field="balance">${u.balance}</td>
+            <td><button data-email="${u.email}">Save</button></td>`;
+          tr.querySelector("button").onclick = async () => {
+            const email = tr.querySelector("button").dataset.email;
+            const updated = {
+              watched: +tr.querySelector("[data-field=watched]").innerText,
+              caps:    +tr.querySelector("[data-field=caps]").innerText,
+              balance: +tr.querySelector("[data-field=balance]").innerText,
+            };
+            await updateDoc(doc(db, "users", email), updated);
+            alert("Saved");
+          };
+          usersTableBody.append(tr);
+        });
+      });
+    }
+    if (location.pathname.endsWith("profile.html")) {
+      const snap = await getDoc(doc(db, "users", user.email));
+      const { watched, caps, balance } = snap.data();
+      watchedEl.innerText = watched;
+      capsEl.innerText     = caps;
+      balanceEl.innerText  = balance.toFixed(2);
+      earnedEl.innerText   = (watched * 0.20).toFixed(2);
+    }
   } else {
-    alert("Invalid credentials");
+    if (location.pathname.endsWith("admin-dashboard.html")) {
+      location.href = "admin.html";
+    }
   }
-};
+});
 
-const register = () => {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
-  if (users[u]) return alert("User already exists");
-  users[u] = { password: p, watched: 0 };
-  saveUsers();
-  alert("Registered successfully");
-};
+// Signup
+signupBtn?.addEventListener("click", async () => {
+  const email = emailEl.value, pw = passEl.value;
+  await createUserWithEmailAndPassword(auth, email, pw);
+  await setDoc(doc(db, "users", email), { email, watched: 0, caps: 0, balance: 0.00 });
+});
 
-const logout = () => {
-  currentUser = null;
-  localStorage.removeItem("currentUser");
-  document.getElementById("watched").innerText = 0;
-  document.getElementById("earned").innerText = "0.00";
-  document.getElementById("caps").innerText = 0;
-};
+// Login
+loginBtn?.addEventListener("click", () =>
+  signInWithEmailAndPassword(auth, emailEl.value, passEl.value)
+);
 
-const watchVideo = () => {
-  if (!currentUser) return alert("Please log in first.");
-  users[currentUser].watched += 1;
-  saveUsers();
-  updateStats();
-  const links = ['https://www.youtube.com/watch?v=2Vv-BfVoq4g', 'https://www.youtube.com/watch?v=3JZ4pnNtyxQ', 'https://www.youtube.com/watch?v=OPf0YbXqDm0', 'https://www.youtube.com/watch?v=kJQP7kiw5Fk', 'https://www.youtube.com/watch?v=ktvTqknDobU', 'https://www.youtube.com/watch?v=Z0zConOPZ8Y', 'https://www.youtube.com/watch?v=FzwgkSzkbTo', 'https://www.youtube.com/watch?v=VD6DJf-2hxg', 'https://www.youtube.com/watch?v=UxxajLWwzqY', 'https://www.youtube.com/watch?v=owZ3iJ9mD4k', 'https://www.youtube.com/watch?v=V1qWb3oQ4nQ', 'https://www.youtube.com/watch?v=VYOjWnS4cMY', 'https://www.youtube.com/watch?v=z3v3Ww2bMoo', 'https://www.youtube.com/watch?v=UJe7F2zQvPI', 'https://www.youtube.com/watch?v=0qP4l3R8UjI', 'https://www.youtube.com/watch?v=kcdxhubt0n0', 'https://www.youtube.com/watch?v=Zc8zvtX_GTc', 'https://www.youtube.com/watch?v=rQvOAnNvcNw', 'https://www.youtube.com/watch?v=Pf0I9qQeIPY', 'https://www.youtube.com/watch?v=Vr_L28Mle-s', 'https://www.youtube.com/watch?v=jNQXAC9IVRw', 'https://www.youtube.com/watch?v=ysz5S6PUM-U', 'https://www.youtube.com/watch?v=hY7m5jjJ9mM', 'https://www.youtube.com/watch?v=MtN1YnoL46Q', 'https://www.youtube.com/watch?v=G5qvSPqhFZk'];
-  const url = links[Math.floor(Math.random() * links.length)];
-  window.open(url, "_blank");
-};
+// Logout
+logoutBtn?.addEventListener("click", () => signOut(auth));
 
-if (currentUser) updateStats();
+// Watch video
+watchBtn?.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("Log in first");
+  const ref = doc(db, "users", user.email);
+  const snap = await getDoc(ref);
+  const data = snap.data();
+  await updateDoc(ref, {
+    watched: data.watched + 1,
+    caps:    data.caps + 1,
+    balance: data.balance + 0.20
+  });
+  window.open("https://www.youtube.com/watch?v=ysz5S6PUM-U", "_blank");
+});
 
-
-// Admin login handler
-function loginAdmin() {
-  const u = document.getElementById("admin-username").value;
-  const p = document.getElementById("admin-password").value;
-  if (u === "Admin" && p === "Admin123") {
-    window.location.href = "admin-dashboard.html";
-  } else {
+// Admin login
+adminLoginBtn?.addEventListener("click", async () => {
+  try {
+    await signInWithEmailAndPassword(auth, adminEmailEl.value, adminPassEl.value);
+    if (auth.currentUser.email !== ADMIN_EMAIL) throw "Not admin";
+    location.href = "admin-dashboard.html";
+  } catch {
     alert("Invalid admin credentials");
   }
-}
+});
+
+// Admin logout
+adminLogoutBtn?.addEventListener("click", () => signOut(auth));

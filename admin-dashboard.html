@@ -17,6 +17,7 @@
       <tbody></tbody>
     </table>
   </main>
+
   <!-- Firebase compat -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -45,7 +46,10 @@
             <td><input class="watched" data-id="${doc.id}" value="${d.watched}"/></td>
             <td><input class="caps" data-id="${doc.id}" value="${d.caps}"/></td>
             <td><input class="balance" data-id="${doc.id}" value="${d.balance}"/></td>
-            <td><button class="save-btn" data-id="${doc.id}">Save</button></td>
+            <td>
+              <button class="save-btn" data-id="${doc.id}">Save</button>
+              <button class="reset-boost-btn" data-id="${doc.id}">Reset Boost</button>
+            </td>
           `;
           tbody.appendChild(tr);
         });
@@ -53,14 +57,26 @@
     }
 
     document.addEventListener("click", e => {
+      const id = e.target.dataset.id;
+      const row = e.target.closest("tr");
+
       if (e.target.classList.contains("save-btn")) {
-        const id = e.target.dataset.id;
-        const row = e.target.closest("tr");
         const watched = Number(row.querySelector(".watched").value);
         const caps = Number(row.querySelector(".caps").value);
         const balance = Number(row.querySelector(".balance").value);
         db.collection("users").doc(id).update({ watched, caps, balance })
           .then(() => alert("Saved!"));
+      }
+
+      if (e.target.classList.contains("reset-boost-btn")) {
+        if (confirm("Are you sure you want to reset this user's boost to 0%?")) {
+          db.collection("users").doc(id).update({ boost: 0 })
+            .then(() => alert("✅ Boost reset to 0%"))
+            .catch(err => {
+              console.error(err);
+              alert("❌ Failed to reset boost.");
+            });
+        }
       }
     });
 

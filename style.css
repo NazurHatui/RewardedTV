@@ -54,6 +54,14 @@ button {
   box-shadow: 0 0 10px #0f0;
 }
 
-/* Admin tab */
-.admin-tab {position: fixed; top: 10px; right: 10px; background: #0f0; color: #000; padding: 6px 12px; border-radius:4px; font-size:12px; z-index:1000; cursor:pointer;}
-.admin-tab a {color: #000; text-decoration: none; font-weight:bold;}
+
+/* admin tab */
+.admin-link {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #0f0;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 1000;
+}

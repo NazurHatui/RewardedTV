@@ -52,3 +52,15 @@ const watchVideo = () => {
 };
 
 if (currentUser) updateStats();
+
+
+// Admin login handler
+function loginAdmin() {
+  const u = document.getElementById("admin-username").value;
+  const p = document.getElementById("admin-password").value;
+  if (u === "Admin" && p === "Admin123") {
+    window.location.href = "admin-dashboard.html";
+  } else {
+    alert("Invalid admin credentials");
+  }
+}

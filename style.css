@@ -1,10 +1,4 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom, #0d001a000, #120022);
-  color: #c7a4ff;
-  text-align: center;
-}
+
 header {
   background: #1a001f;
   padding: 15px 20px;
@@ -61,7 +55,10 @@ button {
   font-weight: bold;
   box-shadow: 0 0 10px #8000ff;
 }
+
+
+
+
 body {
-  background: url("assets/56CE3CD8-348E-4D36-8FCB-0CD5CDD70A87.jpeg") no-repeat center center fixed;
-  background-size: cover;
+  background: #0d001a;
 }

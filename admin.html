@@ -1,23 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Login</title>
-  <link rel="stylesheet" href="style.css"/>
-  <script type="module" src="app.js"></script>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1",
+      storageBucket: "rewardedtv-1e5b1.appspot.com",
+      messagingSenderId: "188103901236",
+      appId: "1:188103901236:web:4e968cbde9d01a03988a61",
+      measurementId: "G-3W0Y6BTS35"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    async function adminLogin() {
+      const email = document.getElementById("adminEmail").value;
+      const pw    = document.getElementById("adminPass").value;
+      await signInWithEmailAndPassword(auth, email, pw);
+    }
+
+    async function loadDashboard() {
+      const snap = await getDocs(collection(db, "users"));
+      const tbody = document.querySelector("#usersTable tbody");
+      tbody.innerHTML = "";
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${data.email}</td>
+          <td><input value="${data.watched}" data-id="${docSnap.id}" data-field="watched"></td>
+          <td><input value="${data.caps}"    data-id="${docSnap.id}" data-field="caps"></td>
+          <td><input value="${data.balance}" data-id="${docSnap.id}" data-field="balance"></td>
+          <td><button class="saveBtn" data-id="${docSnap.id}">Save</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.querySelectorAll(".saveBtn").forEach(btn => {
+        btn.onclick = async e => {
+          const id = e.target.dataset.id;
+          const inputs = document.querySelectorAll(`input[data-id="${id}"]`);
+          const updates = {};
+          inputs.forEach(i => updates[i.dataset.field] = Number(i.value));
+          await updateDoc(doc(db, "users", id), updates);
+          alert("User updated");
+        };
+      });
+    }
+
+    onAuthStateChanged(auth, user => {
+      if (user) loadDashboard();
+    });
+
+    window.adminLogin = adminLogin;
+    window.loadDashboard = loadDashboard;
+  </script>
 </head>
 <body>
-  <header>
-    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
-  </header>
-  <main class="container">
-    <section class="card">
-      <h2>🔒 Admin Login</h2>
-      <input type="email" id="admin-email"    placeholder="Admin Email"/><br/>
-      <input type="password" id="admin-pass"  placeholder="Admin Password"/><br/>
-      <button id="adminLoginBtn">Login as Admin</button>
-    </section>
-  </main>
+  <h1>Admin Dashboard</h1>
+  <div>
+    <input id="adminEmail" placeholder="Admin Email">
+    <input id="adminPass" type="password" placeholder="Admin Password">
+    <button onclick="adminLogin()">Login</button>
+  </div>
+  <div id="dash">
+    <h2>All Users</h2>
+    <table id="usersTable">
+      <thead><tr><th>Email</th><th>Watched</th><th>Caps</th><th>Balance</th><th>Action</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
 </body>
 </html>

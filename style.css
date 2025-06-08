@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -10,12 +11,10 @@ header {
   padding: 15px 20px;
   box-shadow: 0 2px 4px rgba(0,255,0,0.2);
 }
-.logo img {
-  max-width: 200px;
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
 }
 nav a {
   margin: 0 15px;

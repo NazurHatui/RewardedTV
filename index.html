@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,64 +6,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js";
-    import { getAuth }        from "https://www.gstatic.com/firebasejs/9.24.0/firebase-auth.js";
-    import { getFirestore }   from "https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore.js";
-    import { getAnalytics }   from "https://www.gstatic.com/firebasejs/9.24.0/firebase-analytics.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
-      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1",
-      storageBucket: "rewardedtv-1e5b1.appspot.com",
-      messagingSenderId: "188103901236",
-      appId: "1:188103901236:web:4e968cbde9d01a03988a61",
-      measurementId: "G-3W0Y6BTS35"
-    };
-    const app  = initializeApp(firebaseConfig);
-    export const auth = getAuth(app);
-    export const db   = getFirestore(app);
-    getAnalytics(app);
-  </script>
 </head>
 <body>
   <header>
-    <div class="logo"><img src="logo.png" alt="RewardedTV Logo"></div>
+    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
+  <div style="max-width: 700px; margin: 30px auto; background: #111; border: 2px solid #0f0; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 0 15px #0f0;">
+    <img src="logo.png" alt="RewardedTV Logo" style="max-width: 100px; margin-bottom: 15px;">
+    <h2 style="color: #00ff99;">Welcome to RewardedTV</h2>
+    <p style="color: #ccc; font-size: 15px; line-height: 1.5;">
+      Users can Watch2Earn, become creators, and step up into a bigger universe.<br />
+      Select your own videos or explore a curated library. Log in to track stats, manage your account, and control how you earn.
+    </p>
+  </div>
+
     <nav>
       <a href="index.html">Home</a>
       <a href="store.html">Store</a>
       <a href="videos.html">Videos</a>
       <a href="profile.html">Profile</a>
-      <a href="admin.html" style="float:right">Admin</a>
     </nav>
   </header>
+
   <main class="container">
-    <section class="card intro">
-      <h2>Welcome to RewardedTV</h2>
-      <p>Users can Watch2Earn, become creators, and step up into a bigger universe. Select your own videos or explore a curated library. Log in to track stats, manage your account, and control how you earn.</p>
-    </section>
     <section class="card">
       <h2>📺 Featured Video</h2>
-      <button id="watchBtn">▶ Watch on YouTube</button>
+      <p>Watch a video to earn daily rewards</p>
+      <button onclick="watchVideo()">▶ Watch on YouTube</button>
     </section>
+
     <section class="card">
       <h2>🎁 Rewards Summary</h2>
       <p>Videos Watched: <span id="watched">0</span></p>
       <p>Rewards Earned: $<span id="earned">0.00</span></p>
       <p>Caps: <span id="caps">0</span></p>
-      <p>Balance: $<span id="balance">0.00</span></p>
     </section>
+
     <section class="card">
-      <h2>🔐 Login / Register</h2>
-      <input id="emailInput" placeholder="Email" />
-      <input id="passwordInput" type="password" placeholder="Password" />
+      <h2>🔐 Login</h2>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
       <br />
-      <button id="loginBtn">Login</button>
-      <button id="registerBtn">Register</button>
-      <button id="logoutBtn">Logout</button>
+      <button onclick="login()">Login</button>
+      <button onclick="register()">Register</button>
+      <button onclick="logout()">Logout</button>
     </section>
   </main>
-  <script type="module" src="app.js"></script>
+
+  <script src="app.js"></script>
 </body>
 </html>

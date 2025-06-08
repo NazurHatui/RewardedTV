@@ -1,82 +1,54 @@
-import { auth, db } from "./index.html";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "firebase/auth";
-import {
-  doc, setDoc, getDoc,
-  updateDoc, increment, collection, getDocs
-} from "firebase/firestore";
 
-const ui = {
-  watchedElem: document.getElementById("watched"),
-  earnedElem:  document.getElementById("earned"),
-  capsElem:    document.getElementById("caps"),
-  balanceElem: document.getElementById("balance"),
-  emailInput:  document.getElementById("emailInput"),
-  passInput:   document.getElementById("passwordInput"),
-  watchBtn:    document.getElementById("watchBtn"),
-  loginBtn:    document.getElementById("loginBtn"),
-  registerBtn: document.getElementById("registerBtn"),
-  logoutBtn:   document.getElementById("logoutBtn"),
+const users = JSON.parse(localStorage.getItem("users") || "{}");
+let currentUser = localStorage.getItem("currentUser");
+
+const updateStats = () => {
+  if (!currentUser || !users[currentUser]) return;
+  document.getElementById("watched").innerText = users[currentUser].watched;
+  document.getElementById("earned").innerText = (users[currentUser].watched * 20).toFixed(2);
+  document.getElementById("caps").innerText = users[currentUser].watched;
 };
 
-async function register() {
-  const email = ui.emailInput.value.trim();
-  const pw    = ui.passInput.value;
-  const cred  = await createUserWithEmailAndPassword(auth, email, pw);
-  await setDoc(doc(db, "users", cred.user.uid), {
-    email:   email,
-    watched: 0,
-    caps:    0,
-    balance: 1000
-  });
-}
+const saveUsers = () => localStorage.setItem("users", JSON.stringify(users));
 
-async function login() {
-  const email = ui.emailInput.value.trim();
-  const pw    = ui.passInput.value;
-  const cred  = await signInWithEmailAndPassword(auth, email, pw);
-  loadUserData(cred.user.uid);
-}
+const login = () => {
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
+  if (users[u] && users[u].password === p) {
+    currentUser = u;
+    localStorage.setItem("currentUser", currentUser);
+    updateStats();
+    alert("Login successful");
+  } else {
+    alert("Invalid credentials");
+  }
+};
 
-async function logout() {
-  await signOut(auth);
-  ui.watchedElem.innerText = 0;
-  ui.earnedElem.innerText  = "0.00";
-  ui.capsElem.innerText    = 0;
-  ui.balanceElem.innerText = "0.00";
-}
+const register = () => {
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
+  if (users[u]) return alert("User already exists");
+  users[u] = { password: p, watched: 0 };
+  saveUsers();
+  alert("Registered successfully");
+};
 
-async function loadUserData(uid) {
-  const snap = await getDoc(doc(db, "users", uid));
-  if (!snap.exists()) return;
-  const data = snap.data();
-  ui.watchedElem.innerText = data.watched;
-  ui.earnedElem.innerText  = (data.watched * 20).toFixed(2);
-  ui.capsElem.innerText    = data.caps;
-  ui.balanceElem.innerText = data.balance.toFixed(2);
-}
+const logout = () => {
+  currentUser = null;
+  localStorage.removeItem("currentUser");
+  document.getElementById("watched").innerText = 0;
+  document.getElementById("earned").innerText = "0.00";
+  document.getElementById("caps").innerText = 0;
+};
 
-async function watchVideo() {
-  const user = auth.currentUser;
-  if (!user) return alert("Please log in first.");
-  const ref = doc(db, "users", user.uid);
-  await updateDoc(ref, {
-    watched:  increment(1),
-    caps:      increment(1),
-    balance:   increment(20)
-  });
-  loadUserData(user.uid);
-}
+const watchVideo = () => {
+  if (!currentUser) return alert("Please log in first.");
+  users[currentUser].watched += 1;
+  saveUsers();
+  updateStats();
+  const links = ['https://www.youtube.com/watch?v=2Vv-BfVoq4g', 'https://www.youtube.com/watch?v=3JZ4pnNtyxQ', 'https://www.youtube.com/watch?v=OPf0YbXqDm0', 'https://www.youtube.com/watch?v=kJQP7kiw5Fk', 'https://www.youtube.com/watch?v=ktvTqknDobU', 'https://www.youtube.com/watch?v=Z0zConOPZ8Y', 'https://www.youtube.com/watch?v=FzwgkSzkbTo', 'https://www.youtube.com/watch?v=VD6DJf-2hxg', 'https://www.youtube.com/watch?v=UxxajLWwzqY', 'https://www.youtube.com/watch?v=owZ3iJ9mD4k', 'https://www.youtube.com/watch?v=V1qWb3oQ4nQ', 'https://www.youtube.com/watch?v=VYOjWnS4cMY', 'https://www.youtube.com/watch?v=z3v3Ww2bMoo', 'https://www.youtube.com/watch?v=UJe7F2zQvPI', 'https://www.youtube.com/watch?v=0qP4l3R8UjI', 'https://www.youtube.com/watch?v=kcdxhubt0n0', 'https://www.youtube.com/watch?v=Zc8zvtX_GTc', 'https://www.youtube.com/watch?v=rQvOAnNvcNw', 'https://www.youtube.com/watch?v=Pf0I9qQeIPY', 'https://www.youtube.com/watch?v=Vr_L28Mle-s', 'https://www.youtube.com/watch?v=jNQXAC9IVRw', 'https://www.youtube.com/watch?v=ysz5S6PUM-U', 'https://www.youtube.com/watch?v=hY7m5jjJ9mM', 'https://www.youtube.com/watch?v=MtN1YnoL46Q', 'https://www.youtube.com/watch?v=G5qvSPqhFZk'];
+  const url = links[Math.floor(Math.random() * links.length)];
+  window.open(url, "_blank");
+};
 
-onAuthStateChanged(auth, user => {
-  if (user) loadUserData(user.uid);
-});
-
-ui.registerBtn.onclick = register;
-ui.loginBtn.onclick    = login;
-ui.logoutBtn.onclick   = logout;
-ui.watchBtn.onclick    = watchVideo;
+if (currentUser) updateStats();

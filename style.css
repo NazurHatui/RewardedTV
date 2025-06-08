@@ -1,4 +1,10 @@
-
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #0d001a000, #120022);
+  color: #c7a4ff;
+  text-align: center;
+}
 header {
   background: #1a001f;
   padding: 15px 20px;
@@ -54,11 +60,4 @@ button {
   cursor: pointer;
   font-weight: bold;
   box-shadow: 0 0 10px #8000ff;
-}
-
-
-
-
-body {
-  background: #0d001a;
 }

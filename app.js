@@ -55,7 +55,7 @@ auth.onAuthStateChanged(user => {
       .then(doc => {
         const d = doc.data();
         document.getElementById("watched").innerText = d.watched;
-        document.getElementById("earned").innerText  = (d.watched * 20).toFixed(2);
+        document.getElementById("earned").innerText  = (d.watched * 1).toFixed(2);
         document.getElementById("caps").innerText    = d.caps;
         document.getElementById("balance").innerText= `$${d.balance.toFixed(2)}`;
       })
@@ -100,8 +100,8 @@ firebase.auth().onAuthStateChanged(user => {
   ref.onSnapshot(doc => {
     const d = doc.data() || {};
     document.getElementById("watched").innerText = d.watched || 0;
-    document.getElementById("earned").innerText  = ((d.watched || 0) * 20).toFixed(2);
-    document.getElementById("caps").innerText    = d.caps || 0;
+    document.getElementById("earned").innerText  = ((d.watched || 0) * 1).toFixed(2);
+    document.getElementById("caps").innerText    = ((d.watched || 0) * 0.1).toFixed(1);
     document.getElementById("balance").innerText = "$" + (d.balance || 0).toFixed(2);
   });
 });

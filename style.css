@@ -53,15 +53,3 @@ button {
   font-weight: bold;
   box-shadow: 0 0 10px #0f0;
 }
-
-
-/* admin tab */
-.admin-link {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  color: #0f0;
-  text-decoration: none;
-  font-weight: bold;
-  z-index: 1000;
-}

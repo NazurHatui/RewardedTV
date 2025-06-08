@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -9,6 +8,7 @@ body {
 header {
   background: #101f13;
   padding: 15px 20px;
+  position: relative;
   box-shadow: 0 2px 4px rgba(0,255,0,0.2);
 }
 .logo {
@@ -16,10 +16,18 @@ header {
   font-weight: bold;
   color: #ffffff;
 }
+nav {
+  margin-top: 10px;
+}
 nav a {
   margin: 0 15px;
   color: #5fff5f;
   text-decoration: none;
+}
+#admin-link {
+  position: absolute;
+  top: 18px;
+  right: 20px;
 }
 .container {
   padding: 30px 20px;

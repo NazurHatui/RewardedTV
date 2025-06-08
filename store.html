@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,50 +71,49 @@
     <div class="store-box"><h2>200 CAP</h2><div class="price">$1000</div><button class="buy-button">Buy Now</button></div>
     <div class="store-box"><h2>500 CAP</h2><div class="price">$1500</div><button class="buy-button">Buy Now</button></div>
     <div class="store-box"><h2>1000 CAP</h2><div class="price">$2000</div><button class="buy-button">Buy Now</button></div>
-    <div class="store-box"><h2>Add Queue</h2><div class="price">$850</div><button class="buy-button">Buy Now</button></div>
   </div>
 
-  <!-- Firebase Store Logic -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
-      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1",
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+    authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+    projectId: "rewardedtv-1e5b1",
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        alert("Please log in to make purchases.");
-        return;
-      }
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      alert("Please log in to make purchases.");
+      return;
+    }
 
-      const buyButtons = document.querySelectorAll(".buy-button");
-      buyButtons.forEach((btn, index) => {
-        btn.addEventListener("click", () => {
-          const prices = [200, 400, 1250, 1800, 2500, 3500, 500, 1000, 1500, 2000, 850];
-          const price = prices[index];
-          const ref = db.collection("users").doc(user.uid);
+    const buyButtons = document.querySelectorAll(".buy-button");
+    buyButtons.forEach((btn, index) => {
+      btn.addEventListener("click", () => {
+        const prices = [200, 400, 1250, 1800, 2500, 3500, 500, 1000, 1500, 2000];
+        const price = prices[index];
+        const ref = db.collection("users").doc(user.uid);
 
-          ref.get().then(doc => {
-            const data = doc.data();
-            const balance = data.balance || 0;
-            if (balance < price) {
-              alert("❌ Not enough balance to complete this purchase.");
-            } else {
-              ref.update({ balance: balance - price }).then(() => {
-                alert("✅ Purchase complete!");
-              });
-            }
-          });
+        ref.get().then(doc => {
+          const data = doc.data();
+          const balance = data.balance || 0;
+          if (balance < price) {
+            alert("❌ Not enough balance to complete this purchase.");
+          } else {
+            ref.update({ balance: balance - price }).then(() => {
+              alert("✅ Purchase complete!");
+            });
+          }
         });
       });
     });
-  </script>
+  });
+</script>
 </body>
+
 </html>

@@ -70,10 +70,6 @@
       text-align: center;
     }
   </style>
-
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
   <h1>👤 Profile</h1>
@@ -100,38 +96,37 @@
 
   
 
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
     authDomain: "rewardedtv-1e5b1.firebaseapp.com",
     projectId: "rewardedtv-1e5b1",
-    storageBucket: "rewardedtv-1e5b1.firebasestorage.app",
-    messagingSenderId: "188103901236",
-    appId: "1:188103901236:web:4e968cbde9d01a03988a61",
-    measurementId: "G-3W0Y6BTS35"
   };
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
-  const db   = firebase.firestore();
+  const db = firebase.firestore();
 
   auth.onAuthStateChanged(user => {
-    if (!user) return window.location = "index.html";
-    db.collection("users").doc(user.uid)
-      .onSnapshot(doc => {
-        const data = doc.data() || {};
-        document.getElementById("profileUser").innerText       = user.email;
-        document.getElementById("availableBalance").innerText = "$" + (data.balance||0).toFixed(2);
-        document.getElementById("cashOut").innerText          = "$" + (data.balance||0).toFixed(2);
-        document.getElementById("walletInput").value          = data.wallet || "";
-      });
+    if (!user) return location.href = "index.html";
+    const ref = db.collection("users").doc(user.uid);
+    ref.onSnapshot(doc => {
+      const data = doc.data() || {};
+      document.getElementById("profileUser").innerText = user.email;
+      document.getElementById("walletInput").value = data.wallet || "";
+      document.getElementById("availableBalance").innerText = "$" + (data.balance || 0).toFixed(2);
+      document.getElementById("cashOut").innerText = "$" + (data.balance || 0).toFixed(2);
+    });
   });
 
   function saveWallet() {
     const wallet = document.getElementById("walletInput").value;
-    db.collection("users").doc(auth.currentUser.uid)
-      .update({ wallet })
-      .then(() => alert("Wallet saved!"));
+    const uid = firebase.auth().currentUser.uid;
+    db.collection("users").doc(uid).update({ wallet }).then(() => alert("Wallet saved!"));
   }
 </script>
 </body>
+
 </html>

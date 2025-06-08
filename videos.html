@@ -549,10 +549,6 @@
     let currentUser = localStorage.getItem("currentUser");
 
     function watchVideoFromList(url) {
-      if (!currentUser) {
-        alert("Please log in first to earn rewards.");
-        return;
-      }
       if (!users[currentUser]) return;
 
       users[currentUser].watched += 1;

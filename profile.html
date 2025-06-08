@@ -1,119 +1,44 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>RewardedTV - Profile</title>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <style>
-    body {
-      background: linear-gradient(to bottom, #000, #0a1a0f);
-      color: #ccffcc;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    .profile-box {
-      max-width: 500px;
-      margin: auto;
-      background-color: #111;
-      border: 1px solid #0f0;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 0 12px #0f0;
-    }
-    h1 {
-      text-align: center;
-      color: gold;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #0f0;
-      background-color: #1a1a1a;
-      color: #0f0;
-    }
-    button {
-      margin-top: 10px;
-      width: 100%;
-      padding: 10px;
-      background-color: #0f0;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .info-box {
-      background-color: #1c1c1c;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 8px;
-      border: 1px solid #0f0;
-    }
-    .qr-code {
-      width: 100%;
-      max-width: 200px;
-      display: block;
-      margin: 15px auto;
-    }
-    .wallet-address {
-      word-break: break-all;
-      font-size: 14px;
-      color: #6f6;
-      text-align: center;
-    }
-  </style>
+  <title>RewardedTV – Profile</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>👤 Profile</h1>
-  <div class="profile-box">
-    <div id="usernameDisplay"><strong>Logged in as:</strong> <span id="profileUser"></span></div>
+  <header>
+    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="videos.html">Videos</a>
+      <a href="store.html">Store</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" id="admin-tab">Admin</a>
+    </nav>
+  </header>
 
-    <label for="walletInput">Input Crypto Wallet Address:</label>
-    <input id="walletInput" placeholder="0x...">
-    <button onclick="saveWallet()">💾 Save Wallet</button>
+  <main class="container">
+    <section class="card">
+      <h2>👤 Profile</h2>
+      <p>Username: <span id="profile-username"></span></p>
+      <p>Wallet Address: <span id="wallet-address"></span></p>
+      <p>Available Balance: $<span id="balance">0.00</span></p>
+      <button onclick="logout()">Logout</button>
+    </section>
+  </main>
 
-    <div class="info-box">
-      <h3>Deposit</h3>
-      <img class="qr-code" src="https://raw.githubusercontent.com/nazurhatui/RewardedTV/main/qr.png" alt="QR Code">
-      <div class="wallet-address">0x021A69e2971e25278AA0D8EA97d0FA1b46C7cf29</div>
-    </div>
-
-    <div class="info-box">
-      <h3>Balance</h3>
-      <p>Available Balance: <span id="availableBalance">$0.00</span></p>
-      <p>Available to Cash Out: <span id="cashOut">$0.00</span></p>
-      <button>Withdraw</button>
-    </div>
-  </div>
-
+  <script src="app.js"></script>
   <script>
-    const users = JSON.parse(localStorage.getItem("users") || "{}");
-    let currentUser = localStorage.getItem("currentUser");
-
-    
-
-    document.getElementById("profileUser").innerText = currentUser;
-
-    const walletInput = document.getElementById("walletInput");
-    walletInput.value = users[currentUser].wallet || "";
-
-    function saveWallet() {
-      users[currentUser].wallet = walletInput.value;
-      localStorage.setItem("users", JSON.stringify(users));
-      alert("Wallet address saved!");
+    function updateProfile() {
+      if (!currentUser || !users[currentUser]) return;
+      document.getElementById('profile-username').innerText = currentUser;
+      document.getElementById('wallet-address').innerText = users[currentUser].wallet || '';
+      document.getElementById('balance').innerText = users[currentUser].balance.toFixed(2);
     }
-
-    const balance = (users[currentUser].watched || 0) * 20;
-    document.getElementById("availableBalance").innerText = "$" + balance.toFixed(2);
-    document.getElementById("cashOut").innerText = "$" + balance.toFixed(2);
+    if (currentUser) {
+      updateProfile();
+    }
   </script>
 </body>
 </html>

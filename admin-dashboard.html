@@ -1,70 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <div class="logo">REWARDED<span style="color: gold;">TV</span> Dashboard</div>
+    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin.html">Logout</a>
+    </nav>
   </header>
-  <main class="container">
-    <h2>User Management</h2>
-    <table id="users-table">
-      <thead><tr><th>Email</th><th>Watched</th><th>Caps</th><th>Balance</th><th>Action</th></tr></thead>
+  <div class="container">
+    <h1>Admin Dashboard</h1>
+    <table id="usersTable">
+      <thead>
+        <tr><th>Username</th><th>Watched</th><th>Actions</th></tr>
+      </thead>
       <tbody></tbody>
     </table>
-  </main>
-  <!-- Firebase compat -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  </div>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
-      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1",
-      storageBucket: "rewardedtv-1e5b1.firebasestorage.app",
-      messagingSenderId: "188103901236",
-      appId: "1:188103901236:web:4e968cbde9d01a03988a61",
-      measurementId: "G-3W0Y6BTS35"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    function loadUsers() {
-      db.collection("users").get().then(snapshot => {
-        const tbody = document.querySelector("#users-table tbody");
-        tbody.innerHTML = "";
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${d.email}</td>
-            <td><input class="watched" data-id="${doc.id}" value="${d.watched}"/></td>
-            <td><input class="caps" data-id="${doc.id}" value="${d.caps}"/></td>
-            <td><input class="balance" data-id="${doc.id}" value="${d.balance}"/></td>
-            <td><button class="save-btn" data-id="${doc.id}">Save</button></td>
-          `;
-          tbody.appendChild(tr);
-        });
-      });
-    }
-
-    document.addEventListener("click", e => {
-      if (e.target.classList.contains("save-btn")) {
-        const id = e.target.dataset.id;
-        const row = e.target.closest("tr");
-        const watched = Number(row.querySelector(".watched").value);
-        const caps = Number(row.querySelector(".caps").value);
-        const balance = Number(row.querySelector(".balance").value);
-        db.collection("users").doc(id).update({ watched, caps, balance })
-          .then(() => alert("Saved!"));
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    const tbody = document.querySelector('#usersTable tbody');
+    function render() {
+      tbody.innerHTML = '';
+      for (let u in users) {
+        const tr = document.createElement('tr');
+        const tdName = document.createElement('td');
+        tdName.innerText = u;
+        const tdWatched = document.createElement('td');
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.value = users[u].watched;
+        input.onchange = () => {
+          users[u].watched = +input.value;
+          localStorage.setItem('users', JSON.stringify(users));
+          render();
+        };
+        tdWatched.appendChild(input);
+        const tdActions = document.createElement('td');
+        const btnDelete = document.createElement('button');
+        btnDelete.innerText = 'Delete';
+        btnDelete.onclick = () => {
+          delete users[u];
+          localStorage.setItem('users', JSON.stringify(users));
+          render();
+        };
+        tdActions.appendChild(btnDelete);
+        tr.append(tdName, tdWatched, tdActions);
+        tbody.appendChild(tr);
       }
-    });
-
-    loadUsers();
+    }
+    render();
   </script>
 </body>
 </html>

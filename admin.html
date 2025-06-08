@@ -1,34 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Login</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>RewardedTV Admin</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <div class="logo">REWARDED<span style="color: gold;">TV</span> Admin</div>
-  </header>
-  <main class="container">
+  <div class="container" style="max-width: 360px; margin:4rem auto; text-align:center;">
     <section class="card">
-      <h2>👤 Admin Login</h2>
-      <input type="text" id="admin-user" placeholder="Username"/>
-      <input type="password" id="admin-pass" placeholder="Password"/>
+      <h2>🔒 Admin Login</h2>
+      <input type="text" id="admin-username" placeholder="Username" />
+      <input type="password" id="admin-password" placeholder="Password" />
       <br/>
-      <button id="admin-login-btn">Login</button>
+      <button onclick="loginAdmin()">Login</button>
     </section>
-  </main>
-  <script>
-    document.getElementById("admin-login-btn").onclick = () => {
-      const u = document.getElementById("admin-user").value;
-      const p = document.getElementById("admin-pass").value;
-      if (u === "Admin" && p === "Admin123") {
-        window.location = "admin-dashboard.html";
-      } else {
-        alert("Invalid credentials");
-      }
-    };
-  </script>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>

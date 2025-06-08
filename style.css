@@ -61,3 +61,7 @@ button {
   font-weight: bold;
   box-shadow: 0 0 10px #8000ff;
 }
+body {
+  background: url("assets/56CE3CD8-348E-4D36-8FCB-0CD5CDD70A87.jpeg") no-repeat center center fixed;
+  background-size: cover;
+}

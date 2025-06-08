@@ -16,7 +16,46 @@
   </header>
   <div class="container">
     <h1>Admin Dashboard</h1>
-    <p>Manage users here (placeholder).</p>
+    <table id="usersTable">
+      <thead>
+        <tr><th>Username</th><th>Watched</th><th>Actions</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
+  <script>
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    const tbody = document.querySelector('#usersTable tbody');
+    function render() {
+      tbody.innerHTML = '';
+      for (let u in users) {
+        const tr = document.createElement('tr');
+        const tdName = document.createElement('td');
+        tdName.innerText = u;
+        const tdWatched = document.createElement('td');
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.value = users[u].watched;
+        input.onchange = () => {
+          users[u].watched = +input.value;
+          localStorage.setItem('users', JSON.stringify(users));
+          render();
+        };
+        tdWatched.appendChild(input);
+        const tdActions = document.createElement('td');
+        const btnDelete = document.createElement('button');
+        btnDelete.innerText = 'Delete';
+        btnDelete.onclick = () => {
+          delete users[u];
+          localStorage.setItem('users', JSON.stringify(users));
+          render();
+        };
+        tdActions.appendChild(btnDelete);
+        tr.append(tdName, tdWatched, tdActions);
+        tbody.appendChild(tr);
+      }
+    }
+    render();
+  </script>
 </body>
 </html>

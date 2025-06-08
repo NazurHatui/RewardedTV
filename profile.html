@@ -98,21 +98,18 @@
     const users = JSON.parse(localStorage.getItem("users") || "{}");
     let currentUser = localStorage.getItem("currentUser");
 
-    if (!currentUser || !users[currentUser]) {{
-      alert("You must be logged in to access your profile.");
-      window.location.href = "index.html";
-    }}
+    
 
     document.getElementById("profileUser").innerText = currentUser;
 
     const walletInput = document.getElementById("walletInput");
     walletInput.value = users[currentUser].wallet || "";
 
-    function saveWallet() {{
+    function saveWallet() {
       users[currentUser].wallet = walletInput.value;
       localStorage.setItem("users", JSON.stringify(users));
       alert("Wallet address saved!");
-    }}
+    }
 
     const balance = (users[currentUser].watched || 0) * 20;
     document.getElementById("availableBalance").innerText = "$" + balance.toFixed(2);

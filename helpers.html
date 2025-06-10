@@ -151,38 +151,49 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs and Helpers purchase logic -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase init (if not already in app.js) -->
   <script>
-    // Purchase logic for Helpers page
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+  </script>
+
+  <!-- Buy logic (same as store) -->
+  <script>
     const helperPrices = [200,200,300,300,400,400,500,500,600,600,700,700];
 
     auth.onAuthStateChanged(user => {
       if (!user) return;
-      const cards = document.querySelectorAll(".card");
-      cards.forEach((card, i) => {
-        const btn = card.querySelector(".buy-button");
-        btn.addEventListener("click", () => {
+      document.querySelectorAll(".buy-button").forEach((btn, i) => {
+        btn.onclick = () => {
           const cost = helperPrices[i];
           const ref  = db.collection("users").doc(user.uid);
-
           ref.get().then(doc => {
-            const data = doc.data()||{};
-            const bal  = data.balance||0;
-            if (bal < cost) {
-              alert("❌ Not enough balance to buy this helper.");
-              return;
+            const d = doc.data() || {};
+            if ((d.balance || 0) < cost) {
+              return alert("❌ Not enough balance.");
             }
             ref.update({
-              balance: bal - cost,
+              balance: (d.balance || 0) - cost,
               helpers: firebase.firestore.FieldValue.arrayUnion(`char${i+1}`)
-            }).then(() => {
-              alert(`✅ Purchased! New balance: $${(bal-cost).toFixed(2)}`);
+            })
+            .then(() => alert(`✅ Purchased! New balance: $${((d.balance||0)-cost).toFixed(2)}`))
+            .catch(e => {
+              console.error(e);
+              alert("❌ Purchase failed.");
             });
           });
-        });
+        };
       });
     });
   </script>

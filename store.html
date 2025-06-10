@@ -59,22 +59,22 @@
 </head>
 <body>
   <h1>🛍️ Welcome to Our Store</h1>
-<div class="store-grid">
-  <div class="store-box"><h2>10% Reward Boost</h2><div class="price">$800</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>20% Reward Boost</h2><div class="price">$1200</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>50% Reward Boost</h2><div class="price">$1850</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>100% Reward Boost</h2><div class="price">$2000</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>200% Reward Boost</h2><div class="price">$3500</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>500% Reward Boost</h2><div class="price">$4500</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>100 CAP</h2><div class="price">$1000</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>200 CAP</h2><div class="price">$1500</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>500 CAP</h2><div class="price">$2500</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>1000 CAP</h2><div class="price">$4000</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>Add Queue</h2><div class="price">$1850</div><button class="buy-button">Buy Now</button></div> 
-  <div class="store-box"><h2>Remove Comments</h2><div class="price">$1100</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>Reset Watches</h2><div class="price">$20,000</div><button class="buy-button">Buy Now</button></div>
-  <div class="store-box"><h2>Boost Helper</h2><div class="price">$300</div><button class="buy-button">Buy Now</button></div>
-</div>
+  <div class="store-grid">
+    <div class="store-box"><h2>10% Reward Boost</h2><div class="price">$800</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>20% Reward Boost</h2><div class="price">$1200</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>50% Reward Boost</h2><div class="price">$1850</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>100% Reward Boost</h2><div class="price">$2000</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>200% Reward Boost</h2><div class="price">$3500</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>500% Reward Boost</h2><div class="price">$4500</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>100 CAP</h2><div class="price">$1000</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>200 CAP</h2><div class="price">$1500</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>500 CAP</h2><div class="price">$2500</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>1000 CAP</h2><div class="price">$4000</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>Add Queue</h2><div class="price">$1850</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>Remove Comments</h2><div class="price">$1100</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>Reset Watches</h2><div class="price">$20,000</div><button class="buy-button">Buy Now</button></div>
+    <div class="store-box"><h2>Boost Helper</h2><div class="price">$300</div><button class="buy-button">Buy Now</button></div>
+  </div>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -89,7 +89,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
+    const db   = firebase.firestore();
 
     auth.onAuthStateChanged(user => {
       if (!user) {
@@ -97,36 +97,29 @@
         return;
       }
 
-      // Define prices and boost values for each button
-      const prices      = [200, 400, 1250, 1800, 2500, 3500, 500, 1000, 1500, 2000];
-      const boostValues = [ 10,  20,   50,  100,  200,  500,   0,    0,    0,    0 ]; 
+      // All 14 prices in the same order as the grid above:
+      const prices     = [800,1200,1850,2000,3500,4500,1000,1500,2500,4000,1850,1100,20000,300];
+      // Only the first 6 are reward-boost items:
+      const boostValues= [10,20,50,100,200,500, 0,0,0,0,0,0,0,0];
 
-      document.querySelectorAll(".buy-button").forEach((btn, index) => {
+      document.querySelectorAll(".buy-button").forEach((btn, idx) => {
         btn.addEventListener("click", () => {
-          const price      = prices[index];
-          const boostAdd   = boostValues[index];
-          const userRef    = db.collection("users").doc(user.uid);
+          const price    = prices[idx];
+          const boostAdd = boostValues[idx];
+          const ref      = db.collection("users").doc(user.uid);
 
-          userRef.get().then(doc => {
-            const data      = doc.data() || {};
-            const balance   = data.balance || 0;
-            const currentBoost = data.boost || 0;
-
-            if (balance < price) {
+          ref.get().then(doc => {
+            const d = doc.data()||{};
+            if ((d.balance||0) < price) {
               return alert("❌ Not enough balance to complete this purchase.");
             }
 
-            // Build the update payload
-            const updates = { balance: balance - price };
-            if (boostAdd > 0) {
-              updates.boost = currentBoost + boostAdd;
-            }
+            const updates = { balance: d.balance - price };
+            if (boostAdd) updates.boost = (d.boost||0) + boostAdd;
 
-            userRef.update(updates)
-              .then(() => {
-                alert(`✅ Purchase complete! Your boost is now ${(currentBoost + boostAdd)}%`);
-              })
-              .catch(err => console.error(err));
+            ref.update(updates)
+               .then(() => alert("✅ Purchase complete!"))
+               .catch(err => { console.error(err); alert("❌ Purchase failed."); });
           });
         });
       });

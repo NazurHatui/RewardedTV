@@ -163,7 +163,8 @@
       if (!user) return;
       const cards = document.querySelectorAll(".card");
       cards.forEach((card, i) => {
-        card.querySelector(".buy-button").addEventListener("click", () => {
+        const btn = card.querySelector(".buy-button");
+        btn.addEventListener("click", () => {
           const cost = helperPrices[i];
           const ref  = db.collection("users").doc(user.uid);
 
@@ -171,7 +172,8 @@
             const data = doc.data()||{};
             const bal  = data.balance||0;
             if (bal < cost) {
-              return alert("❌ Not enough balance to buy this helper.");
+              alert("❌ Not enough balance to buy this helper.");
+              return;
             }
             ref.update({
               balance: bal - cost,

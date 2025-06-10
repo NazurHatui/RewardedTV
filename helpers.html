@@ -156,27 +156,28 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // Assumes auth & db are already initialized in your global app.js
-    const prices = [200,400,300,300,400,400,500,500,600,600,700,700];
+    // Purchase logic for Helpers page
+    const helperPrices = [200,200,300,300,400,400,500,500,600,600,700,700];
 
     auth.onAuthStateChanged(user => {
       if (!user) return;
       const cards = document.querySelectorAll(".card");
       cards.forEach((card, i) => {
-        const btn = card.querySelector(".buy-button");
-        btn.addEventListener("click", () => {
-          const cost = prices[i];
-          const ref = db.collection("users").doc(user.uid);
+        card.querySelector(".buy-button").addEventListener("click", () => {
+          const cost = helperPrices[i];
+          const ref  = db.collection("users").doc(user.uid);
+
           ref.get().then(doc => {
-            const d = doc.data()||{};
-            if ((d.balance||0) < cost) {
-              return alert("❌ Not enough balance.");
+            const data = doc.data()||{};
+            const bal  = data.balance||0;
+            if (bal < cost) {
+              return alert("❌ Not enough balance to buy this helper.");
             }
             ref.update({
-              balance: (d.balance||0) - cost,
+              balance: bal - cost,
               helpers: firebase.firestore.FieldValue.arrayUnion(`char${i+1}`)
             }).then(() => {
-              alert("✅ Helper purchased!");
+              alert(`✅ Purchased! New balance: $${(bal-cost).toFixed(2)}`);
             });
           });
         });

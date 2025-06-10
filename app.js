@@ -30,7 +30,8 @@ regBtn.onclick = () => {
         watched:  0,
         caps:     0,
         balance:  0,
-        boost:    0
+        boost:    0,
+        helpers:  []      // ← initialize empty array
       });
     })
     .then(() => alert("✅ Registered!"))
@@ -49,25 +50,27 @@ loginBtn.onclick = () => {
 // Logout
 logoutBtn.onclick = () => auth.signOut();
 
-// Auth state change (one-time fetch)
+// One-time fetch on auth change
 auth.onAuthStateChanged(user => {
   if (user) {
     db.collection("users").doc(user.uid).get()
       .then(doc => {
         const d = doc.data() || {};
-        document.getElementById("watched").innerText = d.watched || 0;
-        document.getElementById("earned").innerText  = (d.watched || 0).toFixed(2);
-        document.getElementById("caps").innerText    = d.caps || 0;
-        document.getElementById("balance").innerText = "$" + (d.balance || 0).toFixed(2);
-        document.getElementById("boost").innerText   = (d.boost   || 0) + "%";
+        document.getElementById("watched").innerText      = d.watched  || 0;
+        document.getElementById("earned").innerText       = (d.watched   || 0).toFixed(2);
+        document.getElementById("caps").innerText         = d.caps      || 0;
+        document.getElementById("balance").innerText      = (d.balance   || 0).toFixed(2);
+        document.getElementById("boost").innerText        = (d.boost     || 0) + "%";
+        document.getElementById("helpersCount").innerText = (d.helpers   || []).length;
       })
       .catch(console.error);
   } else {
-    document.getElementById("watched").innerText = 0;
-    document.getElementById("earned").innerText  = "0.00";
-    document.getElementById("caps").innerText    = 0;
-    document.getElementById("balance").innerText = "$0.00";
-    document.getElementById("boost").innerText   = "0%";
+    document.getElementById("watched").innerText      = 0;
+    document.getElementById("earned").innerText       = "0.00";
+    document.getElementById("caps").innerText         = 0;
+    document.getElementById("balance").innerText      = "0.00";
+    document.getElementById("boost").innerText        = "0%";
+    document.getElementById("helpersCount").innerText = 0;
   }
 });
 
@@ -104,10 +107,11 @@ auth.onAuthStateChanged(user => {
   const ref = db.collection("users").doc(user.uid);
   ref.onSnapshot(doc => {
     const d = doc.data() || {};
-    document.getElementById("watched").innerText  = d.watched || 0;
-    document.getElementById("earned").innerText   = (d.watched || 0).toFixed(2);
-    document.getElementById("caps").innerText     = ((d.watched || 0) * 0.1).toFixed(1);
-    document.getElementById("balance").innerText  = "$" + (d.balance || 0).toFixed(2);
-    document.getElementById("boost").innerText    = (d.boost   || 0) + "%";
+    document.getElementById("watched").innerText      = d.watched  || 0;
+    document.getElementById("earned").innerText       = (d.watched   || 0).toFixed(2);
+    document.getElementById("caps").innerText         = ((d.watched || 0) * 0.1).toFixed(1);
+    document.getElementById("balance").innerText      = (d.balance   || 0).toFixed(2);
+    document.getElementById("boost").innerText        = (d.boost     || 0) + "%";
+    document.getElementById("helpersCount").innerText = (d.helpers   || []).length;
   });
 });

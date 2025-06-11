@@ -5,92 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV</title>
   <link rel="stylesheet" href="style.css"/>
-
-  <style>
-    body {
-      background: #0d001a !important;
-    }
-  </style>
 </head>
 <body>
-  <header>
-    <!-- Hamburger menu icon (no functionality yet) -->
-    <button id="menu-btn" style="
-      position: absolute;
-      top: 18px;
-      left: 20px;
-      background: none;
-      border: none;
-      font-size: 24px;
-      color: #c7a4ff;
-      cursor: pointer;
-    ">☰</button>
-
-    <div class="logo">REWARDED<span style="color: gold;">TV</span></div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="helpers.html">Helpers</a>
-      <a href="videos.html">Videos</a>
-      <a href="store.html">Store</a>
-      <a href="profile.html">Profile</a>
-      <a href="admin.html" id="admin-link">Admin</a>
-    </nav>
+  <!-- Header with centered logo -->
+  <header class="header">
+    <div class="left-nav">
+      <button class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </div>
+    <div class="logo-header">
+      <!-- Place your logo.png in the same directory or assets folder -->
+      <img src="assets/logo.png" alt="RewardedTV Logo">
+    </div>
+    <div class="right-nav">
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+      <a href="admin.html">Admin</a>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="card" style="background-color: #0d001a; border-color: #8000ff;">
-      <img src="assets/16503665-9D0B-4FCF-B418-1CFB04D9F41C.png" alt="RewardedTV Logo" style="width: 100px; margin: 10px auto; display: block;">
-      <h2 style="color: #c7a4ff;">Welcome to RewardedTV</h2>
-      <p style="color: #ccc;">
-        Step into a new universe where <strong>you control how you earn</strong>. Watch videos, earn rewards, manage your account,
-        and explore premium content — all in one place. Welcome to the future of entertainment: <strong>Watch2Earn</strong>.
-      </p>
-    </section>
+  <!-- Hero section -->
+  <section class="hero">
+    <h1>Unlock Daily Rewards</h1>
+    <p>Watch videos, earn credits, and claim exclusive perks.</p>
+    <button onclick="watchVideo()">▶ Watch on YouTube</button>
+  </section>
 
-    <section class="card" style="background-color: #0d001a; border-color: #8000ff;">
-      <h2>📺 Featured Video</h2>
-      <p>Watch a video to earn daily rewards</p>
-      <button onclick="watchVideo()">▶ Watch on YouTube</button>
-    </section>
+  <!-- Stats cards -->
+  <section class="stats">
+    <div class="stat-card">
+      <h3>Videos Watched</h3>
+      <div class="value" id="watched">0</div>
+    </div>
+    <div class="stat-card">
+      <h3>Rewards Earned</h3>
+      <div class="value" id="earned">$0.00</div>
+    </div>
+    <div class="stat-card">
+      <h3>Caps</h3>
+      <div class="value" id="caps">0</div>
+      <button class="btn-small" onclick="useCaps()">Use Caps</button>
+    </div>
+    <div class="stat-card">
+      <h3>Balance</h3>
+      <div class="value" id="balance">$0.00</div>
+    </div>
+    <div class="stat-card">
+      <h3>Boost</h3>
+      <div class="value" id="boost">0%</div>
+    </div>
+    <div class="stat-card">
+      <h3>Helpers Active</h3>
+      <div class="value" id="helpersCount">0</div>
+    </div>
+  </section>
 
-    <section class="card" style="background-color: #0d001a; border-color: #8000ff;">
-      <h2>🎁 Rewards Summary</h2>
-      <p>Videos Watched: <span id="watched">0</span></p>
-      <p>Rewards Earned: $<span id="earned">0.00</span></p>
-      <p>Caps: <span id="caps">0</span></p>
-      <p>Balance: $<span id="balance">0.00</span></p>
-      <p>Boost: <span id="boost">0%</span></p>
-      <p>Helpers Active: <span id="helpersCount">0</span></p>
-      <button style="margin-top: 10px; background: #8000ff; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
-        Use CAPS
-      </button>
-    </section>
+  <!-- Feature cards -->
+  <section class="features">
+    <div class="feature">
+      <h2>Daily Streaks</h2>
+      <p>Keep streaks alive for bonuses.</p>
+    </div>
+    <div class="feature">
+      <h2>Boosts</h2>
+      <p>Grab boosts to maximize rewards.</p>
+    </div>
+    <div class="feature">
+      <h2>Leaderboard</h2>
+      <p>Compete and climb ranks.</p>
+    </div>
+  </section>
 
-    <section class="card" style="background-color: #0d001a; border-color: #8000ff;">
-      <h2>🔐 Login / Register</h2>
-      <input type="email"    id="email"    placeholder="Email"/>
-      <input type="password" id="password" placeholder="Password"/>
-      <br/>
-      <button id="login-btn">Login</button>
-      <button id="register-btn">Register</button>
-      <button id="logout-btn">Logout</button>
-    </section>
-  </main>
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 RewardedTV. All rights reserved.</p>
+  </footer>
 
-  <!-- Firebase compat scripts -->
+  <!-- Firebase & App scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="app.js"></script>
 
-  <footer style="margin-top: 40px; padding: 20px; background: #120022; border-top: 1px solid #8000ff; color: #c7a4ff; font-size: 14px;">
-    <div style="margin-bottom: 10px;">
-      <a href="support.html" style="margin: 0 10px; color: #c7a4ff; text-decoration: none;">Support</a>
-      <a href="https://t.me/rewardedtv" target="_blank" style="margin: 0 10px; color: #c7a4ff; text-decoration: none;">Telegram</a>
-      <a href="https://twitter.com/rewardedtv" target="_blank" style="margin: 0 10px; color: #c7a4ff; text-decoration: none;">Twitter</a>
-      <a href="https://instagram.com/rewardedtv" target="_blank" style="margin: 0 10px; color: #c7a4ff; text-decoration: none;">Instagram</a>
-    </div>
-    <div>© 2025 RewardedTV. All rights reserved.</div>
-  </footer>
+  <!-- Mobile menu toggle -->
+  <script>
+    document.getElementById('mobile-menu').addEventListener('click', () => {
+      document.getElementById('nav-links').classList.toggle('active');
+    });
+  </script>
 </body>
 </html>

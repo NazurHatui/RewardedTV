@@ -4,15 +4,191 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV</title>
-  <link rel="stylesheet" href="style.css"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      line-height:1.6;
+    }
+    header.header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #1a1a1a;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    /* Left nav */
+    .left-nav {
+      display: flex;
+      align-items: center;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      margin-right: 1rem;
+    }
+    .menu-toggle .bar {
+      height: 3px;
+      width: 25px;
+      background: #9b59b6;
+      margin: 4px 0;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+    }
+    .nav-links li {
+      margin-left: 1.5rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #e0e0e0;
+      font-weight: 500;
+    }
+    /* Center logo */
+    .logo-header img {
+      height: 40px;
+    }
+    /* Right nav */
+    .right-nav a {
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      background: #9b59b6;
+      color: #111;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .right-nav a:hover {
+      background: #8e44ad;
+    }
+    /* Mobile */
+    @media (max-width: 768px) {
+      .menu-toggle { display: flex; }
+      .nav-links {
+        position: absolute;
+        top: 70px; left: 0;
+        background: #1a1a1a;
+        flex-direction: column;
+        width: 200px;
+        transform: translateX(-100%);
+        transition: transform .3s ease-in-out;
+        padding-top: 1rem;
+      }
+      .nav-links.active {
+        transform: translateX(0);
+      }
+      .nav-links li {
+        margin: 1rem 0;
+        text-align: center;
+      }
+    }
+    /* Hero */
+    .hero {
+      background: url('https://via.placeholder.com/1200x400/333333/000000') center/cover no-repeat;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      color: #9b59b6;
+      margin-bottom: 0.5rem;
+    }
+    .hero p {
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+    }
+    .hero button {
+      padding: 0.75rem 1.5rem;
+      background: #9b59b6;
+      color: #111;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .hero button:hover {
+      background: #8e44ad;
+    }
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+      gap: 1rem;
+      margin: 1rem 2rem;
+    }
+    .stat-card {
+      background: #1c1c1c;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-card h3 {
+      color: #9b59b6;
+      margin-bottom: 0.5rem;
+    }
+    .stat-card .value {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #e0e0e0;
+    }
+    .stat-card .btn-small {
+      padding: 0.25rem 0.5rem;
+      background: #9b59b6;
+      color: #111;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .stat-card .btn-small:hover {
+      background: #8e44ad;
+    }
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 1rem;
+      margin: 1rem 2rem;
+      padding: 1rem;
+      background: #111;
+    }
+    .feature {
+      background: #1c1c1c;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .feature h2 {
+      color: #9b59b6;
+      margin-bottom: 0.5rem;
+    }
+    /* Footer */
+    footer.footer {
+      text-align: center;
+      padding: 1rem;
+      background: #1a1a1a;
+      margin-top: 2rem;
+    }
+  </style>
 </head>
 <body>
-  <!-- Header -->
   <header class="header">
     <div class="left-nav">
-      <button class="menu-toggle" id="mobile-menu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-      </button>
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
       <ul class="nav-links" id="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="helpers.html">Helpers</a></li>
@@ -22,7 +198,7 @@
       </ul>
     </div>
     <div class="logo-header">
-      <img src="assets/logo.png" alt="RewardedTV Logo" />
+      <img src="assets/logo.png" alt="RewardedTV Logo"/>
     </div>
     <div class="right-nav">
       <a href="login.html">Login</a>
@@ -31,14 +207,12 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
   <section class="hero">
     <h1>Unlock Daily Rewards</h1>
     <p>Watch videos, earn credits, and claim exclusive perks.</p>
     <button onclick="watchVideo()">▶ Watch on YouTube</button>
   </section>
 
-  <!-- Stats Cards -->
   <section class="stats">
     <div class="stat-card">
       <h3>Videos Watched</h3>
@@ -67,7 +241,6 @@
     </div>
   </section>
 
-  <!-- Feature Cards -->
   <section class="features">
     <div class="feature">
       <h2>Daily Streaks</h2>
@@ -83,22 +256,17 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>&copy; 2025 RewardedTV. All rights reserved.</p>
   </footer>
 
-  <!-- Firebase & App Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="app.js"></script>
-
-  <!-- Mobile Menu Toggle -->
   <script>
-    document.getElementById('mobile-menu').addEventListener('click', () => {
-      document.getElementById('nav-links').classList.toggle('active');
-    });
+    document.getElementById('mobile-menu')
+      .addEventListener('click', ()=> document.getElementById('nav-links').classList.toggle('active'));
   </script>
 </body>
 </html>

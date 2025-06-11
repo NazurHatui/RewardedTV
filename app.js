@@ -12,8 +12,8 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Grab elements only once DOM is ready
+window.onload = () => {
+  // Grab elements once the window is fully loaded
   const emailIn    = document.getElementById("email");
   const passIn     = document.getElementById("password");
   const loginBtn   = document.getElementById("login-btn");
@@ -28,12 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
       auth.createUserWithEmailAndPassword(email, pw)
         .then(({ user }) => {
           return db.collection("users").doc(user.uid).set({
-            email:    user.email,
-            watched:  0,
-            caps:     0,
-            balance:  0,
-            boost:    0,
-            helpers:  []
+            email:   user.email,
+            watched: 0,
+            caps:    0,
+            balance: 0,
+            boost:   0,
+            helpers: []
           });
         })
         .then(() => alert("✅ Registered!"))
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.onclick = () => auth.signOut();
   }
 
-  // Initial data fetch
+  // One-time fetch on auth change
   auth.onAuthStateChanged(user => {
     if (user) {
       db.collection("users").doc(user.uid).get()
@@ -120,4 +120,4 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById("helpersCount").innerText = (d.helpers   || []).length;
     });
   });
-});
+};

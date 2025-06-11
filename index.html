@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <!-- Header with centered logo -->
+  <!-- Header -->
   <header class="header">
     <div class="left-nav">
       <button class="menu-toggle" id="mobile-menu">
@@ -22,8 +22,7 @@
       </ul>
     </div>
     <div class="logo-header">
-      <!-- Place your logo.png in the same directory or assets folder -->
-      <img src="assets/logo.png" alt="RewardedTV Logo">
+      <img src="assets/logo.png" alt="RewardedTV Logo" />
     </div>
     <div class="right-nav">
       <a href="login.html">Login</a>
@@ -32,14 +31,14 @@
     </div>
   </header>
 
-  <!-- Hero section -->
+  <!-- Hero Section -->
   <section class="hero">
     <h1>Unlock Daily Rewards</h1>
     <p>Watch videos, earn credits, and claim exclusive perks.</p>
     <button onclick="watchVideo()">▶ Watch on YouTube</button>
   </section>
 
-  <!-- Stats cards -->
+  <!-- Stats Cards -->
   <section class="stats">
     <div class="stat-card">
       <h3>Videos Watched</h3>
@@ -68,7 +67,7 @@
     </div>
   </section>
 
-  <!-- Feature cards -->
+  <!-- Feature Cards -->
   <section class="features">
     <div class="feature">
       <h2>Daily Streaks</h2>
@@ -89,13 +88,13 @@
     <p>&copy; 2025 RewardedTV. All rights reserved.</p>
   </footer>
 
-  <!-- Firebase & App scripts -->
+  <!-- Firebase & App Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="app.js"></script>
 
-  <!-- Mobile menu toggle -->
+  <!-- Mobile Menu Toggle -->
   <script>
     document.getElementById('mobile-menu').addEventListener('click', () => {
       document.getElementById('nav-links').classList.toggle('active');

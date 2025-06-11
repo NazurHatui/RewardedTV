@@ -12,16 +12,15 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
-// Wait for DOM
 document.addEventListener('DOMContentLoaded', () => {
-  // Elements
-  const emailIn   = document.getElementById("email");
-  const passIn    = document.getElementById("password");
-  const loginBtn  = document.getElementById("login-btn");
-  const regBtn    = document.getElementById("register-btn");
-  const logoutBtn = document.getElementById("logout-btn");
+  // Grab elements only once DOM is ready
+  const emailIn    = document.getElementById("email");
+  const passIn     = document.getElementById("password");
+  const loginBtn   = document.getElementById("login-btn");
+  const regBtn     = document.getElementById("register-btn");
+  const logoutBtn  = document.getElementById("logout-btn");
 
-  // Register
+  // Register handler
   if (regBtn) {
     regBtn.onclick = () => {
       const email = emailIn.value.trim();
@@ -42,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Login
+  // Login handler
   if (loginBtn) {
     loginBtn.onclick = () => {
       const email = emailIn.value.trim();
@@ -53,12 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Logout
+  // Logout handler
   if (logoutBtn) {
     logoutBtn.onclick = () => auth.signOut();
   }
 
-  // One-time fetch on auth change
+  // Initial data fetch
   auth.onAuthStateChanged(user => {
     if (user) {
       db.collection("users").doc(user.uid).get()
@@ -82,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Watch video logic (random links)
+  // Watch video logic
   function watchVideo() {
     const user = auth.currentUser;
     if (!user) return alert("Please log in first.");
@@ -105,11 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     window.open(url, "_blank");
   }
-
-  // Attach watchVideo globally if needed
   window.watchVideo = watchVideo;
 
-  // Real-time listener (keeps summary up-to-date)
+  // Real-time updates
   auth.onAuthStateChanged(user => {
     if (!user) return;
     const ref = db.collection("users").doc(user.uid);

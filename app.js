@@ -10,7 +10,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const db = firebase.firestore();
+const db   = firebase.firestore();
 
 // Elements
 const emailIn    = document.getElementById("email");
@@ -20,35 +20,41 @@ const regBtn     = document.getElementById("register-btn");
 const logoutBtn  = document.getElementById("logout-btn");
 
 // Register
-regBtn.onclick = () => {
-  const email = emailIn.value.trim();
-  const pw    = passIn.value;
-  auth.createUserWithEmailAndPassword(email, pw)
-    .then(({ user }) => {
-      return db.collection("users").doc(user.uid).set({
-        email:    user.email,
-        watched:  0,
-        caps:     0,
-        balance:  0,
-        boost:    0,
-        helpers:  []      // ← initialize empty array
-      });
-    })
-    .then(() => alert("✅ Registered!"))
-    .catch(e => alert("❌ Register failed: " + e.message));
-};
+if (regBtn) {
+  regBtn.onclick = () => {
+    const email = emailIn.value.trim();
+    const pw    = passIn.value;
+    auth.createUserWithEmailAndPassword(email, pw)
+      .then(({ user }) => {
+        return db.collection("users").doc(user.uid).set({
+          email:    user.email,
+          watched:  0,
+          caps:     0,
+          balance:  0,
+          boost:    0,
+          helpers:  []      // initialize empty array
+        });
+      })
+      .then(() => alert("✅ Registered!"))
+      .catch(e => alert("❌ Register failed: " + e.message));
+  };
+}
 
 // Login
-loginBtn.onclick = () => {
-  const email = emailIn.value.trim();
-  const pw    = passIn.value;
-  auth.signInWithEmailAndPassword(email, pw)
-    .then(() => alert("✅ Logged in!"))
-    .catch(e => alert("❌ Login failed: " + e.message));
-};
+if (loginBtn) {
+  loginBtn.onclick = () => {
+    const email = emailIn.value.trim();
+    const pw    = passIn.value;
+    auth.signInWithEmailAndPassword(email, pw)
+      .then(() => alert("✅ Logged in!"))
+      .catch(e => alert("❌ Login failed: " + e.message));
+  };
+}
 
 // Logout
-logoutBtn.onclick = () => auth.signOut();
+if (logoutBtn) {
+  logoutBtn.onclick = () => auth.signOut();
+}
 
 // One-time fetch on auth change
 auth.onAuthStateChanged(user => {

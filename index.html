@@ -43,6 +43,22 @@
     .feature button:hover { background:#8e44ad; }
     footer.footer { text-align:center; padding:1rem; background:#1a1a1a; margin-top:2rem; }
   </style>
+
+  <!-- Firebase SDKs and Initialization -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+  </script>
+
 </head>
 <body>
   <header class="header">
@@ -89,14 +105,12 @@
 
   <footer class="footer"><p>&copy; 2025 RewardedTV. All rights reserved.</p></footer>
 
+  <!-- App Logic -->
+  <script src="app.js"></script>
   <script>
     document.getElementById('mobile-menu').addEventListener('click', () =>
       document.getElementById('nav-links').classList.toggle('active')
     );
   </script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-  <script src="app.js"></script>
 </body>
 </html>

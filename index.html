@@ -43,8 +43,7 @@
     .feature button:hover { background:#8e44ad; }
     footer.footer { text-align:center; padding:1rem; background:#1a1a1a; margin-top:2rem; }
   </style>
-
-  <!-- Firebase SDKs and Initialization -->
+  <!-- Firebase SDKs & Init -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -58,7 +57,6 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
   </script>
-
 </head>
 <body>
   <header class="header">
@@ -95,17 +93,16 @@
     <div class="feature"><h2>Daily Streaks</h2><p>Keep streaks alive for bonuses.</p></div>
     <div class="feature">
       <h2>🔐 Login / Register</h2>
-      <input type="email" id="email" placeholder="Email"/>
+      <input type="email"    id="email"    placeholder="Email"/>
       <input type="password" id="password" placeholder="Password"/>
-      <button onclick="login()">Login</button>
-      <button onclick="register()">Register</button>
+      <button id="login-btn">Login</button>
+      <button id="register-btn">Register</button>
     </div>
     <div class="feature"><h2>Leaderboard</h2><p>Compete and climb ranks.</p></div>
   </section>
 
   <footer class="footer"><p>&copy; 2025 RewardedTV. All rights reserved.</p></footer>
 
-  <!-- App Logic -->
   <script src="app.js"></script>
   <script>
     document.getElementById('mobile-menu').addEventListener('click', () =>

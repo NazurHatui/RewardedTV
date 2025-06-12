@@ -42,28 +42,15 @@
     .feature button { background:#9b59b6; color:#111; border:none; cursor:pointer; }
     .feature button:hover { background:#8e44ad; }
     footer.footer { text-align:center; padding:1rem; background:#1a1a1a; margin-top:2rem; }
-
-    /* ——— HERO LOGOS (no change) ——— */
-    .hero-title { display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
-    .hero-logo { height:60px; margin:0 1rem; }
-
-    /* ——— LEADERBOARD STYLING (no change) ——— */
-    .leaderboard-list { max-width:500px; margin:1rem auto; background:#1c1c1c; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.3); padding:0.5rem 0; counter-reset:rank; list-style:none; }
-    .leaderboard-list li { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; border-bottom:1px solid #2a2a2a; counter-increment:rank; }
-    .leaderboard-list li:last-child { border-bottom:none; }
-    .leaderboard-list li:nth-child(odd) { background:rgba(255,255,255,0.05); }
-    .position { width:2.5rem; font-weight:bold; color:#9b59b6; text-align:left; }
-    .leaderboard-list li:nth-child(1) .position::before { content:"🥇 "; }
-    .leaderboard-list li:nth-child(2) .position::before { content:"🥈 "; }
-    .leaderboard-list li:nth-child(3) .position::before { content:"🥉 "; }
-    .name { flex:1; margin-left:1rem; color:#e0e0e0; }
-    .watches { font-weight:bold; color:#f39c12; }
+    /* … end of your existing CSS … */
   </style>
 </head>
 <body>
   <header class="header">
     <div class="left-nav">
-      <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
       <ul class="nav-links" id="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="helpers.html">Helpers</a></li>
@@ -72,8 +59,9 @@
         <li><a href="profile.html">Profile</a></li>
       </ul>
     </div>
-    <!-- logo-header remains removed -->
-    <div class="right-nav"><a href="admin.html">Admin</a></div>
+    <div class="right-nav">
+      <a href="admin.html">Admin</a>
+    </div>
   </header>
 
   <section class="hero">
@@ -87,10 +75,17 @@
   </section>
 
   <section class="stats">
-    <!-- … stats cards unchanged … -->
+    <!-- stat cards remain exactly as before -->
+    <div class="stat-card"><h3>Videos Watched</h3><div class="value" id="watched">0</div></div>
+    <div class="stat-card"><h3>Rewards Earned</h3><div class="value" id="earned">$0.00</div></div>
+    <div class="stat-card"><h3>Caps</h3><div class="value" id="caps">0</div><button class="btn-small" onclick="useCaps()">Use Caps</button></div>
+    <div class="stat-card"><h3>Balance</h3><div class="value" id="balance">$0.00</div></div>
+    <div class="stat-card"><h3>Boost</h3><div class="value" id="boost">0%</div></div>
+    <div class="stat-card"><h3>Helpers Active</h3><div class="value" id="helpersCount">0</div></div>
   </section>
 
   <section class="features">
+    <!-- ——— UPDATED Daily Streaks ——— -->
     <div class="feature">
       <h2>Daily Streaks</h2>
       <ol>
@@ -107,20 +102,43 @@
       </ol>
     </div>
 
+    <!-- ——— login/register and leaderboard feature cards remain exactly as before :contentReference[oaicite:1]{index=1} ——— -->
     <div class="feature">
       <h2>🔐 Login / Register</h2>
-      <!-- … login form unchanged … -->
+      <input type="email"    id="email"    placeholder="Email"/>
+      <input type="password" id="password" placeholder="Password"/>
+      <button id="login-btn">Login</button>
+      <button id="register-btn">Register</button>
+      <button id="logout-btn">Logout</button>
     </div>
-
     <div class="feature">
       <h2>Leaderboard</h2>
       <ol class="leaderboard-list">
-        <!-- … leaderboard items unchanged … -->
+        <li><span class="position">1.</span><span class="name">Ziccas</span><span class="watches">763,000</span></li>
+        <li><span class="position">2.</span><span class="name">Voided</span><span class="watches">761,000</span></li>
+        <li><span class="position">3.</span><span class="name">Tunez</span><span class="watches">723,000</span></li>
+        <li><span class="position">4.</span><span class="name">Maztuki</span><span class="watches">548,000</span></li>
+        <li><span class="position">5.</span><span class="name">Elicryptosignals</span><span class="watches">509,000</span></li>
+        <li><span class="position">6.</span><span class="name">Rager</span><span class="watches">480,000</span></li>
+        <li><span class="position">7.</span><span class="name">CryptoTipo</span><span class="watches">400,000</span></li>
+        <li><span class="position">8.</span><span class="name">Hank</span><span class="watches">300,000</span></li>
+        <li><span class="position">9.</span><span class="name">DegenApe</span><span class="watches">200,000</span></li>
+        <li><span class="position">10.</span><span class="name">Iamnomad</span><span class="watches">100,000</span></li>
       </ol>
     </div>
   </section>
 
   <footer class="footer"><p>&copy; 2025 RewardedTV. All rights reserved.</p></footer>
-  <!-- … scripts unchanged … -->
+
+  <!-- Firebase + App scripts unchanged -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+  <script>
+    document.getElementById('mobile-menu').addEventListener('click', () =>
+      document.getElementById('nav-links').classList.toggle('active')
+    );
+  </script>
 </body>
 </html>

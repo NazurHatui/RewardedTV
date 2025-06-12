@@ -11,7 +11,6 @@
     .nav-links li { margin-left:1rem; }
     .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .nav-links a.active { color:#f39c12; }
-    /* Added styling for logout button */
     #logout-btn { margin-left:1rem; padding:0.5rem 1rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; }
     #logout-btn:hover { background:#8e44ad; }
 
@@ -25,7 +24,7 @@
 
     .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:2rem; }
     .stat-card { background:#1c1c1c; padding:1rem; border-radius:8px; text-align:center; }
-    .stat-card h3 { color:#9b59b6; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.5px; font-size:0.85rem; }
+    .stat-card h3 { color:#9b59b6; margin-bottom:0.5rem; text-transform:uppercase; font-size:0.85rem; }
     .stat-card .value { font-size:1.5rem; }
     .stat-card .btn-small { margin-top:0.5rem; padding:0.25rem 0.5rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; font-size:0.75rem; }
     .stat-card .btn-small:hover { background:#8e44ad; }
@@ -47,7 +46,6 @@
     </div>
   </header>
 
-  <!-- Cloned Unlock Daily Rewards Section -->
   <section class="hero-clone">
     <div class="hero-title">
       <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
@@ -58,7 +56,6 @@
     <button onclick="watchVideo()">▶ Watch on YouTube</button>
   </section>
 
-  <!-- Live Stats -->
   <section class="stats">
     <div class="stat-card">
       <h3>Videos Watched</h3>
@@ -71,7 +68,6 @@
     <div class="stat-card">
       <h3>Caps</h3>
       <div class="value" id="caps">0</div>
-      <button class="btn-small" onclick="useCaps()">Use Caps</button>
     </div>
     <div class="stat-card">
       <h3>Balance</h3>
@@ -101,43 +97,33 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // Increment on “Watch” click
+    // Watch button: increment all stats together
     window.watchVideo = () => {
       window.open("https://www.youtube.com", "_blank");
       if (!auth.currentUser) return alert("Please log in.");
       db.collection("users").doc(auth.currentUser.uid).update({
         watched: firebase.firestore.FieldValue.increment(1),
-        balance: firebase.firestore.FieldValue.increment(0.10)
+        rewardsEarned: firebase.firestore.FieldValue.increment(1),
+        caps: firebase.firestore.FieldValue.increment(1)
       }).catch(console.error);
     };
 
-    // Use Caps
-    function useCaps() {
-      const user = auth.currentUser;
-      if (!user) return alert("Please log in.");
-      const ref = db.collection("users").doc(user.uid);
-      ref.get().then(doc => {
-        const d = doc.data()||{};
-        if ((d.caps||0) <= 0) return alert("No caps available");
-        ref.update({
-          caps: firebase.firestore.FieldValue.increment(-1),
-          balance: firebase.firestore.FieldValue.increment(0.10)
-        });
-      });
-    }
-
     // Auth state & live stats
     auth.onAuthStateChanged(user => {
-      if (!user) return location.replace("index.html");  // send back to homepage when logged out
-      document.getElementById("logout-btn").addEventListener("click", () => auth.signOut());
+      if (!user) return location.replace("index.html");  // back to homepage if logged out
+
+      // Logout button
+      document.getElementById("logout-btn").onclick = () => auth.signOut();
+
+      // Listen for live updates
       db.collection("users").doc(user.uid).onSnapshot(doc => {
-        const d = doc.data()||{};
+        const d = doc.data() || {};
         document.getElementById("watched").innerText      = d.watched        || 0;
-        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned||d.balance||0).toFixed(2);
+        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned || 0).toFixed(2);
         document.getElementById("caps").innerText         = d.caps           || 0;
-        document.getElementById("balance").innerText      = "$" + (d.balance  || 0).toFixed(2);
+        document.getElementById("balance").innerText      = "$" + (d.balance      || 0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost         || 0) + "%";
-        document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
+        document.getElementById("helpersCount").innerText = (d.helpers || []).length;
       });
     });
   </script>

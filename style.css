@@ -6,14 +6,26 @@ body {
   text-align: center;
 }
 header.header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 15px 20px;
   background: #1a001f;
-  position: sticky;
+  position: relative;
   top: 0;
   box-shadow: 0 2px 4px rgba(128,0,255,0.2);
+}
+
+/* Absolute center logo */
+.logo-header {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.logo-header img {
+  height: 50px; /* adjust size */
 }
 
 .logo-header {

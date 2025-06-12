@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV</title>
   <style>
-    /* … all of your existing CSS unchanged … */
+    /* … your existing CSS … */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#0a0a0a; color:#e0e0e0; line-height:1.6; }
     header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
@@ -15,6 +15,7 @@
     .nav-links { list-style:none; display:flex; }
     .nav-links li { margin-left:1.5rem; }
     .nav-links a { text-decoration:none; color:#e0e0e0; font-weight:500; }
+    .logo-header img { height:40px; }
     .right-nav a { margin-left:1rem; padding:0.5rem 1rem; background:#9b59b6; color:#111; text-decoration:none; border-radius:4px; }
     .right-nav a:hover { background:#8e44ad; }
     @media (max-width:768px) {
@@ -42,7 +43,101 @@
     .feature button { background:#9b59b6; color:#111; border:none; cursor:pointer; }
     .feature button:hover { background:#8e44ad; }
     footer.footer { text-align:center; padding:1rem; background:#1a1a1a; margin-top:2rem; }
-    /* … end of your existing CSS … */
+
+    /* ——— NEW HERO LOGOS ——— */
+    .hero-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .hero-logo {
+      height: 60px;
+      margin: 0 1rem;
+    }
+
+    /* ——— FANCY LEADERBOARD STYLING ——— */
+    .leaderboard-list {
+      max-width: 500px;
+      margin: 1rem auto;
+      background: #1c1c1c;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      padding: 0.5rem 0;
+      counter-reset: rank;
+      list-style: none;
+    }
+    .leaderboard-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #2a2a2a;
+      counter-increment: rank;
+    }
+    .leaderboard-list li:last-child {
+      border-bottom: none;
+    }
+    .leaderboard-list li:nth-child(odd) {
+      background: rgba(255,255,255,0.05);
+    }
+    .position {
+      width: 2.5rem;
+      font-weight: bold;
+      color: #9b59b6;
+      text-align: left;
+    }
+    .leaderboard-list li:nth-child(1) .position::before { content: "🥇 "; }
+    .leaderboard-list li:nth-child(2) .position::before { content: "🥈 "; }
+    .leaderboard-list li:nth-child(3) .position::before { content: "🥉 "; }
+    .name {
+      flex: 1;
+      margin-left: 1rem;
+      color: #e0e0e0;
+    }
+    .watches {
+      font-weight: bold;
+      color: #f39c12;
+    }
+
+    /* ——— NEW FANCY STREAKS STYLING ——— */
+    .streaks-list {
+      max-width: 500px;
+      margin: 1rem auto;
+      background: #1c1c1c;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      padding: 0.5rem 0;
+      counter-reset: rank;
+      list-style: none;
+    }
+    .streaks-list li {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #2a2a2a;
+      counter-increment: rank;
+    }
+    .streaks-list li:last-child {
+      border-bottom: none;
+    }
+    .streaks-list li:nth-child(odd) {
+      background: rgba(255,255,255,0.05);
+    }
+    .streaks-list .position {
+      width: 2.5rem;
+      font-weight: bold;
+      color: #9b59b6;
+      text-align: left;
+    }
+    .streaks-list .position::before {
+      content: counter(rank) ". ";
+    }
+    .streaks-list .streak-text {
+      flex: 1;
+      margin-left: 1rem;
+      color: #e0e0e0;
+    }
   </style>
 </head>
 <body>
@@ -59,6 +154,7 @@
         <li><a href="profile.html">Profile</a></li>
       </ul>
     </div>
+    <!-- logo-header removed -->
     <div class="right-nav">
       <a href="admin.html">Admin</a>
     </div>
@@ -75,7 +171,6 @@
   </section>
 
   <section class="stats">
-    <!-- stat cards remain exactly as before -->
     <div class="stat-card"><h3>Videos Watched</h3><div class="value" id="watched">0</div></div>
     <div class="stat-card"><h3>Rewards Earned</h3><div class="value" id="earned">$0.00</div></div>
     <div class="stat-card"><h3>Caps</h3><div class="value" id="caps">0</div><button class="btn-small" onclick="useCaps()">Use Caps</button></div>
@@ -85,24 +180,22 @@
   </section>
 
   <section class="features">
-    <!-- ——— UPDATED Daily Streaks ——— -->
     <div class="feature">
       <h2>Daily Streaks</h2>
-      <ol>
-        <li>Watch 1000 videos — Reward: $10</li>
-        <li>Watch 2000 videos — Reward: $20</li>
-        <li>Watch 3000 videos — Reward: $30</li>
-        <li>Watch 4000 videos — Reward: $40</li>
-        <li>Watch 5000 videos — Reward: $50</li>
-        <li>Upload 5 videos — Reward: $10</li>
-        <li>Upload 10 videos — Reward: $20</li>
-        <li>Upload 20 videos — Reward: $30</li>
-        <li>Upload 30 videos — Reward: $40</li>
-        <li>Upload 40 videos — Reward: $50</li>
+      <ol class="streaks-list">
+        <li><span class="position"></span><span class="streak-text">Watch 1000 videos — Reward: $10</span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 2000 videos — Reward: $20</span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 3000 videos — Reward: $30</span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 4000 videos — Reward: $40</span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 5000 videos — Reward: $50</span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 5 videos — Reward: $10</span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 10 videos — Reward: $20</span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 20 videos — Reward: $30</span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 30 videos — Reward: $40</span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 40 videos — Reward: $50</span></li>
       </ol>
     </div>
 
-    <!-- ——— login/register and leaderboard feature cards remain exactly as before :contentReference[oaicite:1]{index=1} ——— -->
     <div class="feature">
       <h2>🔐 Login / Register</h2>
       <input type="email"    id="email"    placeholder="Email"/>
@@ -111,6 +204,7 @@
       <button id="register-btn">Register</button>
       <button id="logout-btn">Logout</button>
     </div>
+
     <div class="feature">
       <h2>Leaderboard</h2>
       <ol class="leaderboard-list">

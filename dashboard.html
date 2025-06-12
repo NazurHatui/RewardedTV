@@ -196,6 +196,8 @@
     let uploads         = parseInt(elUploads.textContent.replace(/,/g,''), 10);
     let revenueMonthly  = parseInt(elRevenue.textContent.replace(/[\$,]/g,''), 10);
 
+    const initialTotal = totalUsers;  // keep track of starting point
+
     // Helpers
     function fmt(n){ return n.toLocaleString(); }
     function rnd(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
@@ -207,9 +209,11 @@
       elOnline.textContent = fmt(usersOnline);
     }, 1000);
 
-    // 2) Total Users: +1000–2000 every second
+    // 2) Total Users: ±10–20 every second, capped [initialTotal, 400000]
     setInterval(()=>{
-      totalUsers += rnd(1000,2000);
+      totalUsers += rnd(-20,20);
+      if(totalUsers < initialTotal) totalUsers = initialTotal;
+      if(totalUsers > 400000) totalUsers = 400000;
       elTotal.textContent = fmt(totalUsers);
     }, 1000);
 

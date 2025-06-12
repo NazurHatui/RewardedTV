@@ -8,8 +8,18 @@ body {
 header {
   background: #1a001f;
   padding: 15px 20px;
-  position: relative; /* allow absolute positioning of logo */
+  position: relative;
   box-shadow: 0 2px 4px rgba(128,0,255,0.2);
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  /* Use flex centering instead of absolute */
+  margin: 0 auto;
+  font-size: 32px;
+  font-weight: bold;
+  color: #ffffff;
 }
 .logo {
   position: absolute;    /* center at top */

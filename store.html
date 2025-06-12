@@ -1,179 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>RewardedTV - Store</title>
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RewardedTV – Store</title>
   <style>
+    /* ——— Global Reset & Typography ——— */
     body {
-      background: #0d001a;
-      color: #8000ff;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+
+    /* ——— Header & Navigation ——— */
+    header.header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #1a001f;
+    }
+    .left-nav, .right-nav {
+      display: flex;
+      align-items: center;
+    }
+    .nav-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+    .nav-links li {
+      margin-left: 1.5rem;
+    }
+    .nav-links a {
+      color: #e0e0e0;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .right-nav a {
+      background: #9b59b6;
+      color: #111;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .right-nav a:hover {
+      background: #8e44ad;
+    }
+
+    /* ——— Hero Section ——— */
+    .hero {
+      background: #111;
+      padding: 2rem;
+      text-align: center;
+    }
+    .hero-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .hero-logo {
+      height: 60px;
+      margin: 0 1rem;
+    }
+    .hero h1 {
+      color: #9b59b6;
+      font-size: 2.5rem;
       margin: 0;
     }
-    h1 {
-      color: gold;
-      text-align: center;
-      margin-bottom: 30px;
+    .hero p {
+      color: #e0e0e0;
+      margin-top: 0.5rem;
     }
+
+    /* ——— Store Grid & Cards ——— */
     .store-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: auto;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem;
+      padding: 0 2rem;
     }
-    .store-box {
-      background-color: #1a1a1a;
-      border: 2px solid #8000ff;
-      border-radius: 12px;
-      padding: 20px;
+    .store-card {
+      background: #1c1c1c;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
       text-align: center;
-      box-shadow: 0 0 15px #8000ff;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .store-box:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #8000ff;
-    }
-    .store-box img {
+    .store-card img {
       width: 60px;
-      margin-bottom: 12px;
+      margin-bottom: 0.75rem;
     }
-    .store-box h2 {
-      margin-bottom: 10px;
-      color: #fff;
+    .store-card h2 {
+      color: #f39c12;
+      margin: 0.5rem 0;
     }
-    .price {
-      font-size: 18px;
-      margin-bottom: 15px;
-      color: #c7a4ff;
-    }
-    .buy-button {
-      background-color: #8000ff;
-      color: #0d001a;
-      padding: 10px 20px;
+    .store-card .price {
+      color: #f39c12;
       font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .store-card button {
+      padding: 0.5rem 1rem;
+      background: #9b59b6;
+      color: #111;
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
+      font-weight: 500;
+    }
+    .store-card button:hover {
+      background: #8e44ad;
     }
   </style>
 </head>
 <body>
-  <h1>🛍️ Welcome to Our Store</h1>
-  <div class="store-grid">
+  <header class="header">
+    <div class="left-nav">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </div>
+    <div class="right-nav">
+      <a href="admin.html">Admin</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-title">
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
+      <h1>Store</h1>
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Right"/>
+    </div>
+    <p>Browse and purchase boosts, caps, and more!</p>
+  </section>
+
+  <section class="store-grid">
     <!-- 10% Reward Boost -->
-    <div class="store-box">
-      <img src="assets/boost-icon.jpeg" alt="Reward Boost">
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="10% Reward Boost"/>
       <h2>10% Reward Boost</h2>
       <div class="price">$800</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 20% Reward Boost -->
-    <div class="store-box">
-      <img src="assets/boost-icon.jpeg" alt="Reward Boost">
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="20% Reward Boost"/>
       <h2>20% Reward Boost</h2>
       <div class="price">$1200</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 50% Reward Boost -->
-    <div class="store-box">
-      <img src="assets/boost-icon.jpeg" alt="Reward Boost">
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="50% Reward Boost"/>
       <h2>50% Reward Boost</h2>
       <div class="price">$1850</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 100% Reward Boost -->
-    <div class="store-box">
-      <img src="assets/boost-icon.jpeg" alt="Reward Boost">
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="100% Reward Boost"/>
       <h2>100% Reward Boost</h2>
       <div class="price">$2000</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 200% Reward Boost -->
-    <div class="store-box">
-      <img src="assets/boost-icon.jpeg" alt="Reward Boost">
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="200% Reward Boost"/>
       <h2>200% Reward Boost</h2>
       <div class="price">$3500</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 500% Reward Boost -->
-    <div class="store-box">
-      <img src="assets/boost-icon.jpeg" alt="Reward Boost">
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="500% Reward Boost"/>
       <h2>500% Reward Boost</h2>
       <div class="price">$4500</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 100 CAP -->
-    <div class="store-box">
-      <img src="assets/cap-icon.jpeg" alt="CAP">
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="100 CAP"/>
       <h2>100 CAP</h2>
       <div class="price">$1000</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 200 CAP -->
-    <div class="store-box">
-      <img src="assets/cap-icon.jpeg" alt="CAP">
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="200 CAP"/>
       <h2>200 CAP</h2>
       <div class="price">$1500</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 500 CAP -->
-    <div class="store-box">
-      <img src="assets/cap-icon.jpeg" alt="CAP">
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="500 CAP"/>
       <h2>500 CAP</h2>
       <div class="price">$2500</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- 1000 CAP -->
-    <div class="store-box">
-      <img src="assets/cap-icon.jpeg" alt="CAP">
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="1000 CAP"/>
       <h2>1000 CAP</h2>
       <div class="price">$4000</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- Add Queue -->
-    <div class="store-box">
-      <img src="assets/add-queue-icon.jpeg" alt="Add Queue">
+    <div class="store-card">
+      <img src="assets/add-queue-icon.jpeg" alt="Add Queue"/>
       <h2>Add Queue</h2>
       <div class="price">$1850</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- Remove Comments -->
-    <div class="store-box">
-      <img src="assets/remove-comments-icon.jpeg" alt="Remove Comments">
+    <div class="store-card">
+      <img src="assets/remove-comments-icon.jpeg" alt="Remove Comments"/>
       <h2>Remove Comments</h2>
       <div class="price">$1100</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- Reset Watches -->
-    <div class="store-box">
-      <img src="assets/reset-watches-icon.jpeg" alt="Reset Watches">
+    <div class="store-card">
+      <img src="assets/reset-watches-icon.jpeg" alt="Reset Watches"/>
       <h2>Reset Watches</h2>
       <div class="price">$20,000</div>
       <button class="buy-button">Buy Now</button>
     </div>
     <!-- Boost Helper -->
-    <div class="store-box">
-      <img src="assets/boost-helper-icon.jpeg" alt="Boost Helper">
+    <div class="store-card">
+      <img src="assets/boost-helper-icon.jpeg" alt="Boost Helper"/>
       <h2>Boost Helper</h2>
       <div class="price">$300</div>
       <button class="buy-button">Buy Now</button>
     </div>
-  </div>
+  </section>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDKs (unchanged) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
+  <!-- Firebase init & purchase logic (unchanged) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
       authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1",
+      projectId: "rewardedtv-1e5b1"
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
@@ -184,30 +268,25 @@
         alert("Please log in to make purchases.");
         return;
       }
-
-      const prices      = [800,1200,1850,2000,3500,4500,1000,1500,2500,4000,1850,1100,20000,300];
-      const boostValues = [10,20,50,100,200,500,0,0,0,0,0,0,0,0];
-
-      document.querySelectorAll(".buy-button").forEach((btn, idx) => {
-        btn.addEventListener("click", () => {
-          const price    = prices[idx];
-          const boostAdd = boostValues[idx];
-          const ref      = db.collection("users").doc(user.uid);
-
+      const prices = [800,1200,1850,2000,3500,4500,1000,1500,2500,4000,1850,1100,20000,300];
+      const boosts = [10,20,50,100,200,500,0,0,0,0,0,0,0,0];
+      document.querySelectorAll(".buy-button").forEach((btn,i) => {
+        btn.onclick = () => {
+          const price = prices[i];
+          const boost = boosts[i];
+          const ref   = db.collection("users").doc(user.uid);
           ref.get().then(doc => {
             const d = doc.data()||{};
             if ((d.balance||0) < price) {
-              return alert("❌ Not enough balance to complete this purchase.");
+              return alert("❌ Not enough balance.");
             }
-
             const updates = { balance: d.balance - price };
-            if (boostAdd) updates.boost = (d.boost||0) + boostAdd;
-
+            if (boost) updates.boost = (d.boost||0) + boost;
             ref.update(updates)
-               .then(() => alert("✅ Purchase complete!"))
-               .catch(err => { console.error(err); alert("❌ Purchase failed."); });
+               .then(()=> alert("✅ Purchase complete!"))
+               .catch(()=> alert("❌ Purchase failed."));
           });
-        });
+        };
       });
     });
   </script>

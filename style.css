@@ -1,34 +1,4 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom, #0d001a00, #120022);
-  color: #c7a4ff;
-  text-align: center;
-}
-header.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 20px;
-  background: #1a001f;
-  position: relative;
-  top: 0;
-  box-shadow: 0 2px 4px rgba(128,0,255,0.2);
-}
-
-/* … rest of your existing CSS remains exactly the same … */
-
-/* ——— NEW HERO LOGOS ——— */
-.hero-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-.hero-logo {
-  height: 60px;
-  margin: 0 1rem;
-}
+/* … your existing style.css up to .hero-logo … */
 
 /* —— Fancy Leaderboard Styling —— */
 .leaderboard-list {
@@ -61,7 +31,9 @@ header.header {
   color: #9b59b6;
   text-align: left;
 }
-/* 🎖️ Medal lines removed */
+.leaderboard-list li:nth-child(1) .position::before { content: "🥇 "; }
+.leaderboard-list li:nth-child(2) .position::before { content: "🥈 "; }
+.leaderboard-list li:nth-child(3) .position::before { content: "🥉 "; }
 .name {
   flex: 1;
   margin-left: 1rem;
@@ -70,4 +42,43 @@ header.header {
 .watches {
   font-weight: bold;
   color: #f39c12;
+}
+
+/* —— New Fancy Streaks Styling —— */
+.streaks-list {
+  max-width: 500px;
+  margin: 1rem auto;
+  background: #1c1c1c;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  padding: 0.5rem 0;
+  counter-reset: rank;
+  list-style: none;
+}
+.streaks-list li {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #2a2a2a;
+  counter-increment: rank;
+}
+.streaks-list li:last-child {
+  border-bottom: none;
+}
+.streaks-list li:nth-child(odd) {
+  background: rgba(255,255,255,0.05);
+}
+.streaks-list .position {
+  width: 2.5rem;
+  font-weight: bold;
+  color: #9b59b6;
+  text-align: left;
+}
+.streaks-list .position::before {
+  content: counter(rank) ". ";
+}
+.streaks-list .streak-text {
+  flex: 1;
+  margin-left: 1rem;
+  color: #e0e0e0;
 }

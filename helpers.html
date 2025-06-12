@@ -3,199 +3,161 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Helpers – RewardedTV</title>
+  <title>Helpers — RewardedTV</title>
   <style>
+    /* ——— Global Reset & Typography ——— */
     body {
-      background: #0d001a;
-      color: #c7a4ff;
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 40px;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      line-height: 1.6;
     }
-    h1 {
-      color: gold;
-      text-align: center;
-      margin-bottom: 40px;
+
+    /* ——— Header & Navigation ——— */
+    header.header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #1a001f;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: auto;
+    .left-nav, .right-nav {
+      display: flex;
+      align-items: center;
     }
-    .card {
-      background: #1e0033;
-      border: 2px solid #8000ff;
-      border-radius: 12px;
-      padding: 10px;
-      text-align: center;
-      box-shadow: 0 0 10px #8000ff;
+    .nav-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
     }
-    .card img {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 8px;
+    .nav-links li {
+      margin-left: 1.5rem;
     }
-    .card h3 {
-      margin: 6px 0;
-      color: #c7a4ff;
-      font-size: 1.1em;
+    .nav-links a {
+      color: #e0e0e0;
+      text-decoration: none;
+      font-weight: 500;
     }
-    .price {
-      font-size: 16px;
-      color: #fff;
-      background: #8000ff;
-      padding: 4px 8px;
+    .right-nav a {
+      color: #e0e0e0;
+      text-decoration: none;
+      font-weight: 500;
+      background: #9b59b6;
+      padding: 0.5rem 1rem;
       border-radius: 4px;
-      display: inline-block;
-      margin: 6px 0;
     }
-    .buy-button {
-      background: #8000ff;
-      color: #fff;
+    .right-nav a:hover {
+      background: #8e44ad;
+    }
+
+    /* ——— Hero Section ——— */
+    .hero {
+      background: #111;
+      padding: 2rem;
+      text-align: center;
+    }
+    .hero-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .hero-logo {
+      height: 60px;
+      margin: 0 1rem;
+    }
+    .hero h1 {
+      color: #9b59b6;
+      font-size: 2.5rem;
+      margin: 0;
+    }
+    .hero p {
+      color: #e0e0e0;
+      margin-top: 0.5rem;
+    }
+
+    /* ——— Helpers Grid ——— */
+    .helpers-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem;
+      padding: 0 2rem;
+    }
+    .helper-card {
+      background: #1c1c1c;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .helper-card h3 {
+      color: #f39c12;
+      margin-bottom: 0.5rem;
+    }
+    .helper-card p {
+      color: #e0e0e0;
+      margin-bottom: 1rem;
+    }
+    .helper-card button {
+      padding: 0.5rem 1rem;
+      background: #9b59b6;
+      color: #111;
       border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
-      font-weight: bold;
+    }
+    .helper-card button:hover {
+      background: #8e44ad;
     }
   </style>
 </head>
 <body>
-  <h1>🎮 Meet Your Helpers</h1>
-  <div class="grid">
-    <!-- Card 1 -->
-    <div class="card">
-      <img src="assets/char1.jpeg" alt="Gamer">
-      <h3>Gamer</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
+  <header class="header">
+    <div class="left-nav">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
     </div>
-    <!-- Card 2 -->
-    <div class="card">
-      <img src="assets/char2.jpeg" alt="Gamer">
-      <h3>Gamer</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
+    <div class="right-nav">
+      <a href="admin.html">Admin</a>
     </div>
-    <!-- Card 3 -->
-    <div class="card">
-      <img src="assets/char3.jpeg" alt="Sniper">
-      <h3>Sniper</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 4 -->
-    <div class="card">
-      <img src="assets/char4.jpeg" alt="Ranger">
-      <h3>Ranger</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 5 -->
-    <div class="card">
-      <img src="assets/char5.jpeg" alt="Killer">
-      <h3>Killer</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 6 -->
-    <div class="card">
-      <img src="assets/char6.jpeg" alt="Tactician">
-      <h3>Tactician</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 7 -->
-    <div class="card">
-      <img src="assets/char7.jpeg" alt="CAP Miner">
-      <h3>CAP Miner</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 8 -->
-    <div class="card">
-      <img src="assets/char8.jpeg" alt="Bot Miner">
-      <h3>Bot Miner</h3>
-      <div class="price">$1000</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 9 -->
-    <div class="card">
-      <img src="assets/char9.jpeg" alt="Marksman">
-      <h3>Marksman</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 10 -->
-    <div class="card">
-      <img src="assets/char10.jpeg" alt="Streamer">
-      <h3>Streamer</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 11 -->
-    <div class="card">
-      <img src="assets/char11.jpeg" alt="Helper #11">
-      <h3>Helper #11</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Card 12 -->
-    <div class="card">
-      <img src="assets/char12.jpeg" alt="Helper #12">
-      <h3>Helper #12</h3>
-      <div class="price">$700</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-  </div>
+  </header>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <section class="hero">
+    <div class="hero-title">
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
+      <h1>Helpers</h1>
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Right"/>
+    </div>
+    <p>Manage your active helper bots and settings.</p>
+  </section>
 
-  <!-- Firebase init (if not already in app.js) -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
-      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
-  </script>
-
-  <!-- Buy logic (same as store) -->
-  <script>
-    const helperPrices = [200,200,300,300,400,400,500,500,600,600,700,700];
-
-    auth.onAuthStateChanged(user => {
-      if (!user) return;
-      document.querySelectorAll(".buy-button").forEach((btn, i) => {
-        btn.onclick = () => {
-          const cost = helperPrices[i];
-          const ref  = db.collection("users").doc(user.uid);
-          ref.get().then(doc => {
-            const d = doc.data() || {};
-            if ((d.balance || 0) < cost) {
-              return alert("❌ Not enough balance.");
-            }
-            ref.update({
-              balance: (d.balance || 0) - cost,
-              helpers: firebase.firestore.FieldValue.arrayUnion(`char${i+1}`)
-            })
-            .then(() => alert(`✅ Purchased! New balance: $${((d.balance||0)-cost).toFixed(2)}`))
-            .catch(e => {
-              console.error(e);
-              alert("❌ Purchase failed.");
-            });
-          });
-        };
-      });
-    });
-  </script>
+  <section class="helpers-list">
+    <!-- Replace these with your real helper entries -->
+    <div class="helper-card">
+      <h3>Helper Bot A</h3>
+      <p>Status: Active</p>
+      <button>Configure</button>
+    </div>
+    <div class="helper-card">
+      <h3>Helper Bot B</h3>
+      <p>Status: Inactive</p>
+      <button>Activate</button>
+    </div>
+    <div class="helper-card">
+      <h3>Helper Bot C</h3>
+      <p>Status: Active</p>
+      <button>Configure</button>
+    </div>
+  </section>
 </body>
 </html>
+

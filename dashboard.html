@@ -176,77 +176,87 @@
     });
   </script>
 
-  <!-- Dynamic Metric Animation -->
+  <!-- Dynamic Metric Animation with Persistence -->
   <script>
     // References
-    const elOnline   = document.querySelector('.pd-card:nth-child(1) p');
-    const elTotal    = document.querySelector('.pd-card:nth-child(2) p');
-    const elDaily    = document.querySelector('.pd-card:nth-child(3) p');
-    const elPaid     = document.querySelector('.pd-card:nth-child(4) p');
-    const elVids     = document.querySelector('.pd-card:nth-child(5) p');
-    const elUploads  = document.querySelector('.pd-card:nth-child(6) p');
-    const elRevenue  = document.querySelector('.pd-card:nth-child(7) p');
+    const els = document.querySelectorAll('.pd-card p');
+    const [elOnline, elTotal, elDaily, elPaid, elVids, elUploads, elRevenue] = els;
 
-    // Parse initial values
-    let usersOnline     = parseInt(elOnline.textContent.replace(/,/g,''), 10);
-    let totalUsers      = parseInt(elTotal.textContent.replace(/,/g,''), 10);
-    let dailyUsers      = parseInt(elDaily.textContent.replace(/,/g,''), 10);
-    let amountsPaid     = parseInt(elPaid.textContent.replace(/[\$,]/g,''), 10);
-    let videosWatched   = parseInt(elVids.textContent.replace(/,/g,''), 10);
-    let uploads         = parseInt(elUploads.textContent.replace(/,/g,''), 10);
-    let revenueMonthly  = parseInt(elRevenue.textContent.replace(/[\$,]/g,''), 10);
+    // Parse initial or persisted values
+    let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
+    let totalUsers     = parseInt(localStorage.getItem('totalUsers')     || elTotal.textContent.replace(/,/g,''), 10);
+    let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
+    let amountsPaid    = parseInt(localStorage.getItem('amountsPaid')    || elPaid.textContent.replace(/[\$,]/g,''), 10);
+    let videosWatched  = parseInt(localStorage.getItem('videosWatched')  || elVids.textContent.replace(/,/g,''), 10);
+    let uploads        = parseInt(localStorage.getItem('uploads')        || elUploads.textContent.replace(/,/g,''), 10);
+    let revenueMonthly = parseInt(localStorage.getItem('revenueMonthly') || elRevenue.textContent.replace(/[\$,]/g,''), 10);
 
-    const initialTotal = totalUsers;  // keep track of starting point
+    const initialTotal = totalUsers;  // for clamping
 
-    // Helpers
-    function fmt(n){ return n.toLocaleString(); }
-    function rnd(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    // Utils
+    const fmt = n => n.toLocaleString();
+    const rnd = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
 
-    // 1) Users Online: ±100–3000 every second
+    // Update DOM & persist
+    function updateAndStore(el, key, value, prefix = '', clamp = null) {
+      if(clamp) value = Math.min(Math.max(value, clamp[0]), clamp[1]);
+      if(value < 0) value = 0;
+      localStorage.setItem(key, value);
+      el.textContent = prefix + fmt(value);
+      return value;
+    }
+
+    // 1) Users Online
     setInterval(()=>{
-      usersOnline += rnd(-3000,3000);
-      if(usersOnline < 0) usersOnline = 0;
-      elOnline.textContent = fmt(usersOnline);
-    }, 1000);
+      usersOnline = updateAndStore(elOnline, 'usersOnline',
+        usersOnline + rnd(-3000,3000)
+      );
+    },1000);
 
-    // 2) Total Users: ±10–20 every second, capped [initialTotal, 400000]
+    // 2) Total Users ±10–20, clamp [initialTotal,400000]
     setInterval(()=>{
-      totalUsers += rnd(-20,20);
-      if(totalUsers < initialTotal) totalUsers = initialTotal;
-      if(totalUsers > 400000) totalUsers = 400000;
-      elTotal.textContent = fmt(totalUsers);
-    }, 1000);
+      totalUsers = updateAndStore(elTotal, 'totalUsers',
+        totalUsers + rnd(-20,20),
+        '', [initialTotal,400000]
+      );
+    },1000);
 
-    // 3) Daily Users: ±100–3000 every second
+    // 3) Daily Users
     setInterval(()=>{
-      dailyUsers += rnd(-3000,3000);
-      if(dailyUsers < 0) dailyUsers = 0;
-      elDaily.textContent = fmt(dailyUsers);
-    }, 1000);
+      dailyUsers = updateAndStore(elDaily, 'dailyUsers',
+        dailyUsers + rnd(-3000,3000)
+      );
+    },1000);
 
-    // 4) Amounts Paid: +100$ per minute (~+1.67$/sec)
+    // 4) Amounts Paid +100$/min (~+1.67$/sec)
     setInterval(()=>{
-      amountsPaid += Math.round(100/60);
-      elPaid.textContent = '$' + fmt(amountsPaid);
-    }, 1000);
+      amountsPaid = updateAndStore(elPaid, 'amountsPaid',
+        amountsPaid + Math.round(100/60),
+        '$'
+      );
+    },1000);
 
-    // 5) Videos Watched: +5,000,000 per day (~+58/sec)
+    // 5) Videos Watched +5M/day (~+58/sec)
     setInterval(()=>{
-      videosWatched += Math.round(5000000/86400);
-      elVids.textContent = fmt(videosWatched);
-    }, 1000);
+      videosWatched = updateAndStore(elVids, 'videosWatched',
+        videosWatched + Math.round(5000000/86400)
+      );
+    },1000);
 
-    // 6) Uploads: +100,000 per day (~+1/sec)
+    // 6) Uploads +100k/day (~+1/sec)
     setInterval(()=>{
-      uploads += Math.max(1, Math.round(100000/86400));
-      elUploads.textContent = fmt(uploads);
-    }, 1000);
+      uploads = updateAndStore(elUploads, 'uploads',
+        uploads + Math.max(1,Math.round(100000/86400))
+      );
+    },1000);
 
-    // 7) Revenue Monthly: +50,000 per hour (~+14/sec)
+    // 7) Revenue Monthly +50k/hr (~+14/sec)
     setInterval(()=>{
-      revenueMonthly += Math.round(50000/3600);
-      elRevenue.textContent = '$' + fmt(revenueMonthly);
-    }, 1000);
+      revenueMonthly = updateAndStore(elRevenue, 'revenueMonthly',
+        revenueMonthly + Math.round(50000/3600),
+        '$'
+      );
+    },1000);
   </script>
 </body>
 </html>

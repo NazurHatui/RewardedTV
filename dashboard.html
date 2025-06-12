@@ -93,17 +93,19 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // Increment on “Watch” click
+    // “Watch on YouTube” gives +1 watched, +1 reward, +1 cap
     window.watchVideo = () => {
       window.open("https://www.youtube.com", "_blank");
-      if (!auth.currentUser) return alert("Please log in.");
-      db.collection("users").doc(auth.currentUser.uid).update({
-        watched: firebase.firestore.FieldValue.increment(1),
-        balance: firebase.firestore.FieldValue.increment(0.10)
+      const user = auth.currentUser;
+      if (!user) return alert("Please log in.");
+      db.collection("users").doc(user.uid).update({
+        watched:       firebase.firestore.FieldValue.increment(1),
+        rewardsEarned: firebase.firestore.FieldValue.increment(1),
+        caps:          firebase.firestore.FieldValue.increment(1)
       }).catch(console.error);
     };
 
-    // Use Caps
+    // Use Caps -> +1 balance per cap
     function useCaps() {
       const user = auth.currentUser;
       if (!user) return alert("Please log in.");
@@ -112,8 +114,8 @@
         const d = doc.data()||{};
         if ((d.caps||0) <= 0) return alert("No caps available");
         ref.update({
-          caps: firebase.firestore.FieldValue.increment(-1),
-          balance: firebase.firestore.FieldValue.increment(0.10)
+          caps:    firebase.firestore.FieldValue.increment(-1),
+          balance: firebase.firestore.FieldValue.increment(1)
         });
       });
     }
@@ -125,7 +127,7 @@
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data()||{};
         document.getElementById("watched").innerText      = d.watched        || 0;
-        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned||d.balance||0).toFixed(2);
+        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned||0).toFixed(2);
         document.getElementById("caps").innerText         = d.caps           || 0;
         document.getElementById("balance").innerText      = "$" + (d.balance  || 0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost         || 0) + "%";

@@ -184,7 +184,6 @@
 
     // Parse initial or persisted values
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
-    // clamp initial as well
     usersOnline = Math.min(Math.max(usersOnline, 1000), 45000);
     let totalUsers     = parseInt(localStorage.getItem('totalUsers')     || elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
@@ -193,43 +192,42 @@
     let uploads        = parseInt(localStorage.getItem('uploads')        || elUploads.textContent.replace(/,/g,''), 10);
     let revenueMonthly = parseInt(localStorage.getItem('revenueMonthly') || elRevenue.textContent.replace(/[\$,]/g,''), 10);
 
-    const initialTotal = totalUsers;  // for clamping
+    const initialTotal = totalUsers;
 
     // Utils
     const fmt = n => n.toLocaleString();
     const rnd = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
 
-    // Update DOM & persist
-    function updateAndStore(el, key, value, prefix = '', clamp = null) {
-      if (clamp) value = Math.min(Math.max(value, clamp[0]), clamp[1]);
-      if (value < 0) value = 0;
+    // update & persist helper
+    function updateAndStore(el, key, value, prefix='', clamp=null) {
+      if(clamp) value = Math.min(Math.max(value, clamp[0]), clamp[1]);
+      if(value<0) value=0;
       localStorage.setItem(key, value);
       el.textContent = prefix + fmt(value);
       return value;
     }
 
-    // 1) Users Online: ±100–3000 clamp [1000,45000]
+    // 1) Users Online ±3000, clamp [1000,45000]
     setInterval(()=>{
       usersOnline = updateAndStore(elOnline, 'usersOnline',
         usersOnline + rnd(-3000,3000),
-        '',
-        [1000,45000]
+        '', [1000,45000]
       );
     },1000);
 
-    // 2) Total Users ±10–20 clamp [initialTotal,400000]
+    // 2) Total Users ±20, clamp [initialTotal,400000]
     setInterval(()=>{
       totalUsers = updateAndStore(elTotal, 'totalUsers',
         totalUsers + rnd(-20,20),
-        '',
-        [initialTotal,400000]
+        '', [initialTotal,400000]
       );
     },1000);
 
-    // 3) Daily Users
+    // 3) Daily Users ±3000, clamp [1000, Infinity]
     setInterval(()=>{
       dailyUsers = updateAndStore(elDaily, 'dailyUsers',
-        dailyUsers + rnd(-3000,3000)
+        dailyUsers + rnd(-3000,3000),
+        '', [1000, Infinity]
       );
     },1000);
 
@@ -255,7 +253,7 @@
       );
     },1000);
 
-    // 7) Revenue Monthly +10k/hr
+    // 7) Revenue Monthly +50k/hr
     setInterval(()=>{
       revenueMonthly = updateAndStore(elRevenue, 'revenueMonthly',
         revenueMonthly + Math.round(50000/3600),

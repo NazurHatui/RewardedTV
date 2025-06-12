@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV</title>
   <style>
-    /* … your existing CSS … */
+    /* … your existing CSS above … */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#0a0a0a; color:#e0e0e0; line-height:1.6; }
     header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
@@ -56,7 +56,8 @@
       margin: 0 1rem;
     }
 
-    /* ——— FANCY LEADERBOARD STYLING ——— */
+    /* ——— UNIFIED STREAKS & LEADERBOARD STYLING ——— */
+    .streaks-list,
     .leaderboard-list {
       max-width: 500px;
       margin: 1rem auto;
@@ -67,53 +68,53 @@
       counter-reset: rank;
       list-style: none;
     }
-    /* … leaderboard rules unchanged … */
-
-    /* ——— FANCY STREAKS STYLING ——— */
-    .streaks-list {
-      max-width: 500px;
-      margin: 1rem auto;
-      background: #1c1c1c;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      padding: 0.5rem 0;
-      counter-reset: rank;
-      list-style: none;
-    }
-    .streaks-list li {
+    .streaks-list li,
+    .leaderboard-list li {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0.75rem 1rem;
       border-bottom: 1px solid #2a2a2a;
       counter-increment: rank;
       margin-bottom: 0.5rem;
     }
-    .streaks-list li:last-child {
+    .streaks-list li:last-child,
+    .leaderboard-list li:last-child {
       border-bottom: none;
       margin-bottom: 0;
     }
-    .streaks-list li:nth-child(odd) {
+    .streaks-list li:nth-child(odd),
+    .leaderboard-list li:nth-child(odd) {
       background: rgba(255,255,255,0.05);
     }
-    .streaks-list .position {
+    .streaks-list .position,
+    .leaderboard-list .position {
       width: 2.5rem;
       font-weight: bold;
       color: #9b59b6;
       text-align: left;
     }
-    .streaks-list .position::before {
+    .streaks-list .position::before,
+    .leaderboard-list .position::before {
       content: counter(rank) ". ";
     }
-    .streaks-list .streak-text {
+    /* re-add medals on leaderboard only */
+    .leaderboard-list li:nth-child(1) .position::before { content: "🥇 1. "; }
+    .leaderboard-list li:nth-child(2) .position::before { content: "🥈 2. "; }
+    .leaderboard-list li:nth-child(3) .position::before { content: "🥉 3. "; }
+    .streaks-list .streak-text,
+    .leaderboard-list .name {
       flex: 1;
       margin-left: 1rem;
       color: #e0e0e0;
     }
-    /* ← NEW: color the reward text yellow */
-    .streak-amount {
+    .streak-amount,
+    .leaderboard-list .watches {
       color: #f39c12;
       font-weight: bold;
     }
+
+    /* … rest of your existing CSS below … */
   </style>
 </head>
 <body>
@@ -174,7 +175,7 @@
 
     <div class="feature">
       <h2>🔐 Login / Register</h2>
-      <input type="email"    id="email"    placeholder="Email"/>
+      <input type="email" id="email" placeholder="Email"/>
       <input type="password" id="password" placeholder="Password"/>
       <button id="login-btn">Login</button>
       <button id="register-btn">Register</button>
@@ -184,16 +185,16 @@
     <div class="feature">
       <h2>Leaderboard</h2>
       <ol class="leaderboard-list">
-        <li><span class="position">1.</span><span class="name">Ziccas</span><span class="watches">763,000</span></li>
-        <li><span class="position">2.</span><span class="name">Voided</span><span class="watches">761,000</span></li>
-        <li><span class="position">3.</span><span class="name">Tunez</span><span class="watches">723,000</span></li>
-        <li><span class="position">4.</span><span class="name">Maztuki</span><span class="watches">548,000</span></li>
-        <li><span class="position">5.</span><span class="name">Elicryptosignals</span><span class="watches">509,000</span></li>
-        <li><span class="position">6.</span><span class="name">Rager</span><span class="watches">480,000</span></li>
-        <li><span class="position">7.</span><span class="name">CryptoTipo</span><span class="watches">400,000</span></li>
-        <li><span class="position">8.</span><span class="name">Hank</span><span class="watches">300,000</span></li>
-        <li><span class="position">9.</span><span class="name">DegenApe</span><span class="watches">200,000</span></li>
-        <li><span class="position">10.</span><span class="name">Iamnomad</span><span class="watches">100,000</span></li>
+        <li><span class="position"></span><span class="name">Ziccas</span><span class="watches">763,000</span></li>
+        <li><span class="position"></span><span class="name">Voided</span><span class="watches">761,000</span></li>
+        <li><span class="position"></span><span class="name">Tunez</span><span class="watches">723,000</span></li>
+        <li><span class="position"></span><span class="name">Maztuki</span><span class="watches">548,000</span></li>
+        <li><span class="position"></span><span class="name">Elicryptosignals</span><span class="watches">509,000</span></li>
+        <li><span class="position"></span><span class="name">Rager</span><span class="watches">480,000</span></li>
+        <li><span class="position"></span><span class="name">CryptoTipo</span><span class="watches">400,000</span></li>
+        <li><span class="position"></span><span class="name">Hank</span><span class="watches">300,000</span></li>
+        <li><span class="position"></span><span class="name">DegenApe</span><span class="watches">200,000</span></li>
+        <li><span class="position"></span><span class="name">Iamnomad</span><span class="watches">100,000</span></li>
       </ol>
     </div>
   </section>

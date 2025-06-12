@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <title>RewardedTV – Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <style>
     body { margin:0; font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
     header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
@@ -28,46 +28,27 @@
     .stat-card .value { font-size:1.5rem; }
 
     .project-dashboard {
-      background:#1c1c1c;
-      margin:2rem auto;
-      padding:2rem;
-      max-width:1200px;
-      border-radius:8px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.4);
+      background:#1c1c1c; margin:2rem auto; padding:2rem; max-width:1200px;
+      border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.4);
     }
     .project-dashboard h2 {
-      color:#9b59b6;
-      margin-top:0;
-      font-size:1.75rem;
-      text-align:center;
-      border-bottom:2px solid #9b59b6;
-      padding-bottom:1rem;
+      color:#9b59b6; margin-top:0; font-size:1.75rem; text-align:center;
+      border-bottom:2px solid #9b59b6; padding-bottom:1rem;
     }
     .pd-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:1.5rem;
-      margin-top:1.5rem;
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:1.5rem; margin-top:1.5rem;
     }
     .pd-card {
-      background:#262626;
-      padding:1.25rem;
-      border-radius:8px;
-      text-align:center;
+      background:#262626; padding:1.25rem; border-radius:8px; text-align:center;
       box-shadow:0 2px 6px rgba(0,0,0,0.4);
     }
     .pd-card h3 {
-      margin:0 0 0.5rem;
-      font-size:1rem;
-      color:#f39c12;
-      text-transform:uppercase;
-      letter-spacing:0.5px;
+      margin:0 0 0.5rem; font-size:1rem; color:#f39c12;
+      text-transform:uppercase; letter-spacing:0.5px;
     }
     .pd-card p {
-      margin:0;
-      font-size:1.25rem;
-      color:#e0e0e0;
-      font-weight:bold;
+      margin:0; font-size:1.25rem; color:#e0e0e0; font-weight:bold;
     }
   </style>
 </head>
@@ -168,7 +149,7 @@
     const db   = firebase.firestore();
 
     window.watchVideo = () => {
-      window.open("https://www.youtube.com", "_blank");
+      window.open("https://www.youtube.com","_blank");
       if (!auth.currentUser) return alert("Please log in.");
       db.collection("users").doc(auth.currentUser.uid).update({
         watched: firebase.firestore.FieldValue.increment(1),
@@ -182,11 +163,13 @@
       document.getElementById("logout-btn").onclick = () => auth.signOut();
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data() || {};
-        document.getElementById("watched").innerText      = d.watched        || 0;
-        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned || 0).toFixed(2);
-        document.getElementById("caps").innerText         = d.caps           || 0;
-        document.getElementById("balance").innerText      = "$" + (d.balance      || 0).toFixed(2);
-        document.getElementById("boost").innerText        = (d.boost         || 0) + "%";
+        // when videos watched changes, rewards always match 1$ per video:
+        const watchedCount = d.watched || 0;
+        document.getElementById("watched").innerText      = watchedCount;
+        document.getElementById("earned").innerText       = '$' + watchedCount.toLocaleString();
+        document.getElementById("caps").innerText         = d.caps || 0;
+        document.getElementById("balance").innerText      = '$' + (d.balance || 0).toFixed(2);
+        document.getElementById("boost").innerText        = (d.boost || 0) + '%';
         document.getElementById("helpersCount").innerText = (d.helpers || []).length;
       });
     });
@@ -200,7 +183,7 @@
 
     // Parse initial or persisted values
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
-    usersOnline = Math.min(Math.max(usersOnline, 1000), 45000);
+    usersOnline = Math.min(Math.max(usersOnline,1000),45000);
     let totalUsers     = parseInt(localStorage.getItem('totalUsers')     || elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
     let amountsPaid    = parseInt(localStorage.getItem('amountsPaid')    || elPaid.textContent.replace(/[\$,]/g,''), 10);
@@ -214,42 +197,41 @@
     const fmt = n => n.toLocaleString();
     const rnd = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
 
-    // update & persist helper
     function updateAndStore(el, key, value, prefix='', clamp=null) {
-      if(clamp) value = Math.min(Math.max(value, clamp[0]), clamp[1]);
-      if(value<0) value=0;
-      localStorage.setItem(key, value);
+      if (clamp) value = Math.min(Math.max(value,clamp[0]||0), clamp[1]||Infinity);
+      if (value<0) value=0;
+      localStorage.setItem(key,value);
       el.textContent = prefix + fmt(value);
       return value;
     }
 
-    // 1) Users Online ±3000, clamp [1000,45000]
+    // 1) Users Online ±3k, clamp [1000,45000]
     setInterval(()=>{
-      usersOnline = updateAndStore(elOnline, 'usersOnline',
+      usersOnline = updateAndStore(elOnline,'usersOnline',
         usersOnline + rnd(-3000,3000),
         '', [1000,45000]
       );
     },1000);
 
-    // 2) Total Users ±20, clamp [initialTotal,400000]
+    // 2) Total Users ±20, clamp [initialTotal,400k]
     setInterval(()=>{
-      totalUsers = updateAndStore(elTotal, 'totalUsers',
+      totalUsers = updateAndStore(elTotal,'totalUsers',
         totalUsers + rnd(-20,20),
         '', [initialTotal,400000]
       );
     },1000);
 
-    // 3) Daily Users ±3000, clamp [1000, Infinity]
+    // 3) Daily Users ±3k, clamp [1000,∞]
     setInterval(()=>{
-      dailyUsers = updateAndStore(elDaily, 'dailyUsers',
+      dailyUsers = updateAndStore(elDaily,'dailyUsers',
         dailyUsers + rnd(-3000,3000),
-        '', [1000, Infinity]
+        '', [1000,null]
       );
     },1000);
 
     // 4) Amounts Paid +100$/min
     setInterval(()=>{
-      amountsPaid = updateAndStore(elPaid, 'amountsPaid',
+      amountsPaid = updateAndStore(elPaid,'amountsPaid',
         amountsPaid + Math.round(100/60),
         '$'
       );
@@ -257,21 +239,21 @@
 
     // 5) Videos Watched +5M/day
     setInterval(()=>{
-      videosWatched = updateAndStore(elVids, 'videosWatched',
+      videosWatched = updateAndStore(elVids,'videosWatched',
         videosWatched + Math.round(5000000/86400)
       );
     },1000);
 
     // 6) Uploads +100k/day
     setInterval(()=>{
-      uploads = updateAndStore(elUploads, 'uploads',
+      uploads = updateAndStore(elUploads,'uploads',
         uploads + Math.max(1,Math.round(100000/86400))
       );
     },1000);
 
     // 7) Revenue Monthly +50k/hr
     setInterval(()=>{
-      revenueMonthly = updateAndStore(elRevenue, 'revenueMonthly',
+      revenueMonthly = updateAndStore(elRevenue,'revenueMonthly',
         revenueMonthly + Math.round(50000/3600),
         '$'
       );

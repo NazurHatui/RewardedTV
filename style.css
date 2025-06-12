@@ -6,13 +6,21 @@ body {
   text-align: center;
 }
 header.header {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   padding: 15px 20px;
   background: #1a001f;
   position: sticky;
   top: 0;
   box-shadow: 0 2px 4px rgba(128,0,255,0.2);
+}
+
+.logo-header {
+  text-align: center;
+}
+.logo-header img {
+  height: 50px;
 }
 
 /* Center logo flex item */

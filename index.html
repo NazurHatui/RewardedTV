@@ -43,8 +43,8 @@
     .feature button { background:#9b59b6; color:#111; border:none; cursor:pointer; }
     .feature button:hover { background:#8e44ad; }
     footer.footer { text-align:center; padding:1rem; background:#1a1a1a; margin-top:2rem; }
-    
-    /* ——— NEW RULES ——— */
+
+    /* ——— NEW HERO LOGOS ——— */
     .hero-title {
       display: flex;
       align-items: center;
@@ -56,17 +56,48 @@
       margin: 0 1rem;
     }
 
-    /* Leaderboard styling */
+    /* ——— FANCY LEADERBOARD STYLING ——— */
     .leaderboard-list {
-      list-style: decimal inside;
-      padding: 0;
-      margin: 0.5rem auto;
-      text-align: left;
-      color: #e0e0e0;
-      max-width: 250px;
+      max-width: 500px;
+      margin: 1rem auto;
+      background: #1c1c1c;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      padding: 0.5rem 0;
+      counter-reset: rank;
+      list-style: none;
     }
     .leaderboard-list li {
-      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #2a2a2a;
+      counter-increment: rank;
+    }
+    .leaderboard-list li:last-child {
+      border-bottom: none;
+    }
+    .leaderboard-list li:nth-child(odd) {
+      background: rgba(255,255,255,0.05);
+    }
+    .position {
+      width: 2.5rem;
+      font-weight: bold;
+      color: #9b59b6;
+      text-align: left;
+    }
+    .leaderboard-list li:nth-child(1) .position::before { content: "🥇 "; }
+    .leaderboard-list li:nth-child(2) .position::before { content: "🥈 "; }
+    .leaderboard-list li:nth-child(3) .position::before { content: "🥉 "; }
+    .name {
+      flex: 1;
+      margin-left: 1rem;
+      color: #e0e0e0;
+    }
+    .watches {
+      font-weight: bold;
+      color: #f39c12;
     }
   </style>
 </head>
@@ -84,9 +115,7 @@
         <li><a href="profile.html">Profile</a></li>
       </ul>
     </div>
-
-    <!-- logo-header removed completely -->
-
+    <!-- logo-header removed -->
     <div class="right-nav">
       <a href="admin.html">Admin</a>
     </div>
@@ -115,7 +144,7 @@
     <div class="feature"><h2>Daily Streaks</h2><p>Keep streaks alive for bonuses.</p></div>
     <div class="feature">
       <h2>🔐 Login / Register</h2>
-      <input type="email"    id="email"    placeholder="Email"/>
+      <input type="email" id="email" placeholder="Email"/>
       <input type="password" id="password" placeholder="Password"/>
       <button id="login-btn">Login</button>
       <button id="register-btn">Register</button>
@@ -124,16 +153,16 @@
     <div class="feature">
       <h2>Leaderboard</h2>
       <ol class="leaderboard-list">
-        <li>Ziccas — Watches: 763,000</li>
-        <li>Voided — Watches: 761,000</li>
-        <li>Tunez — Watches: 723,000</li>
-        <li>Maztuki — Watches: 548,000</li>
-        <li>Elicryptosignals — Watches: 509,000</li>
-        <li>Rager — Watches: 480,000</li>
-        <li>CryptoTipo — Watches: 400,000</li>
-        <li>Hank — Watches: 300,000</li>
-        <li>DegenApe — Watches: 200,000</li>
-        <li>Iamnomad — Watches: 100,000</li>
+        <li><span class="position">1.</span><span class="name">Ziccas</span><span class="watches">763,000</span></li>
+        <li><span class="position">2.</span><span class="name">Voided</span><span class="watches">761,000</span></li>
+        <li><span class="position">3.</span><span class="name">Tunez</span><span class="watches">723,000</span></li>
+        <li><span class="position">4.</span><span class="name">Maztuki</span><span class="watches">548,000</span></li>
+        <li><span class="position">5.</span><span class="name">Elicryptosignals</span><span class="watches">509,000</span></li>
+        <li><span class="position">6.</span><span class="name">Rager</span><span class="watches">480,000</span></li>
+        <li><span class="position">7.</span><span class="name">CryptoTipo</span><span class="watches">400,000</span></li>
+        <li><span class="position">8.</span><span class="name">Hank</span><span class="watches">300,000</span></li>
+        <li><span class="position">9.</span><span class="name">DegenApe</span><span class="watches">200,000</span></li>
+        <li><span class="position">10.</span><span class="name">Iamnomad</span><span class="watches">100,000</span></li>
       </ol>
     </div>
   </section>

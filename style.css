@@ -23,18 +23,15 @@ header.header {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 .logo-header img {
   height: 50px; /* adjust size */
 }
-
 .logo-header {
   text-align: center;
 }
 .logo-header img {
   height: 50px;
 }
-
 /* Center logo flex item */
 .logo-header {
   flex: 1;
@@ -60,6 +57,7 @@ header.header {
   font-weight: bold;
   color: #ffffff;
 }
+
 nav {
   margin-top: 10px;
 }
@@ -104,4 +102,16 @@ button {
   cursor: pointer;
   font-weight: bold;
   box-shadow: 0 0 10px #8000ff;
+}
+
+/* Side-by-side logos around hero title */
+.hero-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.hero-logo {
+  height: 60px;
+  margin: 0 1rem;
 }

@@ -122,10 +122,21 @@
       <h3>Helpers Active</h3>
       <div class="value" id="helpersCount">0</div>
     </div>
-    <!-- New Health Card -->
     <div class="stat-card">
       <h3>Health</h3>
       <div class="value" id="health"></div>
+    </div>
+    <div class="stat-card">
+      <h3>Pets</h3>
+      <div class="value" id="pets"></div>
+    </div>
+    <div class="stat-card">
+      <h3>Claimed</h3>
+      <div class="value" id="claimed"></div>
+    </div>
+    <div class="stat-card">
+      <h3>Vested</h3>
+      <div class="value" id="vested"></div>
     </div>
   </section>
 
@@ -258,7 +269,7 @@
       );
     },1000);
 
-    // 7) Revenue Monthly +20k/hr
+    // 7) Revenue Monthly +50k/hr
     setInterval(()=>{
       revenueMonthly = updateAndStore(elRevenue, 'revenueMonthly',
         revenueMonthly + Math.round(50000/3600),

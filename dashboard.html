@@ -2,92 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV – Dashboard</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    /* ——— Dark Background & Header ——— */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0a0a0a;
-      color: #e0e0e0;
-      line-height: 1.6;
-    }
-    header.header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: #1a1a1a;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid #2a2a2a;
-    }
-    .nav-links a.active {
-      color: #f39c12;
-    }
-    /* ——— Stats Grid ——— */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
-      gap: 1rem;
-      margin: 2rem;
-    }
-    .stat-card {
-      background: #1c1c1c;
-      padding: 1rem;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    }
-    .stat-card h3 {
-      color: #9b59b6;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-      letter-spacing: 0.5px;
-    }
-    .stat-card .value {
-      font-size: 1.5rem;
-      color: #f39c12;
-      font-weight: bold;
-    }
-    .stat-card .btn-small {
-      margin-top: 0.5rem;
-      padding: 0.25rem 0.5rem;
-      background: #9b59b6;
-      color: #111;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
-      font-size:0.75rem;
-    }
-    .stat-card .btn-small:hover {
-      background: #8e44ad;
-    }
+    body { margin:0; font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
+    header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
+    .nav-links { list-style:none; display:flex; }
+    .nav-links li { margin-left:1rem; }
+    .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
+    .nav-links a.active { color:#f39c12; }
+    .hero-clone { background:#111; padding:2rem 0; text-align:center; margin:1rem 2rem; border-radius:8px; }
+    .hero-clone .hero-title { display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
+    .hero-clone .hero-logo { height:50px; margin:0 1rem; }
+    .hero-clone h2 { color:#9b59b6; font-size:2rem; margin:0; }
+    .hero-clone p { color:#e0e0e0; margin:1rem 0; }
+    .hero-clone button { padding:0.75rem 1.5rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; }
+    .hero-clone button:hover { background:#8e44ad; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:2rem; }
+    .stat-card { background:#1c1c1c; padding:1rem; border-radius:8px; text-align:center; }
+    .stat-card h3 { color:#9b59b6; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.5px; font-size:0.85rem; }
+    .stat-card .value { font-size:1.5rem; }
+    .stat-card .btn-small { margin-top:0.5rem; padding:0.25rem 0.5rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; font-size:0.75rem; }
+    .stat-card .btn-small:hover { background:#8e44ad; }
   </style>
 </head>
 <body>
-
   <header class="header">
-    <div class="left-nav">
-      <ul class="nav-links" id="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="dashboard.html" class="active">Dashboard</a></li>
-        <li><a href="helpers.html">Helpers</a></li>
-        <li><a href="videos.html">Videos</a></li>
-        <li><a href="store.html">Store</a></li>
-        <li><a href="profile.html">Profile</a></li>
-      </ul>
-    </div>
-    <div class="right-nav">
-      <a href="admin.html">Admin</a>
-    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="helpers.html">Helpers</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li><a href="store.html">Store</a></li>
+      <li><a href="profile.html">Profile</a></li>
+    </ul>
+    <a href="admin.html">Admin</a>
   </header>
 
+  <!-- Cloned Unlock Daily Rewards Section -->
+  <section class="hero-clone">
+    <div class="hero-title">
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
+      <h2>Unlock Daily Rewards</h2>
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Right"/>
+    </div>
+    <p>Watch videos, earn credits, and claim exclusive perks right here on the dashboard.</p>
+    <button onclick="watchVideo()">▶ Watch on YouTube</button>
+  </section>
+
+  <!-- Live Stats -->
   <section class="stats">
     <div class="stat-card">
       <h3>Videos Watched</h3>
@@ -116,12 +79,11 @@
     </div>
   </section>
 
-  <!-- Firebase SDKs & your existing app.js tracking logic -->
+  <!-- Firebase & Tracking Logic -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // Initialize Firebase (same config as index.html)
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
       authDomain: "rewardedtv-1e5b1.firebaseapp.com",
@@ -131,34 +93,45 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // Mirror your index.html logic:
-    auth.onAuthStateChanged(user => {
-      if (!user) return location.href = "index.html";
-      const docRef = db.collection("users").doc(user.uid);
-      docRef.onSnapshot(doc => {
-        const d = doc.data() || {};
-        document.getElementById("watched").innerText      = d.videosWatched    || 0;
-        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned||0).toFixed(2);
-        document.getElementById("caps").innerText         = d.caps             || 0;
-        document.getElementById("balance").innerText      = "$" + (d.balance     ||0).toFixed(2);
-        document.getElementById("boost").innerText        = (d.boost           ||0) + "%";
-        document.getElementById("helpersCount").innerText = d.helpersActive    || 0;
-      });
-    });
+    // Increment on “Watch” click
+    window.watchVideo = () => {
+      window.open("https://www.youtube.com", "_blank");
+      if (!auth.currentUser) return alert("Please log in.");
+      db.collection("users").doc(auth.currentUser.uid).update({
+        watched: firebase.firestore.FieldValue.increment(1),
+        balance: firebase.firestore.FieldValue.increment(0.10)
+      }).catch(console.error);
+    };
 
+    // Use Caps
     function useCaps() {
-      // copy your existing useCaps() from app.js
-      if (!firebase.auth().currentUser) return;
-      const uid = firebase.auth().currentUser.uid;
-      const ref = db.collection("users").doc(uid);
+      const user = auth.currentUser;
+      if (!user) return alert("Please log in.");
+      const ref = db.collection("users").doc(user.uid);
       ref.get().then(doc => {
         const d = doc.data()||{};
         if ((d.caps||0) <= 0) return alert("No caps available");
-        ref.update({ caps: d.caps-1, balance: (d.balance||0)+0.10 })
-           .then(()=> alert("Caps used!"))
-           .catch(()=>alert("Error."));
+        ref.update({
+          caps: firebase.firestore.FieldValue.increment(-1),
+          balance: firebase.firestore.FieldValue.increment(0.10)
+        });
       });
     }
+
+    // Auth state & live stats
+    auth.onAuthStateChanged(user => {
+      if (!user) return location.replace("index.html");
+      document.getElementById("logout-btn")?.addEventListener("click", () => auth.signOut());
+      db.collection("users").doc(user.uid).onSnapshot(doc => {
+        const d = doc.data()||{};
+        document.getElementById("watched").innerText      = d.watched        || 0;
+        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned||d.balance||0).toFixed(2);
+        document.getElementById("caps").innerText         = d.caps           || 0;
+        document.getElementById("balance").innerText      = "$" + (d.balance  || 0).toFixed(2);
+        document.getElementById("boost").innerText        = (d.boost         || 0) + "%";
+        document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
+      });
+    });
   </script>
 </body>
 </html>

@@ -137,6 +137,61 @@
   </section>
 
   <footer class="footer"><p>&copy; 2025 RewardedTV. All rights reserved.</p></footer>
-  <script>document.getElementById('mobile-menu').addEventListener('click',()=>document.getElementById('nav-links').classList.toggle('active'));</script>
+
+  <!-- Mobile menu toggle -->
+  <script>
+    document.getElementById('mobile-menu')
+      .addEventListener('click', () =>
+        document.getElementById('nav-links').classList.toggle('active')
+      );
+  </script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Auth & Redirect Logic -->
+  <script>
+    // ——— Firebase Init ———
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ——— Register ———
+    document.getElementById('register-btn').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      auth.createUserWithEmailAndPassword(email, pass)
+        .catch(err => alert(err.message));
+    });
+
+    // ——— Login ———
+    document.getElementById('login-btn').addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(() => alert('You are logged in'))
+        .catch(err => alert(err.message));
+    });
+
+    // ——— Logout ———
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      auth.signOut();
+    });
+
+    // ——— Redirect on Auth State Change ———
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in → go to dashboard
+        location.replace("dashboard.html");
+      }
+    });
+  </script>
 </body>
 </html>

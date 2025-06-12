@@ -1,4 +1,4 @@
-/* … your existing style.css up to .hero-logo … */
+/* … your existing style.css up to .streaks-list … */
 
 /* —— Fancy Leaderboard Styling —— */
 .leaderboard-list {
@@ -61,9 +61,11 @@
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #2a2a2a;
   counter-increment: rank;
+  margin-bottom: 0.5rem; /* ← added spacing */
 }
 .streaks-list li:last-child {
   border-bottom: none;
+  margin-bottom: 0;
 }
 .streaks-list li:nth-child(odd) {
   background: rgba(255,255,255,0.05);

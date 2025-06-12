@@ -117,9 +117,11 @@
       padding: 0.75rem 1rem;
       border-bottom: 1px solid #2a2a2a;
       counter-increment: rank;
+      margin-bottom: 0.5rem; /* added vertical spacing */
     }
     .streaks-list li:last-child {
       border-bottom: none;
+      margin-bottom: 0;
     }
     .streaks-list li:nth-child(odd) {
       background: rgba(255,255,255,0.05);
@@ -183,16 +185,16 @@
     <div class="feature">
       <h2>Daily Streaks</h2>
       <ol class="streaks-list">
-        <li><span class="position"></span><span class="streak-text">Watch 1000 videos — Reward: $10</span></li>
-        <li><span class="position"></span><span class="streak-text">Watch 2000 videos — Reward: $20</span></li>
-        <li><span class="position"></span><span class="streak-text">Watch 3000 videos — Reward: $30</span></li>
-        <li><span class="position"></span><span class="streak-text">Watch 4000 videos — Reward: $40</span></li>
-        <li><span class="position"></span><span class="streak-text">Watch 5000 videos — Reward: $50</span></li>
-        <li><span class="position"></span><span class="streak-text">Upload 5 videos — Reward: $10</span></li>
-        <li><span class="position"></span><span class="streak-text">Upload 10 videos — Reward: $20</span></li>
-        <li><span class="position"></span><span class="streak-text">Upload 20 videos — Reward: $30</span></li>
-        <li><span class="position"></span><span class="streak-text">Upload 30 videos — Reward: $40</span></li>
-        <li><span class="position"></span><span class="streak-text">Upload 40 videos — Reward: $50</span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 1000 videos <span class="streak-amount">Reward: $10</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 2000 videos <span class="streak-amount">Reward: $20</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 3000 videos <span class="streak-amount">Reward: $30</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 4000 videos <span class="streak-amount">Reward: $40</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Watch 5000 videos <span class="streak-amount">Reward: $50</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 5 videos <span class="streak-amount">Reward: $10</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 10 videos <span class="streak-amount">Reward: $20</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 20 videos <span class="streak-amount">Reward: $30</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 30 videos <span class="streak-amount">Reward: $40</span></span></li>
+        <li><span class="position"></span><span class="streak-text">Upload 40 videos <span class="streak-amount">Reward: $50</span></span></li>
       </ol>
     </div>
 
@@ -223,8 +225,6 @@
   </section>
 
   <footer class="footer"><p>&copy; 2025 RewardedTV. All rights reserved.</p></footer>
-
-  <!-- Firebase + App scripts unchanged -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>

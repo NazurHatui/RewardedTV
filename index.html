@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RewardedTV</title>
   <style>
+    /* … your existing CSS … */
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#0a0a0a; color:#e0e0e0; line-height:1.6; }
     header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
@@ -90,7 +91,12 @@
 
   <footer class="footer"><p>&copy; 2025 RewardedTV. All rights reserved.</p></footer>
 
-  <!-- Only load app.js here -->
+  <!-- Load Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- App logic -->
   <script src="app.js"></script>
   <script>
     document.getElementById('mobile-menu').addEventListener('click', () =>

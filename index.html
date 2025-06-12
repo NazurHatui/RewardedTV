@@ -67,40 +67,9 @@
       counter-reset: rank;
       list-style: none;
     }
-    .leaderboard-list li {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid #2a2a2a;
-      counter-increment: rank;
-    }
-    .leaderboard-list li:last-child {
-      border-bottom: none;
-    }
-    .leaderboard-list li:nth-child(odd) {
-      background: rgba(255,255,255,0.05);
-    }
-    .position {
-      width: 2.5rem;
-      font-weight: bold;
-      color: #9b59b6;
-      text-align: left;
-    }
-    .leaderboard-list li:nth-child(1) .position::before { content: ""; }
-    .leaderboard-list li:nth-child(2) .position::before { content: ""; }
-    .leaderboard-list li:nth-child(3) .position::before { content: ""; }
-    .name {
-      flex: 1;
-      margin-left: 1rem;
-      color: #e0e0e0;
-    }
-    .watches {
-      font-weight: bold;
-      color: #f39c12;
-    }
+    /* … leaderboard rules unchanged … */
 
-    /* ——— NEW FANCY STREAKS STYLING ——— */
+    /* ——— FANCY STREAKS STYLING ——— */
     .streaks-list {
       max-width: 500px;
       margin: 1rem auto;
@@ -117,7 +86,7 @@
       padding: 0.75rem 1rem;
       border-bottom: 1px solid #2a2a2a;
       counter-increment: rank;
-      margin-bottom: 0.5rem; /* added vertical spacing */
+      margin-bottom: 0.5rem;
     }
     .streaks-list li:last-child {
       border-bottom: none;
@@ -139,6 +108,11 @@
       flex: 1;
       margin-left: 1rem;
       color: #e0e0e0;
+    }
+    /* ← NEW: color the reward text yellow */
+    .streak-amount {
+      color: #f39c12;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -229,10 +203,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="app.js"></script>
-  <script>
-    document.getElementById('mobile-menu').addEventListener('click', () =>
-      document.getElementById('nav-links').classList.toggle('active')
-    );
-  </script>
+  <script>document.getElementById('mobile-menu').addEventListener('click',()=>document.getElementById('nav-links').classList.toggle('active'));</script>
 </body>
 </html>

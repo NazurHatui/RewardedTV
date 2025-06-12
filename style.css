@@ -1,18 +1,22 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom, #0d001a000, #120022);
+  background: linear-gradient(to bottom, #0d001a00, #120022);
   color: #c7a4ff;
   text-align: center;
 }
 header {
   background: #1a001f;
   padding: 15px 20px;
-  position: relative;
+  position: relative; /* allow absolute positioning of logo */
   box-shadow: 0 2px 4px rgba(128,0,255,0.2);
 }
 .logo {
-  font-size: 28px;
+  position: absolute;    /* center at top */
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;       /* slightly larger */
   font-weight: bold;
   color: #ffffff;
 }

@@ -11,6 +11,10 @@
     .nav-links li { margin-left:1rem; }
     .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .nav-links a.active { color:#f39c12; }
+    /* Added styling for logout button */
+    #logout-btn { margin-left:1rem; padding:0.5rem 1rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; }
+    #logout-btn:hover { background:#8e44ad; }
+
     .hero-clone { background:#111; padding:2rem 0; text-align:center; margin:1rem 2rem; border-radius:8px; }
     .hero-clone .hero-title { display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
     .hero-clone .hero-logo { height:50px; margin:0 1rem; }
@@ -18,6 +22,7 @@
     .hero-clone p { color:#e0e0e0; margin:1rem 0; }
     .hero-clone button { padding:0.75rem 1.5rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; }
     .hero-clone button:hover { background:#8e44ad; }
+
     .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:2rem; }
     .stat-card { background:#1c1c1c; padding:1rem; border-radius:8px; text-align:center; }
     .stat-card h3 { color:#9b59b6; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.5px; font-size:0.85rem; }
@@ -36,7 +41,10 @@
       <li><a href="store.html">Store</a></li>
       <li><a href="profile.html">Profile</a></li>
     </ul>
-    <a href="admin.html">Admin</a>
+    <div>
+      <a href="admin.html">Admin</a>
+      <button id="logout-btn">Logout</button>
+    </div>
   </header>
 
   <!-- Cloned Unlock Daily Rewards Section -->
@@ -93,19 +101,17 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // “Watch on YouTube” gives +1 watched, +1 reward, +1 cap
+    // Increment on “Watch” click
     window.watchVideo = () => {
       window.open("https://www.youtube.com", "_blank");
-      const user = auth.currentUser;
-      if (!user) return alert("Please log in.");
-      db.collection("users").doc(user.uid).update({
-        watched:       firebase.firestore.FieldValue.increment(1),
-        rewardsEarned: firebase.firestore.FieldValue.increment(1),
-        caps:          firebase.firestore.FieldValue.increment(1)
+      if (!auth.currentUser) return alert("Please log in.");
+      db.collection("users").doc(auth.currentUser.uid).update({
+        watched: firebase.firestore.FieldValue.increment(1),
+        balance: firebase.firestore.FieldValue.increment(0.10)
       }).catch(console.error);
     };
 
-    // Use Caps -> +1 balance per cap
+    // Use Caps
     function useCaps() {
       const user = auth.currentUser;
       if (!user) return alert("Please log in.");
@@ -114,20 +120,20 @@
         const d = doc.data()||{};
         if ((d.caps||0) <= 0) return alert("No caps available");
         ref.update({
-          caps:    firebase.firestore.FieldValue.increment(-1),
-          balance: firebase.firestore.FieldValue.increment(1)
+          caps: firebase.firestore.FieldValue.increment(-1),
+          balance: firebase.firestore.FieldValue.increment(0.10)
         });
       });
     }
 
     // Auth state & live stats
     auth.onAuthStateChanged(user => {
-      if (!user) return location.replace("index.html");
-      document.getElementById("logout-btn")?.addEventListener("click", () => auth.signOut());
+      if (!user) return location.replace("index.html");  // send back to homepage when logged out
+      document.getElementById("logout-btn").addEventListener("click", () => auth.signOut());
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data()||{};
         document.getElementById("watched").innerText      = d.watched        || 0;
-        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned||0).toFixed(2);
+        document.getElementById("earned").innerText       = "$" + (d.rewardsEarned||d.balance||0).toFixed(2);
         document.getElementById("caps").innerText         = d.caps           || 0;
         document.getElementById("balance").innerText      = "$" + (d.balance  || 0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost         || 0) + "%";

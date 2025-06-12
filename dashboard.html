@@ -7,7 +7,7 @@
   <style>
     body { margin:0; font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
     header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
-    .nav-links { list-style:none; display:flex; }
+    .nav-links { list-style:none; display:flex; padding:0; margin:0; }
     .nav-links li { margin-left:1rem; }
     .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .nav-links a.active { color:#f39c12; }
@@ -26,8 +26,49 @@
     .stat-card { background:#1c1c1c; padding:1rem; border-radius:8px; text-align:center; }
     .stat-card h3 { color:#9b59b6; margin-bottom:0.5rem; text-transform:uppercase; font-size:0.85rem; }
     .stat-card .value { font-size:1.5rem; }
-    .stat-card .btn-small { margin-top:0.5rem; padding:0.25rem 0.5rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; font-size:0.75rem; }
-    .stat-card .btn-small:hover { background:#8e44ad; }
+
+    .project-dashboard {
+      background:#1c1c1c;
+      margin:2rem auto;
+      padding:2rem;
+      max-width:1200px;
+      border-radius:8px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.4);
+    }
+    .project-dashboard h2 {
+      color:#9b59b6;
+      margin-top:0;
+      font-size:1.75rem;
+      text-align:center;
+      border-bottom:2px solid #9b59b6;
+      padding-bottom:1rem;
+    }
+    .pd-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:1.5rem;
+      margin-top:1.5rem;
+    }
+    .pd-card {
+      background:#262626;
+      padding:1.25rem;
+      border-radius:8px;
+      text-align:center;
+      box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    }
+    .pd-card h3 {
+      margin:0 0 0.5rem;
+      font-size:1rem;
+      color:#f39c12;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+    .pd-card p {
+      margin:0;
+      font-size:1.25rem;
+      color:#e0e0e0;
+      font-weight:bold;
+    }
   </style>
 </head>
 <body>
@@ -83,6 +124,19 @@
     </div>
   </section>
 
+  <section class="project-dashboard">
+    <h2>Project Dashboard</h2>
+    <div class="pd-grid">
+      <div class="pd-card"><h3>Users Online</h3><p>17,434</p></div>
+      <div class="pd-card"><h3>Total Users</h3><p>289,331</p></div>
+      <div class="pd-card"><h3>Daily Users</h3><p>27,896</p></div>
+      <div class="pd-card"><h3>Amounts Paid</h3><p>$10,442,518</p></div>
+      <div class="pd-card"><h3>Videos Watched</h3><p>3,000,000,000</p></div>
+      <div class="pd-card"><h3>Uploads</h3><p>5,000,000</p></div>
+      <div class="pd-card"><h3>Revenue Monthly</h3><p>$32,000,181</p></div>
+    </div>
+  </section>
+
   <!-- Firebase & Tracking Logic -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -97,7 +151,6 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // Watch button: increment all stats together
     window.watchVideo = () => {
       window.open("https://www.youtube.com", "_blank");
       if (!auth.currentUser) return alert("Please log in.");
@@ -108,14 +161,9 @@
       }).catch(console.error);
     };
 
-    // Auth state & live stats
     auth.onAuthStateChanged(user => {
-      if (!user) return location.replace("index.html");  // back to homepage if logged out
-
-      // Logout button
+      if (!user) return location.replace("index.html");
       document.getElementById("logout-btn").onclick = () => auth.signOut();
-
-      // Listen for live updates
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data() || {};
         document.getElementById("watched").innerText      = d.watched        || 0;

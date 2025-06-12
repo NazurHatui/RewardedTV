@@ -5,13 +5,23 @@ body {
   color: #c7a4ff;
   text-align: center;
 }
-header {
-  background: #1a001f;
-  padding: 15px 20px;
-  position: relative;
-  box-shadow: 0 2px 4px rgba(128,0,255,0.2);
+header.header {
   display: flex;
   align-items: center;
+  padding: 15px 20px;
+  background: #1a001f;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 2px 4px rgba(128,0,255,0.2);
+}
+
+/* Center logo flex item */
+.logo-header {
+  flex: 1;
+  text-align: center;
+}
+.logo-header img {
+  height: 50px;
 }
 
 .logo {

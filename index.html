@@ -161,35 +161,41 @@
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
 
-    // ——— Register ———
+    // ensure persistence so login works reliably
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {
+      console.warn('Persistence unavailable, proceeding anyway');
+    });
+
+    // Register
     document.getElementById('register-btn').addEventListener('click', () => {
       const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
+      const pass  = document.getElementById('password').value;
       auth.createUserWithEmailAndPassword(email, pass)
         .catch(err => alert(err.message));
     });
 
-    // ——— Login ———
+    // Login (fixed)
     document.getElementById('login-btn').addEventListener('click', () => {
       const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
+      const pass  = document.getElementById('password').value;
       auth.signInWithEmailAndPassword(email, pass)
-        .then(() => alert('You are logged in'))
+        .then(() => {
+          alert('You are logged in');
+          location.replace('dashboard.html');
+        })
         .catch(err => alert(err.message));
     });
 
-    // ——— Logout ———
+    // Logout
     document.getElementById('logout-btn').addEventListener('click', () => {
       auth.signOut();
     });
 
-    // ——— Redirect on Auth State Change ———
+    // Redirect if already logged in
     auth.onAuthStateChanged(user => {
       if (user) {
-        // User is signed in → go to dashboard
-        location.replace("dashboard.html");
+        location.replace('dashboard.html');
       }
     });
   </script>

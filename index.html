@@ -55,6 +55,19 @@
       height: 60px;
       margin: 0 1rem;
     }
+
+    /* Leaderboard styling */
+    .leaderboard-list {
+      list-style: decimal inside;
+      padding: 0;
+      margin: 0.5rem auto;
+      text-align: left;
+      color: #e0e0e0;
+      max-width: 250px;
+    }
+    .leaderboard-list li {
+      margin-bottom: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -80,7 +93,6 @@
   </header>
 
   <section class="hero">
-    <!-- REPLACED h1 with flanking logos -->
     <div class="hero-title">
       <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
       <h1>Unlock Daily Rewards</h1>
@@ -109,7 +121,21 @@
       <button id="register-btn">Register</button>
       <button id="logout-btn">Logout</button>
     </div>
-    <div class="feature"><h2>Leaderboard</h2><p>Compete and climb ranks.</p></div>
+    <div class="feature">
+      <h2>Leaderboard</h2>
+      <ol class="leaderboard-list">
+        <li>Ziccas — Watches: 763,000</li>
+        <li>Voided — Watches: 761,000</li>
+        <li>Tunez — Watches: 723,000</li>
+        <li>Maztuki — Watches: 548,000</li>
+        <li>Elicryptosignals — Watches: 509,000</li>
+        <li>Rager — Watches: 480,000</li>
+        <li>CryptoTipo — Watches: 400,000</li>
+        <li>Hank — Watches: 300,000</li>
+        <li>DegenApe — Watches: 200,000</li>
+        <li>Iamnomad — Watches: 100,000</li>
+      </ol>
+    </div>
   </section>
 
   <footer class="footer"><p>&copy; 2025 RewardedTV. All rights reserved.</p></footer>

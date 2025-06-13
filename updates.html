@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Updates — RewardedTV</title>
+  <style>
+    /* —— Reset & Base —— */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
 
+    /* —— Header & Nav —— */
+    header.header {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; z-index:10;
+    }
+    .nav-links { list-style:none; display:flex; }
+    .nav-links li { margin-left:1.5rem; }
+    .nav-links a {
+      color:#e0e0e0; text-decoration:none; font-weight:500;
+    }
+    .nav-links a.active { color:#f39c12; }
+
+    /* —— Page Title —— */
+    .page-title {
+      text-align:center; margin:2rem 0;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .page-title img { height:40px; margin:0 1rem; }
+    .page-title h1 { color:#9b59b6; font-size:2.5rem; }
+
+    /* —— Update Cards —— */
+    #updates-container {
+      max-width:800px; margin:0 auto 4rem; padding:0 1rem;
+    }
+    .update {
+      background:#1c1c1c; border-radius:6px; padding:1.5rem;
+      margin-bottom:1.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    }
+    .update h2 { color:#f39c12; margin-bottom:0.5rem; }
+    .update time {
+      display:block; font-size:.85rem; color:#888;
+      margin-bottom:1rem;
+    }
+    .update p { line-height:1.6; }
+
+    /* —— No-JS fallback message —— */
+    #no-js {
+      text-align:center; color:#888; margin-top:4rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="helpers.html">Helpers</a></li>
+      <li><a href="pets.html">Pets</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li><a href="store.html">Store</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="updates.html" class="active">Updates</a></li>
+    </ul>
+    <div><a href="admin.html" style="color:#e0e0e0;text-decoration:none;">Admin</a></div>
+  </header>
+
+  <div class="page-title">
+    <img src="assets/logo.png" alt="Logo Left"/>
+    <h1>Updates</h1>
+    <img src="assets/logo.png" alt="Logo Right"/>
+  </div>
+
+  <div id="updates-container">
+    <p id="no-js">Loading updates…</p>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    // ——— Your Firebase config (replace with your values) ———
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ——— Reference the container ———
+    const container = document.getElementById('updates-container');
+    const noJsMsg   = document.getElementById('no-js');
+
+    // ——— Listen for live updates ordered by timestamp desc ———
+    db.collection('updates')
+      .orderBy('timestamp', 'desc')
+      .onSnapshot(snapshot => {
+        // clear old content
+        container.innerHTML = '';
+        if (snapshot.empty) {
+          container.innerHTML = '<p>No updates yet.</p>';
+          return;
+        }
+        // render each doc
+        snapshot.forEach(doc => {
+          const { title, body, timestamp } = doc.data();
+          const when = timestamp?.toDate().toLocaleString() || '';
+          const html = `
+            <div class="update">
+              <h2>${title}</h2>
+              <time>${when}</time>
+              <p>${body}</p>
+            </div>`;
+          container.insertAdjacentHTML('beforeend', html);
+        });
+      }, err => {
+        console.error(err);
+        container.innerHTML = '<p>Failed to load updates.</p>';
+      });
+  </script>
+</body>
+</html>

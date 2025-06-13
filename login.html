@@ -32,7 +32,6 @@
       .nav-links.active{transform:translateX(0);}
       .nav-links li{margin:1rem 0;text-align:center;}
     }
-    /* —— Login Card —— */
     .login-card {
       max-width:400px;margin:4rem auto;padding:2rem;
       background:#1c1c1c;border-radius:8px;
@@ -98,67 +97,70 @@
 
   <!-- Auth Logic -->
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
-      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1"
-    };
-    firebase.initializeApp(firebaseConfig);
+    window.addEventListener('DOMContentLoaded', () => {
+      // Initialize Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+        authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+        projectId: "rewardedtv-1e5b1"
+      };
+      firebase.initializeApp(firebaseConfig);
 
-    const auth        = firebase.auth();
-    const emailEl     = document.getElementById('email');
-    const passwordEl  = document.getElementById('password');
-    const loginBtn    = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const logoutBtn   = document.getElementById('logout-btn');
+      // Grab DOM elements
+      const emailEl     = document.getElementById('email');
+      const passwordEl  = document.getElementById('password');
+      const loginBtn    = document.getElementById('login-btn');
+      const registerBtn = document.getElementById('register-btn');
+      const logoutBtn   = document.getElementById('logout-btn');
 
-    // persistence with fallback
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-      .catch(e=>{
-        if (e.code === 'auth/visibility-check-was-unavailable')
-          return auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
-        throw e;
+      const auth = firebase.auth();
+
+      // Persistence fallback
+      auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .catch(e => {
+          if (e.code === 'auth/visibility-check-was-unavailable')
+            return auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+          throw e;
+        });
+
+      registerBtn.onclick = () => {
+        auth.createUserWithEmailAndPassword(emailEl.value, passwordEl.value)
+          .catch(e => alert(e.message));
+      };
+
+      loginBtn.onclick = () => {
+        auth.signInWithEmailAndPassword(emailEl.value, passwordEl.value)
+          .then(() => {
+            alert('You are logged in');
+            localStorage.setItem('updatesLastSeen', String(Date.now()));
+            location.replace('dashboard.html');
+          })
+          .catch(e => alert(e.message));
+      };
+
+      logoutBtn.onclick = () => auth.signOut();
+
+      auth.onAuthStateChanged(user => {
+        loginBtn.style.display    = user ? 'none' : 'block';
+        registerBtn.style.display = user ? 'none' : 'block';
+        logoutBtn.style.display   = user ? 'block': 'none';
+        if (user) location.replace('dashboard.html');
       });
 
-    registerBtn.onclick = () => {
-      auth.createUserWithEmailAndPassword(emailEl.value, passwordEl.value)
-        .catch(e => alert(e.message));
-    };
-
-    loginBtn.onclick = () => {
-      auth.signInWithEmailAndPassword(emailEl.value, passwordEl.value)
-        .then(()=>{
-          alert('You are logged in');
-          // mark updates as seen
-          localStorage.setItem('updatesLastSeen', String(Date.now()));
-          location.replace('dashboard.html');
-        })
-        .catch(e => alert(e.message));
-    };
-
-    logoutBtn.onclick = () => auth.signOut();
-
-    auth.onAuthStateChanged(user => {
-      // show/hide buttons
-      loginBtn.style.display    = user ? 'none' : 'block';
-      registerBtn.style.display = user ? 'none' : 'block';
-      logoutBtn.style.display   = user ? 'block': 'none';
-      if (user) location.replace('dashboard.html');
-    });
-
-    // show red dot if there's a newer update
-    firebase.firestore().collection('updates')
-      .orderBy('timestamp','desc').limit(1).get()
-      .then(snap => {
-        if (!snap.empty) {
-          const latest = snap.docs[0].data().timestamp.toMillis();
-          const seen   = +localStorage.getItem('updatesLastSeen')||0;
-          if (latest > seen) {
-            document.querySelector('#nav-updates .dot').style.display = 'block';
+      // Show red dot if new update exists
+      firebase.firestore().collection('updates')
+        .orderBy('timestamp','desc').limit(1).get()
+        .then(snap => {
+          if (!snap.empty) {
+            const latest = snap.docs[0].data().timestamp.toMillis();
+            const seen   = +localStorage.getItem('updatesLastSeen')||0;
+            if (latest > seen) {
+              document.querySelector('#nav-updates .dot').style.display = 'block';
+            }
           }
-        }
-      })
-      .catch(console.error);
+        })
+        .catch(console.error);
+    });
   </script>
 </body>
 </html>

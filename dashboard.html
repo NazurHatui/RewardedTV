@@ -128,8 +128,8 @@
       <div class="pd-card"><h3>Users Online</h3><p>17,434</p></div>
       <div class="pd-card"><h3>Total Users</h3><p>308,799</p></div>
       <div class="pd-card"><h3>Daily Users</h3><p>27,896</p></div>
-      <div class="pd-card"><h3>Amounts Paid</h3><p>$15,442,518</p></div>
-      <div class="pd-card"><h3>Videos Watched</h3><p>3,000,000,000</p></div>
+      <div class="pd-card"><h3>Amounts Paid</h3><p>$15,000,000</p></div>
+      <div class="pd-card"><h3>Videos Watched</h3><p>3,005,000,000</p></div>
       <div class="pd-card"><h3>Uploads</h3><p>5,000,000</p></div>
       <div class="pd-card"><h3>Revenue Monthly</h3><p>$32,000,181</p></div>
     </div>
@@ -183,7 +183,6 @@
 
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
     usersOnline = Math.min(Math.max(usersOnline,1000),45000);
-    // totalUsers initialized from static HTML (308,799), will remain fixed
     let totalUsers     = parseInt(elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
     let amountsPaid    = parseInt(localStorage.getItem('amountsPaid')    || elPaid.textContent.replace(/[\$,]/g,''), 10);
@@ -202,7 +201,7 @@
       return value;
     }
 
-    // 1) Users Online ±3k, clamp [1000,45000]
+    // 1) Users Online ±3k
     setInterval(()=>{
       usersOnline = updateAndStore(elOnline,'usersOnline',
         usersOnline + rnd(-3000,3000),
@@ -210,10 +209,10 @@
       );
     },1000);
 
-    // 2) Total Users — no interval, remains at 308,799
+    // 2) Total Users fixed
     elTotal.textContent = fmt(totalUsers);
 
-    // 3) Daily Users ±3k, clamp [1000,∞]
+    // 3) Daily Users ±3k
     setInterval(()=>{
       dailyUsers = updateAndStore(elDaily,'dailyUsers',
         dailyUsers + rnd(-3000,3000),
@@ -221,7 +220,7 @@
       );
     },1000);
 
-    // 4) Amounts Paid +5.5M/day → ≈ 5500000/86400 ≈ 64 per second
+    // 4) Amounts Paid +5.5M/day ≈ 5500000/86400 ≈ 64/sec
     setInterval(()=>{
       amountsPaid = updateAndStore(elPaid,'amountsPaid',
         amountsPaid + Math.round(5500000/86400),

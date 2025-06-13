@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — RewardedTV</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;line-height:1.6;}
+    header.header{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:#1a1a1a;position:sticky;top:0;}
+    .left-nav{display:flex;align-items:center;}
+    .menu-toggle{display:none;flex-direction:column;cursor:pointer;margin-right:1rem;}
+    .menu-toggle .bar{height:3px;width:25px;background:#9b59b6;margin:4px 0;}
+    .nav-links{list-style:none;display:flex;}
+    .nav-links li{margin-left:1.5rem;position:relative;}
+    .nav-links a{color:#e0e0e0;text-decoration:none;font-weight:500;}
+    .nav-links a.active{color:#f39c12;}
+    /* Red "new update" dot */
+    #nav-updates .dot {
+      display: none;
+      position: absolute;
+      top: -0.1rem; right: -0.4rem;
+      width: 0.5rem; height: 0.5rem;
+      background:#e74c3c;border-radius:50%;
+      box-shadow:0 0 4px rgba(231,76,60,0.6);
+    }
+    .right-nav a{margin-left:1rem;padding:0.5rem 1rem;background:#9b59b6;color:#111;text-decoration:none;border-radius:4px;}
+    .right-nav a:hover{background:#8e44ad;}
+    @media(max-width:768px){
+      .menu-toggle{display:flex;}
+      .nav-links{position:absolute;top:70px;left:0;background:#1a1a1a;flex-direction:column;width:200px;transform:translateX(-100%);transition:transform .3s;padding-top:1rem;}
+      .nav-links.active{transform:translateX(0);}
+      .nav-links li{margin:1rem 0;text-align:center;}
+    }
+    /* —— Login Card —— */
+    .login-card {
+      max-width:400px;margin:4rem auto;padding:2rem;
+      background:#1c1c1c;border-radius:8px;
+      box-shadow:0 4px 8px rgba(0,0,0,0.3);
+    }
+    .login-card h2 { color:#9b59b6;text-align:center;margin-bottom:1rem; }
+    .login-list { display:flex; flex-direction:column; }
+    .login-list input { padding:0.75rem;margin:0.5rem 0;background:#111;border:1px solid #9b59b6;border-radius:4px;color:#e0e0e0; }
+    .login-list button { padding:0.75rem;margin:0.5rem 0;background:#9b59b6;border:none;border-radius:4px;color:#111;cursor:pointer; }
+    .login-list button:hover { background:#8e44ad; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="left-nav">
+      <div id="mobile-menu" class="menu-toggle">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+      <ul id="nav-links" class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="pets.html">Pets</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li>
+        <li id="nav-updates">
+          <a href="updates.html">Updates</a>
+          <span class="dot"></span>
+        </li>
+      </ul>
+    </div>
+    <div class="right-nav">
+      <a href="login.html" class="active">Login</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </header>
+
+  <div class="login-card">
+    <h2>🔐 Login / Register</h2>
+    <div class="login-list">
+      <input id="email" type="email" placeholder="Email"/>
+      <input id="password" type="password" placeholder="Password"/>
+      <button id="login-btn">Login</button>
+      <button id="register-btn">Register</button>
+      <button id="logout-btn" style="display:none;">Logout</button>
+    </div>
+  </div>
+
+  <!-- Mobile menu toggle -->
+  <script>
+    document.getElementById('mobile-menu')
+      .addEventListener('click', () =>
+        document.getElementById('nav-links').classList.toggle('active')
+      );
+  </script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- Auth Logic -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // persistence
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .catch(e=>{
+        if(e.code==='auth/visibility-check-was-unavailable')
+          return auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+        throw e;
+      });
+
+    document.getElementById('register-btn').onclick = () => {
+      const email = emailEl.value, pass = passwordEl.value;
+      auth.createUserWithEmailAndPassword(email, pass).catch(e=>alert(e.message));
+    };
+    document.getElementById('login-btn').onclick = () => {
+      const email = emailEl.value, pass = passwordEl.value;
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(()=>{
+          alert('You are logged in');
+          localStorage.setItem('updatesLastSeen', String(Date.now()));
+          location.replace('dashboard.html');
+        })
+        .catch(e=>alert(e.message));
+    };
+    document.getElementById('logout-btn').onclick = () => auth.signOut();
+
+    auth.onAuthStateChanged(user => {
+      // show/hide buttons
+      loginBtn.style.display   = user ? 'none' : 'block';
+      registerBtn.style.display= user ? 'none' : 'block';
+      logoutBtn.style.display  = user ? 'block': 'none';
+      if(user) location.replace('dashboard.html');
+    });
+
+    // show red dot if new update exists
+    firebase.firestore().collection('updates').orderBy('timestamp','desc').limit(1).get()
+      .then(snap=>{
+        if(!snap.empty){
+          const latest = snap.docs[0].data().timestamp.toMillis();
+          const seen   = +localStorage.getItem('updatesLastSeen')||0;
+          if(latest>seen) document.querySelector('#nav-updates .dot').style.display='block';
+        }
+      })
+      .catch(console.error);
+  </script>
+</body>
+</html>

@@ -126,9 +126,9 @@
     <h2>Project Dashboard</h2>
     <div class="pd-grid">
       <div class="pd-card"><h3>Users Online</h3><p>17,434</p></div>
-      <div class="pd-card"><h3>Total Users</h3><p>326,899</p></div>
+      <div class="pd-card"><h3>Total Users</h3><p>308,799</p></div>
       <div class="pd-card"><h3>Daily Users</h3><p>27,896</p></div>
-      <div class="pd-card"><h3>Amounts Paid</h3><p>$16,442,518</p></div>
+      <div class="pd-card"><h3>Amounts Paid</h3><p>$10,442,518</p></div>
       <div class="pd-card"><h3>Videos Watched</h3><p>3,000,000,000</p></div>
       <div class="pd-card"><h3>Uploads</h3><p>5,000,000</p></div>
       <div class="pd-card"><h3>Revenue Monthly</h3><p>$32,000,181</p></div>
@@ -164,7 +164,6 @@
       document.getElementById("logout-btn").onclick = () => auth.signOut();
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data() || {};
-        // when videos watched changes, rewards always match 1$ per video:
         const watchedCount = d.watched || 0;
         document.getElementById("watched").innerText      = watchedCount;
         document.getElementById("earned").innerText       = '$' + watchedCount.toLocaleString();
@@ -172,30 +171,26 @@
         document.getElementById("balance").innerText      = '$' + (d.balance || 0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost || 0) + '%';
         document.getElementById("helpersCount").innerText = (d.helpers || []).length;
-        document.getElementById("pets").innerText = d.pets || 0;
+        document.getElementById("pets").innerText         = d.pets || 0;
       });
     });
   </script>
 
   <!-- Dynamic Metric Animation with Persistence -->
   <script>
-    // References
     const els = document.querySelectorAll('.pd-card p');
     const [elOnline, elTotal, elDaily, elPaid, elVids, elUploads, elRevenue] = els;
 
-    // Parse initial or persisted values
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
     usersOnline = Math.min(Math.max(usersOnline,1000),45000);
-    let totalUsers     = parseInt(localStorage.getItem('totalUsers')     || elTotal.textContent.replace(/,/g,''), 10);
+    // totalUsers initialized from static HTML (308,799), will remain fixed
+    let totalUsers     = parseInt(elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
     let amountsPaid    = parseInt(localStorage.getItem('amountsPaid')    || elPaid.textContent.replace(/[\$,]/g,''), 10);
     let videosWatched  = parseInt(localStorage.getItem('videosWatched')  || elVids.textContent.replace(/,/g,''), 10);
     let uploads        = parseInt(localStorage.getItem('uploads')        || elUploads.textContent.replace(/,/g,''), 10);
     let revenueMonthly = parseInt(localStorage.getItem('revenueMonthly') || elRevenue.textContent.replace(/[\$,]/g,''), 10);
 
-    const initialTotal = totalUsers;
-
-    // Utils
     const fmt = n => n.toLocaleString();
     const rnd = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
 
@@ -215,13 +210,8 @@
       );
     },1000);
 
-    // 2) Total Users ±20, clamp [initialTotal,400k]
-    setInterval(()=>{
-      totalUsers = updateAndStore(elTotal,'totalUsers',
-        totalUsers 
-        '', [initialTotal,307899]
-      );
-    },1000);
+    // 2) Total Users — no interval, remains at 308,799
+    elTotal.textContent = fmt(totalUsers);
 
     // 3) Daily Users ±3k, clamp [1000,∞]
     setInterval(()=>{
@@ -231,15 +221,15 @@
       );
     },1000);
 
-    // 4) Amounts Paid +5500$/min
+    // 4) Amounts Paid +5.5M/day → ≈ 5500000/86400 ≈ 64 per second
     setInterval(()=>{
       amountsPaid = updateAndStore(elPaid,'amountsPaid',
-        amountsPaid + Math.round(100/60),
+        amountsPaid + Math.round(5500000/86400),
         '$'
       );
     },1000);
 
-    // 5) Videos Watched +3M/day
+    // 5) Videos Watched +5M/day
     setInterval(()=>{
       videosWatched = updateAndStore(elVids,'videosWatched',
         videosWatched + Math.round(5000000/86400)
@@ -253,7 +243,7 @@
       );
     },1000);
 
-    // 7) Revenue Monthly +40k/hr
+    // 7) Revenue Monthly +50k/hr
     setInterval(()=>{
       revenueMonthly = updateAndStore(elRevenue,'revenueMonthly',
         revenueMonthly + Math.round(50000/3600),

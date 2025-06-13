@@ -7,7 +7,7 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
-    header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#111; position:sticky; top:0; }
+    header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
     .left-nav { display:flex; align-items:center; }
     .menu-toggle { display:none; flex-direction:column; cursor:pointer; margin-right:1rem; }
     .menu-toggle .bar { width:25px; height:3px; background:#9b59b6; margin:4px 0; }
@@ -24,7 +24,7 @@
       .nav-links li { margin:1rem 0; text-align:center; }
     }
 
-    /* ——— Hero / Title Section ——— */
+    /* Hero / Title Section */
     .hero {
       background:#111;
       padding:2rem 0;
@@ -44,7 +44,7 @@
       text-transform:uppercase;
     }
 
-    /* ——— Pet Grid ——— */
+    /* Pet Grid */
     .features {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
@@ -123,33 +123,79 @@
       <img src="assets/thefox.png" alt="TheFox"/>
       <h2>TheFox</h2>
       <p class="price">$950</p>
-      <button class="buy-btn">Buy</button>
+      <button class="buy-btn" data-pet="TheFox" data-price="950">Buy</button>
     </div>
     <div class="feature">
       <img src="assets/thecat.png" alt="TheCat"/>
       <h2>TheCat</h2>
       <p class="price">$950</p>
-      <button class="buy-btn">Buy</button>
+      <button class="buy-btn" data-pet="TheCat" data-price="950">Buy</button>
     </div>
     <div class="feature">
       <img src="assets/theowl.png" alt="TheOwl"/>
       <h2>TheOwl</h2>
       <p class="price">$950</p>
-      <button class="buy-btn">Buy</button>
+      <button class="buy-btn" data-pet="TheOwl" data-price="950">Buy</button>
     </div>
     <div class="feature">
       <img src="assets/thephoenix.png" alt="ThePhoenix"/>
       <h2>ThePhoenix</h2>
       <p class="price">$950</p>
-      <button class="buy-btn">Buy</button>
+      <button class="buy-btn" data-pet="ThePhoenix" data-price="950">Buy</button>
     </div>
   </section>
 
+  <!-- Firebase & Purchase Logic -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    document.getElementById('mobile-menu')
-      .addEventListener('click', () =>
-        document.getElementById('nav-links').classList.toggle('active')
-      );
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    document.querySelectorAll('.buy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const price = Number(btn.dataset.price);
+        const pet = btn.dataset.pet;
+        const user = auth.currentUser;
+        if (!user) return alert('Please log in to buy pets.');
+
+        const ref = db.collection('users').doc(user.uid);
+        ref.get().then(doc => {
+          const data = doc.data() || {};
+          const balance = data.balance || 0;
+          if (balance < price) {
+            return alert('Insufficient balance');
+          }
+          return ref.update({
+            balance: balance - price,
+            pets: firebase.firestore.FieldValue.increment(1),
+            [`ownedPets.${pet}`]: firebase.firestore.FieldValue.increment(1)
+          });
+        }).then(() => {
+          alert('Purchase successful!');
+        }).catch(err => {
+          console.error(err);
+          alert('Purchase failed.');
+        });
+      });
+    });
+
+    auth.onAuthStateChanged(user => {
+      if (!user) return location.replace('index.html');
+    });
+  </script>
+
+  <script>
+    document.getElementById('mobile-menu').addEventListener('click', () =>
+      document.getElementById('nav-links').classList.toggle('active')
+    );
   </script>
 </body>
 </html>

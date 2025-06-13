@@ -15,6 +15,22 @@
     .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .nav-links a.active { color:#f39c12; }
 
+    /* make the Updates li a positioning context */
+    .nav-links li#nav-updates { position: relative; }
+
+    /* red dot */
+    #nav-updates .dot {
+      display: none;
+      position: absolute;
+      top: -0.2rem;
+      right: -0.3rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      background: #e74c3c;
+      border-radius:50%;
+      box-shadow:0 0 4px rgba(231,76,60,0.6);
+    }
+
     /* right side controls */
     .right-nav { display:flex; align-items:center; }
     .right-nav a { color:#e0e0e0; text-decoration:none; font-weight:500; margin-right:1rem; }
@@ -71,7 +87,10 @@
         <li><a href="videos.html">Videos</a></li>
         <li><a href="store.html">Store</a></li>
         <li><a href="profile.html">Profile</a></li>
-        <li><a href="updates.html">Updates</a></li>
+        <li id="nav-updates">
+          <a href="updates.html">Updates</a>
+          <span class="dot"></span>
+        </li>
       </ul>
     </div>
 
@@ -257,6 +276,22 @@
         '$'
       );
     },1000);
+  </script>
+
+  <!-- Show red dot only if there’s a newer update than last seen -->
+  <script>
+    db.collection('updates')
+      .orderBy('timestamp','desc').limit(1).get()
+      .then(snap => {
+        if (!snap.empty) {
+          const latest = snap.docs[0].data().timestamp.toMillis();
+          const seen   = parseInt(localStorage.getItem('updatesLastSeen')||0, 10);
+          if (latest > seen) {
+            document.querySelector('#nav-updates .dot').style.display = 'block';
+          }
+        }
+      })
+      .catch(console.error);
   </script>
 </body>
 </html>

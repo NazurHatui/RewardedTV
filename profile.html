@@ -218,7 +218,7 @@
         }
 
         // Balance
-        document.getElementById("availableBalance").innerText = "$" + ( (d.balance||0).toFixed(2) );
+        document.getElementById("availableBalance").innerText = "$" + ((d.balance||0).toFixed(2));
       });
     });
 
@@ -236,7 +236,7 @@
     }
     document.getElementById("saveWalletBtn").onclick = saveWallet;
 
-    // Helper Picker (char1–char12 as .jpeg)
+    // Helper Picker (char1–char12 as .jpeg in assets/)
     document.getElementById("selectHelperBtn").onclick = () => {
       const picker = document.createElement("div");
       picker.id = "helperPicker";
@@ -248,7 +248,7 @@
       });
       for (let i = 1; i <= 12; i++) {
         const img = document.createElement("img");
-        img.src = `assets/helpers/char${i}.jpeg`;
+        img.src = `assets/char${i}.jpeg`;
         Object.assign(img.style, {
           width:'100px', height:'100px', margin:'0.5rem',
           cursor:'pointer', border:'2px solid #2a2a2a',

@@ -12,9 +12,21 @@
     .menu-toggle{display:none;flex-direction:column;cursor:pointer;margin-right:1rem;}
     .menu-toggle .bar{height:3px;width:25px;background:#9b59b6;margin:4px 0;}
     .nav-links{list-style:none;display:flex;}
-    .nav-links li{margin-left:1.5rem;}
+    .nav-links li{margin-left:1.5rem;position:relative;}
     .nav-links a{color:#e0e0e0;text-decoration:none;font-weight:500;}
     .nav-links a.active{color:#f39c12;}
+    /* Red "new update" dot */
+    #nav-updates .dot {
+      display: none;
+      position: absolute;
+      top: -0.1rem;
+      right: -0.4rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      background: #e74c3c;
+      border-radius: 50%;
+      box-shadow: 0 0 4px rgba(231,76,60,0.6);
+    }
     .right-nav a{margin-left:1rem;padding:0.5rem 1rem;background:#9b59b6;color:#111;text-decoration:none;border-radius:4px;}
     .right-nav a:hover{background:#8e44ad;}
     @media(max-width:768px){
@@ -75,7 +87,11 @@
         <li><a href="store.html">Store</a></li>
         <li><a href="profile.html">Profile</a></li>
         <li><a href="roadmap.html">Roadmap</a></li>
-        <li><a href="updates.html">Updates</a></li>         
+        <li id="nav-updates">
+          <a href="updates.html">Updates</a>
+          <span class="dot"></span>
+        </li>
+      </ul>
     </div>
     <div class="right-nav"><a href="admin.html">Admin</a></div>
   </header>
@@ -208,6 +224,17 @@
         location.replace('dashboard.html');
       }
     });
+  </script>
+
+  <!-- Show red dot if there's at least one update -->
+  <script>
+    firebase.firestore().collection('updates').limit(1).get()
+      .then(snap => {
+        if (!snap.empty) {
+          document.querySelector('#nav-updates .dot').style.display = 'block';
+        }
+      })
+      .catch(console.error);
   </script>
 </body>
 </html>

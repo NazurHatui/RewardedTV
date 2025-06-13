@@ -234,9 +234,14 @@
     function saveWallet() {
       const wallet = document.getElementById("walletInput").value;
       const uid    = firebase.auth().currentUser.uid;
+      // ← changed update() to set() with merge so wallet field is persisted
       db.collection("users").doc(uid)
-        .update({ wallet })
-        .then(() => alert("Wallet saved!"));
+        .set({ wallet }, { merge: true })
+        .then(() => alert("Wallet saved!"))
+        .catch(err => {
+          console.error(err);
+          alert("Failed to save wallet.");
+        });
     }
   </script>
 </body>

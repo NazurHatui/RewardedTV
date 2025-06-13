@@ -150,7 +150,7 @@
   </section>
 
   <div class="profile-dashboard">
-    <!-- Avatar from last helper -->
+    <!-- Avatar from selectedHelper -->
     <div class="card avatar-card">
       <h2>Your Helper</h2>
       <img id="avatarPreview" src="assets/default-avatar.png" alt="Helper Avatar"/>
@@ -203,11 +203,10 @@
       ref.onSnapshot(doc => {
         const d = doc.data()||{};
 
-        // Last helper
-        const helpers = d.helpers || [];
-        const last = helpers[helpers.length-1] || {};
-        document.getElementById("avatarPreview").src = last.avatarURL || "assets/default-avatar.png";
-        document.getElementById("helperName").innerText = last.name || "None";
+        // selectedHelper instead of helpers array
+        const sel = d.selectedHelper || {};
+        document.getElementById("avatarPreview").src = sel.avatarURL || "assets/default-avatar.png";
+        document.getElementById("helperName").innerText = sel.name || "None";
 
         // Wallet
         document.getElementById("walletInput").value = d.wallet||"";
@@ -256,9 +255,7 @@
         img.onclick = () => {
           db.collection("users").doc(auth.currentUser.uid)
             .set({
-              helpers: firebase.firestore.FieldValue.arrayUnion({
-                name:`char${i}`, avatarURL:img.src
-              })
+              selectedHelper: { name:`char${i}`, avatarURL:img.src }
             }, {merge:true})
             .then(()=>{
               document.getElementById("avatarPreview").src = img.src;

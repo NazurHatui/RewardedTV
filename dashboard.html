@@ -184,9 +184,9 @@
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
     usersOnline = Math.min(Math.max(usersOnline,1000),45000);
 
-    // start from your desired initial troughs,       then store so subsequent ticks build on them
-    let amountsPaid    = 15000000; localStorage.setItem('amountsPaid', amountsPaid);
-    let videosWatched  = 3005000000; localStorage.setItem('videosWatched', videosWatched);
+   // load from storage if present, otherwise use default
+    let amountsPaid   = parseInt(localStorage.getItem('amountsPaid')   || '15000000', 10);
+    let videosWatched = parseInt(localStorage.getItem('videosWatched') || '3005000000', 10);
 
     let totalUsers     = parseInt(elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);

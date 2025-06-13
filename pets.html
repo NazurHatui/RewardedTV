@@ -6,22 +6,42 @@
   <title>Pets — RewardedTV</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; line-height:1.6; }
+    body { font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
     header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
     .left-nav { display:flex; align-items:center; }
     .menu-toggle { display:none; flex-direction:column; cursor:pointer; margin-right:1rem; }
-    .menu-toggle .bar { height:3px; width:25px; background:#9b59b6; margin:4px 0; }
+    .menu-toggle .bar { width:25px; height:3px; background:#9b59b6; margin:4px 0; }
     .nav-links { list-style:none; display:flex; }
     .nav-links li { margin-left:1.5rem; }
     .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .nav-links a.active { color:#f39c12; }
     .right-nav a { margin-left:1rem; padding:0.5rem 1rem; background:#9b59b6; color:#111; text-decoration:none; border-radius:4px; }
     .right-nav a:hover { background:#8e44ad; }
-    @media(max-width:768px) {
+    @media(max-width:768px){
       .menu-toggle { display:flex; }
       .nav-links { position:absolute; top:70px; left:0; background:#1a1a1a; flex-direction:column; width:200px; transform:translateX(-100%); transition:transform .3s; padding-top:1rem; }
       .nav-links.active { transform:translateX(0); }
       .nav-links li { margin:1rem 0; text-align:center; }
+    }
+
+    /* ——— Hero / Title Section ——— */
+    .hero {
+      background:#111;
+      padding:2rem 0;
+      text-align:center;
+      margin-bottom:1rem;
+    }
+    .hero-title {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .hero-logo { height:50px; margin:0 1rem; }
+    .hero h1 {
+      color:#9b59b6;
+      font-size:2.5rem;
+      margin:0;
+      text-transform:uppercase;
     }
 
     /* ——— Pet Grid ——— */
@@ -29,21 +49,22 @@
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
       gap:1rem;
-      margin:2rem;
+      margin:0 2rem 2rem;
     }
     .feature {
       background:#1c1c1c;
       padding:2rem;
       border-radius:8px;
+      text-align:center;
       display:flex;
       flex-direction:column;
       align-items:center;
     }
     .feature img {
-      max-width:100%;
+      width:100%;
+      max-width:200px;
       border-radius:4px;
       margin-bottom:1rem;
-      height:200px;
       object-fit:cover;
     }
     .feature h2 {
@@ -89,6 +110,14 @@
     </div>
   </header>
 
+  <section class="hero">
+    <div class="hero-title">
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
+      <h1>Pets</h1>
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Right"/>
+    </div>
+  </section>
+
   <section class="features">
     <div class="feature">
       <img src="assets/thefox.png" alt="TheFox"/>
@@ -117,7 +146,6 @@
   </section>
 
   <script>
-    // Mobile menu toggle
     document.getElementById('mobile-menu')
       .addEventListener('click', () =>
         document.getElementById('nav-links').classList.toggle('active')

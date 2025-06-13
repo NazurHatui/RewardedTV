@@ -189,7 +189,7 @@
 
     <label for="walletInput">Crypto Wallet Address</label>
     <input id="walletInput" placeholder="0x..." type="text"/>
-    <button onclick="saveWallet()">Save Wallet</button>
+    <button id="saveWalletBtn" onclick="saveWallet()">Save Wallet</button>
 
     <div class="info-box">
       <h3>Deposit</h3>
@@ -228,16 +228,26 @@
         document.getElementById("walletInput").value = data.wallet || "";
         document.getElementById("availableBalance").innerText = "$" + (data.balance || 0).toFixed(2);
         document.getElementById("cashOut").innerText = "$" + (data.balance || 0).toFixed(2);
+
+        // If wallet already set, hide save button and disable input
+        if (data.wallet) {
+          document.getElementById("walletInput").disabled = true;
+          document.getElementById("saveWalletBtn").style.display = "none";
+        }
       });
     });
 
     function saveWallet() {
       const wallet = document.getElementById("walletInput").value;
       const uid    = firebase.auth().currentUser.uid;
-      // ← changed update() to set() with merge so wallet field is persisted
       db.collection("users").doc(uid)
         .set({ wallet }, { merge: true })
-        .then(() => alert("Wallet saved!"))
+        .then(() => {
+          alert("Wallet saved!");
+          // Hide save button and disable input immediately
+          document.getElementById("walletInput").disabled = true;
+          document.getElementById("saveWalletBtn").style.display = "none";
+        })
         .catch(err => {
           console.error(err);
           alert("Failed to save wallet.");

@@ -13,7 +13,15 @@
   <main class="container">
     <h2>User Management</h2>
     <table id="users-table">
-      <thead><tr><th>Email</th><th>Watched</th><th>Caps</th><th>Balance</th><th>Action</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Watched</th>
+          <th>Caps</th>
+          <th>Balance</th>
+          <th>Action</th>
+        </tr>
+      </thead>
       <tbody></tbody>
     </table>
   </main>
@@ -49,6 +57,7 @@
             <td>
               <button class="save-btn" data-id="${doc.id}">Save</button>
               <button class="reset-boost-btn" data-id="${doc.id}">Reset Boost</button>
+              <button class="reset-helpers-btn" data-id="${doc.id}">Reset Helpers</button>
             </td>
           `;
           tbody.appendChild(tr);
@@ -65,17 +74,24 @@
         const caps = Number(row.querySelector(".caps").value);
         const balance = Number(row.querySelector(".balance").value);
         db.collection("users").doc(id).update({ watched, caps, balance })
-          .then(() => alert("Saved!"));
+          .then(() => alert("✅ Saved!"))
+          .catch(err => { console.error(err); alert("❌ Save failed."); });
       }
 
       if (e.target.classList.contains("reset-boost-btn")) {
         if (confirm("Are you sure you want to reset this user's boost to 0%?")) {
           db.collection("users").doc(id).update({ boost: 0 })
             .then(() => alert("✅ Boost reset to 0%"))
-            .catch(err => {
-              console.error(err);
-              alert("❌ Failed to reset boost.");
-            });
+            .catch(err => { console.error(err); alert("❌ Failed to reset boost."); });
+        }
+      }
+
+      if (e.target.classList.contains("reset-helpers-btn")) {
+        if (confirm("Are you sure you want to reset this user's helpers to 0?")) {
+          // assuming `helpers` is stored as an array
+          db.collection("users").doc(id).update({ helpers: [] })
+            .then(() => alert("✅ Helpers reset to 0"))
+            .catch(err => { console.error(err); alert("❌ Failed to reset helpers."); });
         }
       }
     });

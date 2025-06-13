@@ -126,9 +126,9 @@
     <h2>Project Dashboard</h2>
     <div class="pd-grid">
       <div class="pd-card"><h3>Users Online</h3><p>17,434</p></div>
-      <div class="pd-card"><h3>Total Users</h3><p>289,331</p></div>
+      <div class="pd-card"><h3>Total Users</h3><p>326,899</p></div>
       <div class="pd-card"><h3>Daily Users</h3><p>27,896</p></div>
-      <div class="pd-card"><h3>Amounts Paid</h3><p>$10,442,518</p></div>
+      <div class="pd-card"><h3>Amounts Paid</h3><p>$16,442,518</p></div>
       <div class="pd-card"><h3>Videos Watched</h3><p>3,000,000,000</p></div>
       <div class="pd-card"><h3>Uploads</h3><p>5,000,000</p></div>
       <div class="pd-card"><h3>Revenue Monthly</h3><p>$32,000,181</p></div>
@@ -226,12 +226,12 @@
     // 3) Daily Users ±3k, clamp [1000,∞]
     setInterval(()=>{
       dailyUsers = updateAndStore(elDaily,'dailyUsers',
-        dailyUsers + rnd(-3000,3000),
+        dailyUsers + rnd(0),
         '', [1000,null]
       );
     },1000);
 
-    // 4) Amounts Paid +100$/min
+    // 4) Amounts Paid +4500$/min
     setInterval(()=>{
       amountsPaid = updateAndStore(elPaid,'amountsPaid',
         amountsPaid + Math.round(100/60),
@@ -239,7 +239,7 @@
       );
     },1000);
 
-    // 5) Videos Watched +1M/day
+    // 5) Videos Watched +3M/day
     setInterval(()=>{
       videosWatched = updateAndStore(elVids,'videosWatched',
         videosWatched + Math.round(5000000/86400)
@@ -253,7 +253,7 @@
       );
     },1000);
 
-    // 7) Revenue Monthly +50k/hr
+    // 7) Revenue Monthly +40k/hr
     setInterval(()=>{
       revenueMonthly = updateAndStore(elRevenue,'revenueMonthly',
         revenueMonthly + Math.round(50000/3600),

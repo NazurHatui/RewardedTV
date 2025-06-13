@@ -218,20 +218,20 @@
     // 2) Total Users ±20, clamp [initialTotal,400k]
     setInterval(()=>{
       totalUsers = updateAndStore(elTotal,'totalUsers',
-        totalUsers + rnd(-20,20),
-        '', [initialTotal,400000]
+        totalUsers 
+        '', [initialTotal,307899]
       );
     },1000);
 
     // 3) Daily Users ±3k, clamp [1000,∞]
     setInterval(()=>{
       dailyUsers = updateAndStore(elDaily,'dailyUsers',
-        dailyUsers + rnd(0),
+        dailyUsers + rnd(-3000,3000),
         '', [1000,null]
       );
     },1000);
 
-    // 4) Amounts Paid +4500$/min
+    // 4) Amounts Paid +5500$/min
     setInterval(()=>{
       amountsPaid = updateAndStore(elPaid,'amountsPaid',
         amountsPaid + Math.round(100/60),

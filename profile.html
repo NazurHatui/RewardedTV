@@ -76,6 +76,19 @@
     .avatar-card .helper-name {
       color:#e0e0e0; font-weight:500;
     }
+    /* styled “Select Helper” */
+    #selectHelperBtn {
+      width:100%;
+      padding:0.75rem;
+      background:#9b59b6;
+      color:#111;
+      border:none;
+      border-radius:4px;
+      margin-top:0.75rem;
+      cursor:pointer;
+      font-weight:500;
+    }
+    #selectHelperBtn:hover { background:#8e44ad; }
 
     /* Wallet Card */
     .wallet-card label {
@@ -212,32 +225,42 @@
     function saveWallet(){
       const val = document.getElementById("walletInput").value.trim();
       if (!val) return alert("Enter wallet");
-      const uid = auth.currentUser.uid;
-      db.collection("users").doc(uid)
+      db.collection("users").doc(auth.currentUser.uid)
         .set({wallet: val},{merge:true})
         .then(()=>{
           alert("Saved!");
           document.getElementById("walletInput").disabled = true;
           document.getElementById("saveWalletBtn").style.display = "none";
         })
-        .catch(e=>alert("Error"));
+        .catch(()=>alert("Error"));
     }
     document.getElementById("saveWalletBtn").onclick = saveWallet;
 
-    // Helper Picker (opens modal with char1–char12)
+    // Helper Picker (char1–char12 as .jpeg)
     document.getElementById("selectHelperBtn").onclick = () => {
       const picker = document.createElement("div");
       picker.id = "helperPicker";
-      picker.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;overflow:auto;padding:2rem;z-index:1000;";
+      Object.assign(picker.style, {
+        position:'fixed', top:0, left:0, width:'100%', height:'100%',
+        background:'rgba(0,0,0,0.8)', display:'flex',
+        flexWrap:'wrap', alignItems:'center', justifyContent:'center',
+        overflow:'auto', padding:'2rem', zIndex:1000
+      });
       for (let i = 1; i <= 12; i++) {
         const img = document.createElement("img");
-        img.src = `assets/helpers/char${i}.png`;
-        img.style = "width:100px;height:100px;margin:0.5rem;cursor:pointer;border:2px solid #2a2a2a;border-radius:8px;";
+        img.src = `assets/helpers/char${i}.jpeg`;
+        Object.assign(img.style, {
+          width:'100px', height:'100px', margin:'0.5rem',
+          cursor:'pointer', border:'2px solid #2a2a2a',
+          borderRadius:'8px', background:'#000'
+        });
         img.onclick = () => {
-          // save selection
-          const uid=auth.currentUser.uid;
-          db.collection("users").doc(uid)
-            .set({ helpers: firebase.firestore.FieldValue.arrayUnion({ name: `char${i}`, avatarURL: img.src }) }, { merge:true })
+          db.collection("users").doc(auth.currentUser.uid)
+            .set({
+              helpers: firebase.firestore.FieldValue.arrayUnion({
+                name:`char${i}`, avatarURL:img.src
+              })
+            }, {merge:true})
             .then(()=>{
               document.getElementById("avatarPreview").src = img.src;
               document.getElementById("helperName").innerText = `char${i}`;

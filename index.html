@@ -82,7 +82,7 @@
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="helpers.html">Helpers</a></li>
-        <li><a href="pets.html">Pets</a></li>        
+        <li><a href="pets.html">Pets</a></li>
         <li><a href="videos.html">Videos</a></li>
         <li><a href="store.html">Store</a></li>
         <li><a href="profile.html">Profile</a></li>
@@ -226,12 +226,17 @@
     });
   </script>
 
-  <!-- Show red dot if there's at least one update -->
+  <!-- Show red dot only if there’s a newer update than last seen -->
   <script>
-    firebase.firestore().collection('updates').limit(1).get()
+    firebase.firestore().collection('updates')
+      .orderBy('timestamp','desc').limit(1).get()
       .then(snap => {
         if (!snap.empty) {
-          document.querySelector('#nav-updates .dot').style.display = 'block';
+          const latest = snap.docs[0].data().timestamp.toMillis();
+          const seen   = parseInt(localStorage.getItem('updatesLastSeen')||0, 10);
+          if (latest > seen) {
+            document.querySelector('#nav-updates .dot').style.display = 'block';
+          }
         }
       })
       .catch(console.error);

@@ -11,6 +11,20 @@
     <div class="logo">REWARDED<span style="color: gold;">TV</span> Dashboard</div>
   </header>
   <main class="container">
+    
+    <!-- ==== Publish Update Form (new) ==== -->
+    <section class="card">
+      <h2>📢 Publish a Community Update</h2>
+      <form id="update-form" style="display:flex; flex-direction:column; gap:0.5rem; max-width:600px; margin-bottom:2rem;">
+        <input id="upd-title" type="text" placeholder="Update Title" style="padding:0.5rem;"/>
+        <textarea id="upd-body" rows="4" placeholder="Update Text" style="padding:0.5rem;"></textarea>
+        <button type="submit" style="padding:0.5rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer;">
+          Publish Update
+        </button>
+      </form>
+    </section>
+    <!-- ==== end Publish Update Form ==== -->
+
     <h2>User Management</h2>
     <table id="users-table">
       <thead>
@@ -115,6 +129,32 @@
     });
 
     loadUsers();
+  </script>
+
+  <!-- ==== Publish Update Logic ==== -->
+  <script>
+    const form = document.getElementById('update-form');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const title = document.getElementById('upd-title').value.trim();
+      const body  = document.getElementById('upd-body').value.trim();
+      if (!title || !body) {
+        return alert('Both title and body are required.');
+      }
+      db.collection('updates').add({
+        title,
+        body,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        alert('✅ Update published!');
+        form.reset();
+      })
+      .catch(err => {
+        console.error(err);
+        alert('❌ Failed to publish update.');
+      });
+    });
   </script>
 </body>
 </html>

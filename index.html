@@ -50,30 +50,59 @@
     .intro-box h2{color:#9b59b6;margin-bottom:1rem;font-size:2rem;text-align:center;}
     .intro-box p{color:#e0e0e0;line-height:1.8;font-size:1rem;}
 
-    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin:1rem 2rem;}
-    .feature{background:#1c1c1c;padding:1rem;border-radius:8px;}
+    .features {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:1rem;
+      margin:1rem 2rem;
+    }
+    .feature {
+      background:#1c1c1c;
+      padding:1rem;
+      border-radius:8px;
+
+      /* make each feature a flex column */
+      display:flex;
+      flex-direction:column;
+    }
     .feature h2{color:#9b59b6;margin-bottom:1rem;text-align:center;}
-    .streaks-list, .leaderboard-list{list-style:none;padding:0;counter-reset:rank;margin:0;}
-    .streaks-list li, .leaderboard-list li{display:flex;align-items:center;justify-content:space-between;padding:0.75rem;border-bottom:1px solid #2a2a2a;counter-increment:rank;margin-bottom:0.5rem;background:rgba(255,255,255,0.05);border-radius:4px;}
-    .streaks-list li:last-child, .leaderboard-list li:last-child{border-bottom:none;margin-bottom:0;}
+
+    /* equal-height lists */
+    .feature ol {
+      flex:1;
+      list-style:none;
+      padding:0;
+      margin:0;
+      counter-reset:rank;
+      display:flex;
+      flex-direction:column;
+    }
+    .feature ol li {
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0.75rem;
+      border-bottom:1px solid #2a2a2a;
+      counter-increment:rank;
+      margin-bottom:0.5rem;
+      background:rgba(255,255,255,0.05);
+      border-radius:4px;
+    }
+    .feature ol li:last-child {border-bottom:none;margin-bottom:0;}
+
+    /* Daily Streaks numbering */
+    .streaks-list .position::before{content:counter(rank)". ";}
+
+    /* Top Creators */
+    .creators-list li .rank {color:#f39c12;font-weight:bold;}
+
+    /* Leaderboard numbering (no emojis) */
+    .leaderboard-list .position::before{content:counter(rank)". ";}
+
     .position{width:2rem;color:#9b59b6;font-weight:bold;}
-    .position::before{content:counter(rank)". ";}
-    .leaderboard-list li:nth-child(1) .position::before{content:"🥇 1. ";}
-    .leaderboard-list li:nth-child(2) .position::before{content:"🥈 2. ";}
-    .leaderboard-list li:nth-child(3) .position::before{content:"🥉 3. ";}
     .streak-text, .name{flex:1;color:#e0e0e0;margin:0 0.5rem;}
     .streak-amount, .watches{color:#f39c12;font-weight:bold;}
-
-    /* Top Creators list */
-    .creators-list {list-style:none;padding:0;margin:0;}
-    .creators-list li {
-      display:flex;justify-content:space-between;
-      padding:0.75rem;background:rgba(255,255,255,0.05);
-      border-bottom:1px solid #2a2a2a;border-radius:4px;margin-bottom:0.5rem;
-    }
-    .creators-list li:last-child {margin-bottom:0;border-bottom:none;}
-    .creators-list span {color:#e0e0e0;font-weight:500;}
-    .creators-list .rank {color:#f39c12;font-weight:bold;}
 
     .login-list{display:none;} /* hide old login */
     footer.footer{text-align:center;padding:1rem;background:#1a1a1a;margin-top:2rem;}
@@ -110,7 +139,7 @@
     <div class="hero-title">
       <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
       <h1>Unlock Daily Rewards</h1>
-      <img src="assets/logo.png" class="hero-logo" alt="Logo Right"/>
+      <img src="assets-logo.png" class="hero-logo" alt="Logo Right"/>
     </div>
     <p>Watch videos, earn credits, and claim exclusive perks.</p>
     <button onclick="watchVideo()">▶ Watch on YouTube</button>
@@ -141,7 +170,7 @@
     </div>
 
     <div class="feature">
-      <h2>✨ Top Creators</h2>
+      <h2>Top Creators</h2>
       <ol class="creators-list">
         <li><span>PixelVoyager</span><span class="rank">1#</span></li>
         <li><span>EchoCrafted</span><span class="rank">2#</span></li>

@@ -3,173 +3,124 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> Profile — RewardedTV</title>
+  <title>Profile — RewardedTV</title>
   <style>
     /* ——— Global Reset & Typography ——— */
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0a0a0a;
-      color: #e0e0e0;
-      line-height: 1.6;
+      font-family:'Segoe UI',sans-serif;
+      background:#0a0a0a;
+      color:#e0e0e0;
+      line-height:1.6;
     }
 
-    /* ——— Header & Navigation ——— */
+    /* ——— Header & Nav ——— */
     header.header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: #111;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:1rem 2rem; background:#111;
     }
-    .left-nav, .right-nav {
-      display: flex;
-      align-items: center;
-    }
-    .nav-links {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-    .nav-links li { margin-left: 1.5rem; }
+    .nav-links { list-style:none; display:flex; }
+    .nav-links li + li { margin-left:1.5rem; }
     .nav-links a {
-      color: #e0e0e0;
-      text-decoration: none;
-      font-weight: 500;
+      color:#e0e0e0; text-decoration:none; font-weight:500;
     }
     .right-nav a {
-      background: #9b59b6;
-      color: #111;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 500;
+      background:#9b59b6; color:#111; padding:0.5rem 1rem;
+      border-radius:4px; text-decoration:none; font-weight:500;
     }
-    .right-nav a:hover { background: #8e44ad; }
+    .right-nav a:hover { background:#8e44ad; }
 
-    /* ——— Hero Section ——— */
+    /* ——— Hero ——— */
     .hero {
-      background: #111;
-      padding: 2rem;
-      text-align: center;
+      background:#111; text-align:center; padding:2rem;
     }
     .hero-title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:1rem;
     }
-    .hero-logo {
-      height: 60px;
-      margin: 0 1rem;
-    }
+    .hero-logo { height:60px; margin:0 1rem; }
     .hero h1 {
-      color: #9b59b6;
-      font-size: 2.5rem;
-      margin: 0;
+      color:#9b59b6; font-size:2.5rem; margin:0;
     }
-    .hero p {
-      color: #e0e0e0;
-      margin-top: 0.5rem;
-    }
+    .hero p { margin-top:0.5rem; }
 
     /* ——— Profile Card ——— */
     .profile-card {
-      max-width: 500px;
-      margin: 2rem auto;
-      background: #1c1c1c;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      padding: 2rem;
+      max-width:500px; margin:2rem auto; background:#1c1c1c;
+      border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.3);
+      padding:2rem;
     }
     .profile-card h2 {
-      color: #f39c12;
-      margin-bottom: 1rem;
-      text-align: center;
+      color:#f39c12; text-align:center; margin-bottom:0.5rem;
     }
-    .profile-card label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 500;
-      color: #e0e0e0;
-    }
-    .profile-card input {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      background: #0a0a0a;
-      border: 1px solid #9b59b6;
-      border-radius: 4px;
-      color: #e0e0e0;
-    }
-    .profile-card button {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 1rem;
-      background: #9b59b6;
-      color: #111;
-      border: none;
-      border-radius: 4px;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .profile-card button:hover {
-      background: #8e44ad;
+    .profile-card .member-since {
+      text-align:center; font-size:0.9rem; color:#888;
+      margin-bottom:1.5rem;
     }
 
-    /* ——— Info Boxes ——— */
+    /* — Avatar Upload — */
+    .avatar-preview {
+      display:block; width:120px; height:120px;
+      border-radius:50%; background:#2a2a2a;
+      object-fit:cover; margin:0 auto 1rem;
+    }
+    .avatar-input { display:none; }
+    .avatar-label {
+      display:block; text-align:center;
+      padding:0.5rem 1rem; background:#9b59b6;
+      color:#111; border-radius:4px; cursor:pointer;
+      margin-bottom:1.5rem;
+    }
+    .avatar-label:hover { background:#8e44ad; }
+
+    /* — Wallet Input — */
+    .profile-card label {
+      display:block; margin-bottom:0.5rem; font-weight:500;
+    }
+    .profile-card input {
+      width:100%; padding:0.75rem; background:#0a0a0a;
+      border:1px solid #9b59b6; border-radius:4px;
+      color:#e0e0e0; margin-bottom:1rem;
+    }
+    .profile-card button {
+      width:100%; padding:0.75rem; background:#9b59b6;
+      color:#111; border:none; border-radius:4px;
+      font-weight:500; cursor:pointer;
+    }
+    .profile-card button:hover { background:#8e44ad; }
+
+    /* — Info Boxes — */
     .info-box {
-      background: #121212;
-      margin-top: 2rem;
-      padding: 1rem;
-      border-radius: 6px;
-      border: 1px solid #9b59b6;
+      background:#121212; margin-top:2rem; padding:1rem;
+      border-radius:6px; border:1px solid #9b59b6;
     }
     .info-box h3 {
-      color: #f39c12;
-      margin-bottom: 0.75rem;
+      color:#f39c12; margin-bottom:0.75rem; text-align:center;
     }
     .qr-code {
-      display: block;
-      margin: 0.5rem auto;
-      max-width: 200px;
-      width: 100%;
+      display:block; max-width:200px; margin:0 auto 0.5rem;
     }
-    .wallet-address,
-    .info-box p {
-      color: #e0e0e0;
-      text-align: center;
-      margin: 0.5rem 0;
+    .wallet-address, .info-box p {
+      text-align:center; margin:0.5rem 0; color:#e0e0e0;
     }
-    .info-box .withdraw-btn {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 1rem;
-      background: #9b59b6;
-      color: #111;
-      border: none;
-      border-radius: 4px;
-      font-weight: 500;
-      cursor: pointer;
+    .withdraw-btn {
+      width:100%; padding:0.75rem; background:#9b59b6;
+      color:#111; border:none; border-radius:4px;
+      font-weight:500; cursor:pointer;
+      display:block; margin:1rem auto 0;
     }
-    .info-box .withdraw-btn:hover {
-      background: #8e44ad;
-    }
+    .withdraw-btn:hover { background:#8e44ad; }
   </style>
 </head>
 <body>
   <header class="header">
-    <div class="left-nav">
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="helpers.html">Helpers</a></li>
-        <li><a href="videos.html">Videos</a></li>
-        <li><a href="store.html">Store</a></li>
-        <li><a href="profile.html">Profile</a></li>
-      </ul>
-    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="helpers.html">Helpers</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li><a href="store.html">Store</a></li>
+      <li><a href="profile.html" class="active">Profile</a></li>
+    </ul>
     <div class="right-nav">
       <a href="admin.html">Admin</a>
     </div>
@@ -185,27 +136,35 @@
   </section>
 
   <div class="profile-card">
-    <h2>Logged in as: <span id="profileUser"></span></h2>
+    <h2 id="profileUser">Logged in as:</h2>
+    <div class="member-since">Member since <span id="memberSince">—</span></div>
 
+    <!-- Avatar -->
+    <img id="avatarPreview" src="assets/default-avatar.png" alt="Avatar" class="avatar-preview"/>
+    <input type="file" id="avatarInput" accept="image/*" class="avatar-input"/>
+    <label for="avatarInput" class="avatar-label">Change Avatar</label>
+
+    <!-- Wallet -->
     <label for="walletInput">Crypto Wallet Address</label>
-    <input id="walletInput" placeholder="0x..." type="text"/>
-    <button id="saveWalletBtn" onclick="saveWallet()">Save Wallet</button>
+    <input id="walletInput" placeholder="0xABCD...1234" type="text"/>
+    <button id="saveWalletBtn">Save Wallet</button>
 
+    <!-- Deposit QR -->
     <div class="info-box">
       <h3>Deposit</h3>
       <img class="qr-code" src="https://raw.githubusercontent.com/nazurhatui/RewardedTV/main/qr.png" alt="QR Code"/>
       <div class="wallet-address">0x021A69e2971e25278AA0D8EA97d0FA1b46C7cf29</div>
     </div>
 
+    <!-- Balance -->
     <div class="info-box">
       <h3>Balance</h3>
       <p>Available Balance: <span id="availableBalance">$0.00</span></p>
-      <p>Available to Cash Out: <span id="cashOut">$0.00</span></p>
       <button class="withdraw-btn">Withdraw</button>
     </div>
   </div>
 
-  <!-- Firebase SDKs (unchanged) -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -224,27 +183,37 @@
       const ref = db.collection("users").doc(user.uid);
       ref.onSnapshot(doc => {
         const data = doc.data() || {};
-        document.getElementById("profileUser").innerText = user.email;
+        document.getElementById("profileUser").innerText = "Logged in as: " + user.email;
+        document.getElementById("memberSince").innerText = new Date(user.metadata.creationTime).toLocaleDateString();
         document.getElementById("walletInput").value = data.wallet || "";
-        document.getElementById("availableBalance").innerText = "$" + (data.balance || 0).toFixed(2);
-        document.getElementById("cashOut").innerText = "$" + (data.balance || 0).toFixed(2);
-
-        // If wallet already set, hide save button and disable input
+        document.getElementById("availableBalance").innerText = "$" + ((data.balance || 0).toFixed(2));
         if (data.wallet) {
           document.getElementById("walletInput").disabled = true;
           document.getElementById("saveWalletBtn").style.display = "none";
         }
+        if (data.avatarURL) {
+          document.getElementById("avatarPreview").src = data.avatarURL;
+        }
       });
     });
 
+    // Avatar preview + save
+    document.getElementById("avatarInput").onchange = e => {
+      const [file] = e.target.files;
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      document.getElementById("avatarPreview").src = url;
+      // TODO: upload file to storage & save URL in `users().doc(uid).update({ avatarURL })`
+    };
+
     function saveWallet() {
-      const wallet = document.getElementById("walletInput").value;
-      const uid    = firebase.auth().currentUser.uid;
+      const addr = document.getElementById("walletInput").value.trim();
+      if (!addr) return alert("Enter a wallet address");
+      const uid = auth.currentUser.uid;
       db.collection("users").doc(uid)
-        .set({ wallet }, { merge: true })
+        .set({ wallet: addr }, { merge: true })
         .then(() => {
           alert("Wallet saved!");
-          // Hide save button and disable input immediately
           document.getElementById("walletInput").disabled = true;
           document.getElementById("saveWalletBtn").style.display = "none";
         })

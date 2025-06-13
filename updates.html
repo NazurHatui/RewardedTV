@@ -102,6 +102,11 @@
           container.innerHTML = '<p>No updates yet.</p>';
           return;
         }
+
+        // mark latest as “seen”
+        const latestTS = snapshot.docs[0].data().timestamp.toMillis();
+        localStorage.setItem('updatesLastSeen', latestTS);
+
         // render each doc
         snapshot.forEach(doc => {
           const { title, body, timestamp } = doc.data();

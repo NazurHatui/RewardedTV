@@ -7,11 +7,18 @@
   <style>
     body { margin:0; font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
     header.header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#1a1a1a; position:sticky; top:0; }
+
+    /* left side navigation */
     .nav-links { list-style:none; display:flex; padding:0; margin:0; }
     .nav-links li { margin-left:1rem; }
+    .nav-links li:first-child { margin-left:0; }
     .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .nav-links a.active { color:#f39c12; }
-    #logout-btn { margin-left:1rem; padding:0.5rem 1rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; }
+
+    /* right side controls */
+    .right-nav { display:flex; align-items:center; }
+    .right-nav a { color:#e0e0e0; text-decoration:none; font-weight:500; margin-right:1rem; }
+    #logout-btn { padding:0.5rem 1rem; background:#9b59b6; color:#111; border:none; border-radius:4px; cursor:pointer; }
     #logout-btn:hover { background:#8e44ad; }
 
     .hero-clone { background:#111; padding:2rem 0; text-align:center; margin:1rem 2rem; border-radius:8px; }
@@ -54,16 +61,22 @@
 </head>
 <body>
   <header class="header">
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="dashboard.html" class="active">Dashboard</a></li>
-      <li><a href="helpers.html">Helpers</a></li>
-      <li><a href="pets.html">Pets</a></li>
-      <li><a href="videos.html">Videos</a></li>
-      <li><a href="store.html">Store</a></li>
-      <li><a href="profile.html">Profile</a></li>
-      <li><a href="updates.html">Updates</a></li>     
+    <!-- left nav -->
     <div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="pets.html">Pets</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="updates.html">Updates</a></li>
+      </ul>
+    </div>
+
+    <!-- right nav -->
+    <div class="right-nav">
       <a href="admin.html">Admin</a>
       <button id="logout-btn">Logout</button>
     </div>
@@ -184,10 +197,8 @@
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
     usersOnline = Math.min(Math.max(usersOnline,1000),45000);
 
-   // load from storage if present, otherwise use default
-    let amountsPaid   = parseInt(localStorage.getItem('amountsPaid')   || '15000000', 10);
-    let videosWatched = parseInt(localStorage.getItem('videosWatched') || '3005000000', 10);
-
+    let amountsPaid    = parseInt(localStorage.getItem('amountsPaid')   || '15000000', 10);
+    let videosWatched  = parseInt(localStorage.getItem('videosWatched') || '3005000000', 10);
     let totalUsers     = parseInt(elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
     let uploads        = parseInt(localStorage.getItem('uploads')        || elUploads.textContent.replace(/,/g,''), 10);
@@ -204,7 +215,6 @@
       return value;
     }
 
-    // 1) Users Online ±3k
     setInterval(()=>{
       usersOnline = updateAndStore(elOnline,'usersOnline',
         usersOnline + rnd(-3000,3000),
@@ -212,10 +222,9 @@
       );
     },1000);
 
-    // 2) Total Users fixed
+    // fixed total users
     elTotal.textContent = fmt(totalUsers);
 
-    // 3) Daily Users ±3k
     setInterval(()=>{
       dailyUsers = updateAndStore(elDaily,'dailyUsers',
         dailyUsers + rnd(-3000,3000),
@@ -223,7 +232,6 @@
       );
     },1000);
 
-    // 4) Amounts Paid +5.5M/day ≈ 5500000/86400 ≈ 64/sec
     setInterval(()=>{
       amountsPaid = updateAndStore(elPaid,'amountsPaid',
         amountsPaid + Math.round(5500000/86400),
@@ -231,21 +239,18 @@
       );
     },1000);
 
-    // 5) Videos Watched +5M/day
     setInterval(()=>{
       videosWatched = updateAndStore(elVids,'videosWatched',
         videosWatched + Math.round(5000000/86400)
       );
     },1000);
 
-    // 6) Uploads +100k/day
     setInterval(()=>{
       uploads = updateAndStore(elUploads,'uploads',
         uploads + Math.max(1,Math.round(100000/86400))
       );
     },1000);
 
-    // 7) Revenue Monthly +50k/hr
     setInterval(()=>{
       revenueMonthly = updateAndStore(elRevenue,'revenueMonthly',
         revenueMonthly + Math.round(50000/3600),

@@ -76,17 +76,11 @@
     .avatar-card .helper-name {
       color:#e0e0e0; font-weight:500;
     }
-    /* styled “Select Helper” */
     #selectHelperBtn {
-      width:100%;
-      padding:0.75rem;
-      background:#9b59b6;
-      color:#111;
-      border:none;
-      border-radius:4px;
-      margin-top:0.75rem;
-      cursor:pointer;
-      font-weight:500;
+      width:100%; padding:0.75rem;
+      background:#9b59b6; color:#111; border:none;
+      border-radius:4px; margin-top:0.75rem;
+      cursor:pointer; font-weight:500;
     }
     #selectHelperBtn:hover { background:#8e44ad; }
 
@@ -119,6 +113,9 @@
     .info-box .wallet-address,
     .info-box p {
       margin:0.5rem 0; color:#e0e0e0;
+      /* force-wrap long strings */
+      word-break: break-all;
+      overflow-wrap: anywhere;
     }
     .info-box .withdraw-btn {
       margin-top:0.75rem; padding:0.5rem;
@@ -173,7 +170,9 @@
     <div class="card info-box">
       <h3>Deposit</h3>
       <img class="qr-code" src="https://raw.githubusercontent.com/nazurhatui/RewardedTV/main/qr.png" alt="QR Code"/>
-      <div class="wallet-address">0x021A69e2971e25278AA0D8EA97d0FA1b46C7cf29</div>
+      <div class="wallet-address">
+        0x021A69e2971e25278AA0D8EA97d0FA1b46C7cf29
+      </div>
     </div>
 
     <!-- Balance -->
@@ -236,7 +235,7 @@
     }
     document.getElementById("saveWalletBtn").onclick = saveWallet;
 
-    // Helper Picker (char1–char12 as .jpeg in assets/)
+    // Helper Picker (char1–char12 in assets/, .jpeg)
     document.getElementById("selectHelperBtn").onclick = () => {
       const picker = document.createElement("div");
       picker.id = "helperPicker";

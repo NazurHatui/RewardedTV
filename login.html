@@ -104,47 +104,58 @@
       projectId: "rewardedtv-1e5b1"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
 
-    // persistence
+    const auth        = firebase.auth();
+    const emailEl     = document.getElementById('email');
+    const passwordEl  = document.getElementById('password');
+    const loginBtn    = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    const logoutBtn   = document.getElementById('logout-btn');
+
+    // persistence with fallback
     auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .catch(e=>{
-        if(e.code==='auth/visibility-check-was-unavailable')
+        if (e.code === 'auth/visibility-check-was-unavailable')
           return auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
         throw e;
       });
 
-    document.getElementById('register-btn').onclick = () => {
-      const email = emailEl.value, pass = passwordEl.value;
-      auth.createUserWithEmailAndPassword(email, pass).catch(e=>alert(e.message));
+    registerBtn.onclick = () => {
+      auth.createUserWithEmailAndPassword(emailEl.value, passwordEl.value)
+        .catch(e => alert(e.message));
     };
-    document.getElementById('login-btn').onclick = () => {
-      const email = emailEl.value, pass = passwordEl.value;
-      auth.signInWithEmailAndPassword(email, pass)
+
+    loginBtn.onclick = () => {
+      auth.signInWithEmailAndPassword(emailEl.value, passwordEl.value)
         .then(()=>{
           alert('You are logged in');
+          // mark updates as seen
           localStorage.setItem('updatesLastSeen', String(Date.now()));
           location.replace('dashboard.html');
         })
-        .catch(e=>alert(e.message));
+        .catch(e => alert(e.message));
     };
-    document.getElementById('logout-btn').onclick = () => auth.signOut();
+
+    logoutBtn.onclick = () => auth.signOut();
 
     auth.onAuthStateChanged(user => {
       // show/hide buttons
-      loginBtn.style.display   = user ? 'none' : 'block';
-      registerBtn.style.display= user ? 'none' : 'block';
-      logoutBtn.style.display  = user ? 'block': 'none';
-      if(user) location.replace('dashboard.html');
+      loginBtn.style.display    = user ? 'none' : 'block';
+      registerBtn.style.display = user ? 'none' : 'block';
+      logoutBtn.style.display   = user ? 'block': 'none';
+      if (user) location.replace('dashboard.html');
     });
 
-    // show red dot if new update exists
-    firebase.firestore().collection('updates').orderBy('timestamp','desc').limit(1).get()
-      .then(snap=>{
-        if(!snap.empty){
+    // show red dot if there's a newer update
+    firebase.firestore().collection('updates')
+      .orderBy('timestamp','desc').limit(1).get()
+      .then(snap => {
+        if (!snap.empty) {
           const latest = snap.docs[0].data().timestamp.toMillis();
           const seen   = +localStorage.getItem('updatesLastSeen')||0;
-          if(latest>seen) document.querySelector('#nav-updates .dot').style.display='block';
+          if (latest > seen) {
+            document.querySelector('#nav-updates .dot').style.display = 'block';
+          }
         }
       })
       .catch(console.error);

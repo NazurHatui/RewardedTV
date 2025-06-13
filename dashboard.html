@@ -58,7 +58,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="dashboard.html" class="active">Dashboard</a></li>
       <li><a href="helpers.html">Helpers</a></li>
-      <li><a href="pets.html">Pets</a></li>      
+      <li><a href="pets.html">Pets</a></li>
       <li><a href="videos.html">Videos</a></li>
       <li><a href="store.html">Store</a></li>
       <li><a href="profile.html">Profile</a></li>
@@ -183,10 +183,13 @@
 
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
     usersOnline = Math.min(Math.max(usersOnline,1000),45000);
+
+    // start from your desired initial troughs,       then store so subsequent ticks build on them
+    let amountsPaid    = 15000000; localStorage.setItem('amountsPaid', amountsPaid);
+    let videosWatched  = 3005000000; localStorage.setItem('videosWatched', videosWatched);
+
     let totalUsers     = parseInt(elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
-    let amountsPaid    = parseInt(localStorage.getItem('amountsPaid')    || elPaid.textContent.replace(/[\$,]/g,''), 10);
-    let videosWatched  = parseInt(localStorage.getItem('videosWatched')  || elVids.textContent.replace(/,/g,''), 10);
     let uploads        = parseInt(localStorage.getItem('uploads')        || elUploads.textContent.replace(/,/g,''), 10);
     let revenueMonthly = parseInt(localStorage.getItem('revenueMonthly') || elRevenue.textContent.replace(/[\$,]/g,''), 10);
 

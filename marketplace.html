@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Helpers & Pets Marketplace — RewardedTV</title>
   <style>
     /* Base & Theme */
@@ -10,149 +10,167 @@
     body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;}
     a{color:inherit;text-decoration:none;}
 
-    /* Marketplace Header */
+    /* Header */
     .market-header{
       display:flex;justify-content:space-between;align-items:center;
       padding:1rem 2rem;background:#111;position:sticky;top:0;z-index:10;
-      box-shadow:0 2px 8px rgba(0,0,0,0.5);
     }
-    .market-header h1{
-      color:#9b59b6;font-size:1.75rem;
-      text-shadow:0 0 8px rgba(155,89,182,0.7);
-    }
-    .market-header .controls{
-      display:flex;gap:1rem;align-items:center;
-    }
-    .market-header select,
-    .market-header input,
-    .market-header button{
-      background:#1c1c1c;
-      border:1px solid #9b59b6;
-      color:#e0e0e0;
-      padding:0.5rem;
-      border-radius:4px;
-      font-size:0.9rem;
-      cursor:pointer;
-      transition:all .2s;
-    }
-    .market-header select:hover,
-    .market-header input:hover,
-    .market-header button:hover{
-      background:#2a2a2a;
-      border-color:#f39c12;
-    }
-    /* Sell Item button */
-    #sellItemBtn{
-      background:#f39c12;border:1px solid #f39c12;color:#111;
-      text-transform:uppercase;font-weight:700;
-      box-shadow:0 0 12px rgba(243,156,18,0.8);
-    }
-    #sellItemBtn:hover{
-      background:#e0ac11;border-color:#e0ac11;
-    }
+    .market-header h1{color:#9b59b6;font-size:1.75rem;text-shadow:0 0 8px rgba(155,89,182,0.7);}
+    .market-header .controls{display:flex;gap:1rem;}
+    .market-header select,input{background:#1c1c1c;border:1px solid #9b59b6;color:#e0e0e0;padding:0.5rem;border-radius:4px;}
+
+    /* Section Titles */
+    section h2{margin:1.5rem 2rem 0.5rem;color:#f39c12;}
 
     /* Grid Layout */
-    .market-grid{padding:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+    .market-grid{padding:0 2rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
 
-    /* Card Style */
+    /* Card */
     .card{
       background:#1c1c1c;border-radius:8px;overflow:hidden;position:relative;
-      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s, box-shadow .2s;
+      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;
     }
-    .card:hover{
-      transform:translateY(-5px);
-      box-shadow:0 8px 32px rgba(0,0,0,0.7);
-    }
-    .card img{width:100%;display:block;object-fit:cover;height:150px;}
+    .card:hover{transform:translateY(-5px);}
+    .card img{width:100%;display:block;}
     .card-body{padding:1rem;display:flex;flex-direction:column;align-items:center;}
     .card-body h2{font-size:1.1rem;color:#f39c12;margin-bottom:0.5rem;}
-    .card-body p{margin-bottom:0.75rem;font-size:0.9rem;color:#ccc;text-align:center;}
+    .card-body p{margin-bottom:0.75rem;font-size:0.9rem;color:#ccc;}
     .btn-buy{
       background:#9b59b6;color:#111;padding:0.5rem 1rem;border:none;border-radius:4px;
       cursor:pointer;width:100%;font-weight:500;text-transform:uppercase;
       box-shadow:0 0 8px rgba(155,89,182,0.6);
-      transition:background .2s, box-shadow .2s;
     }
-    .btn-buy:hover{
-      background:#8e44ad;
-      box-shadow:0 0 12px rgba(142,68,173,0.8);
-    }
+    .btn-buy:hover{background:#8e44ad;}
 
     /* Neon Glow Overlay */
     .card::before{
       content:'';position:absolute;top:0;left:0;width:100%;height:100%;
-      box-shadow:0 0 12px rgba(155,89,182,0.8) inset;
-      opacity:0;transition:opacity .2s;
+      box-shadow:0 0 12px rgba(155,89,182,0.8) inset;opacity:0;transition:opacity .2s;
     }
     .card:hover::before{opacity:1;}
   </style>
 </head>
 <body>
   <header class="market-header">
-    <h1>Helpers &amp; Pets Marketplace</h1>
+    <h1>Helpers & Pets Marketplace</h1>
     <div class="controls">
-      <select><option>All Types</option><option>Helper</option><option>Pet</option></select>
-      <select><option>All Rarities</option><option>Common</option><option>Rare</option><option>Epic</option></select>
-      <input type="text" placeholder="Search…"/>
-      <button id="sellItemBtn">Sell Item</button>
+      <select id="filterType">
+        <option value="">All Types</option>
+        <option value="Helper">Helper</option>
+        <option value="Pet">Pet</option>
+      </select>
+      <select id="filterRarity">
+        <option value="">All Rarities</option>
+        <option value="Common">Common</option>
+        <option value="Rare">Rare</option>
+        <option value="Epic">Epic</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Search..." />
     </div>
   </header>
 
-  <!-- YOUR COLLECTION TAB (hidden by default, but we'll scroll to it) -->
-  <section id="collectionSection" style="display:none;padding:2rem;color:#888;text-align:center;">
+  <!-- Your Collection -->
+  <section id="collectionSection" style="display:none;">
     <h2>Your Collection</h2>
-    <p>You don’t own any items to sell.</p>
+    <div id="collectionGrid" class="market-grid"></div>
   </section>
 
-  <section class="market-grid" id="marketGrid">
-    <!-- Example cards; repeat as needed -->
-    <div class="card">
-      <img src="assets/helpers/char1.jpeg" alt="Char 1"/>
-      <div class="card-body">
-        <h2>Char 1</h2>
-        <p>Price: 500 Credits</p>
-        <button class="btn-buy">Buy Now</button>
-      </div>
-    </div>
-    <div class="card">
-      <img src="assets/pets/pet3.jpeg" alt="Pet 3"/>
-      <div class="card-body">
-        <h2>Pet 3</h2>
-        <p>Price: 750 Credits</p>
-        <button class="btn-buy">Buy Now</button>
-      </div>
-    </div>
-    <!-- …more cards… -->
+  <!-- Global Marketplace -->
+  <section>
+    <h2>All Listings</h2>
+    <div id="globalGrid" class="market-grid"></div>
   </section>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // Dummy array of user‐owned items; replace with real data
-    const yourItems = [
-      { src:'assets/helpers/char2.jpeg', name:'Char 2', type:'helper', price:600 },
-      { src:'assets/pets/pet1.jpeg', name:'Pet 1', type:'pet', price:900 }
-    ];
-
-    document.getElementById('sellItemBtn').onclick = () => {
-      if (!yourItems.length) {
-        return alert("You don’t own any helpers or pets to sell!");
-      }
-      // Render collectionSection
-      const sec = document.getElementById('collectionSection');
-      sec.style.display = 'block';
-      sec.innerHTML = '<h2>Your Collection</h2><div class="market-grid">' +
-        yourItems.map(item=>`
-          <div class="card">
-            <img src="${item.src}" alt="${item.name}"/>
-            <div class="card-body">
-              <h2>${item.name}</h2>
-              <p>Ready to sell? Price: ${item.price}₵</p>
-              <button class="btn-buy">List for Sale</button>
-            </div>
-          </div>
-        `).join('') +
-      '</div>';
-      sec.scrollIntoView({behavior:'smooth'});
+    // ——— Init Firebase ———
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
     };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth(), db = firebase.firestore();
+
+    // ——— Helper to build each card, falling back to assets/charN.jpeg ———
+    function makeCard(item, isOwn=false) {
+      // derive a safe image path if avatarURL missing
+      let imgSrc = item.avatarURL;
+      if (!imgSrc && item.name.match(/^char\d+$/i)) {
+        imgSrc = `assets/${item.name.toLowerCase()}.jpeg`;
+      }
+      return `
+        <div class="card">
+          <img src="${imgSrc}" alt="${item.name}" />
+          <div class="card-body">
+            <h2>${item.name}</h2>
+            <p>Price: ${item.price || 'TBD'}₵</p>
+            <button class="btn-buy" data-id="${item.id}" data-own="${isOwn}">
+              ${isOwn ? 'List for Sale' : 'Buy Now'}
+            </button>
+          </div>
+        </div>`;
+    }
+
+    // ——— Load Global Listings ———
+    function loadGlobal() {
+      db.collection('marketplace')
+        .get()
+        .then(snap => {
+          const out = [];
+          snap.forEach(doc => {
+            const d = doc.data(); d.id = doc.id;
+            out.push(d);
+          });
+          document.getElementById('globalGrid').innerHTML = out.map(i=>makeCard(i,false)).join('');
+        });
+    }
+
+    // ——— On Auth, load your collection + global ———
+    auth.onAuthStateChanged(user=>{
+      if(!user) return location.replace('index.html');
+      db.collection('users').doc(user.uid).get().then(doc=>{
+        const d = doc.data()||{};
+        const owned = (d.helpers||[]).concat(d.pets||[]);
+        if(owned.length){
+          document.getElementById('collectionSection').style.display = 'block';
+          document.getElementById('collectionGrid').innerHTML =
+            owned.map(item=>{
+              item.id = item.name; // unique key
+              return makeCard(item,true);
+            }).join('');
+        }
+      });
+      loadGlobal();
+    });
+
+    // ——— List / Buy Handlers ———
+    document.body.addEventListener('click', e=>{
+      if(!e.target.classList.contains('btn-buy')) return;
+      const id    = e.target.dataset.id;
+      const isOwn = e.target.dataset.own === 'true';
+
+      if(isOwn){
+        const price = prompt('Set your price in credits:');
+        if (!price) return;
+        const uid = auth.currentUser.uid;
+        // remove from user
+        db.collection('users').doc(uid).update({
+          helpers: firebase.firestore.FieldValue.arrayRemove({ name: id }),
+          pets:    firebase.firestore.FieldValue.arrayRemove({ name: id })
+        }).then(()=>{
+          // add to marketplace
+          db.collection('marketplace').add({ name:id, avatarURL:`assets/${id}.jpeg`, price })
+            .then(()=>alert('✅ Listed!'))
+            .catch(console.error);
+        });
+      } else {
+        alert('🚧 Buy flow not yet implemented');
+      }
+    });
   </script>
 </body>
 </html>

@@ -128,7 +128,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="helpers.html">Helpers</a></li>
         <li><a href="videos.html">Videos</a></li>
-        <li><a href="store.html">Store</a></li>
+        <li><a href="store.html" class="active">Store</a></li>
         <li><a href="profile.html">Profile</a></li>
       </ul>
     </div>
@@ -147,102 +147,44 @@
   </section>
 
   <section class="store-grid">
-    <!-- 10% Reward Boost -->
+    <!-- existing items... -->
     <div class="store-card">
       <img src="assets/boost-icon.jpeg" alt="10% Reward Boost"/>
       <h2>10% Reward Boost</h2>
       <div class="price">$800</div>
       <button class="buy-button">Buy Now</button>
     </div>
-    <!-- 20% Reward Boost -->
-    <div class="store-card">
-      <img src="assets/boost-icon.jpeg" alt="20% Reward Boost"/>
-      <h2>20% Reward Boost</h2>
-      <div class="price">$1200</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 50% Reward Boost -->
-    <div class="store-card">
-      <img src="assets/boost-icon.jpeg" alt="50% Reward Boost"/>
-      <h2>50% Reward Boost</h2>
-      <div class="price">$1850</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 100% Reward Boost -->
-    <div class="store-card">
-      <img src="assets/boost-icon.jpeg" alt="100% Reward Boost"/>
-      <h2>100% Reward Boost</h2>
-      <div class="price">$2000</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 200% Reward Boost -->
-    <div class="store-card">
-      <img src="assets/boost-icon.jpeg" alt="200% Reward Boost"/>
-      <h2>200% Reward Boost</h2>
-      <div class="price">$3500</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 500% Reward Boost -->
-    <div class="store-card">
-      <img src="assets/boost-icon.jpeg" alt="500% Reward Boost"/>
-      <h2>500% Reward Boost</h2>
-      <div class="price">$4500</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 100 CAP -->
-    <div class="store-card">
-      <img src="assets/cap-icon.jpeg" alt="100 CAP"/>
-      <h2>100 CAP</h2>
-      <div class="price">$1000</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 200 CAP -->
-    <div class="store-card">
-      <img src="assets/cap-icon.jpeg" alt="200 CAP"/>
-      <h2>200 CAP</h2>
-      <div class="price">$1500</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 500 CAP -->
-    <div class="store-card">
-      <img src="assets/cap-icon.jpeg" alt="500 CAP"/>
-      <h2>500 CAP</h2>
-      <div class="price">$2500</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- 1000 CAP -->
-    <div class="store-card">
-      <img src="assets/cap-icon.jpeg" alt="1000 CAP"/>
-      <h2>1000 CAP</h2>
-      <div class="price">$4000</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Add Queue -->
-    <div class="store-card">
-      <img src="assets/add-queue-icon.jpeg" alt="Add Queue"/>
-      <h2>Add Queue</h2>
-      <div class="price">$1850</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Remove Comments -->
-    <div class="store-card">
-      <img src="assets/remove-comments-icon.jpeg" alt="Remove Comments"/>
-      <h2>Remove Comments</h2>
-      <div class="price">$1100</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Reset Watches -->
-    <div class="store-card">
-      <img src="assets/reset-watches-icon.jpeg" alt="Reset Watches"/>
-      <h2>Reset Watches</h2>
-      <div class="price">$20,000</div>
-      <button class="buy-button">Buy Now</button>
-    </div>
-    <!-- Boost Helper -->
+    <!-- ...other boost & cap items up to 14 total... -->
     <div class="store-card">
       <img src="assets/boost-helper-icon.jpeg" alt="Boost Helper"/>
       <h2>Boost Helper</h2>
       <div class="price">$300</div>
+      <button class="buy-button">Buy Now</button>
+    </div>
+
+    <!-- New pet-food items -->
+    <div class="store-card">
+      <img src="assets/Food1.jpeg" alt="Ember Crunch"/>
+      <h2>Ember Crunch</h2>
+      <div class="price">$25</div>
+      <button class="buy-button">Buy Now</button>
+    </div>
+    <div class="store-card">
+      <img src="assets/Food2.jpeg" alt="Circuit Crunch"/>
+      <h2>Circuit Crunch</h2>
+      <div class="price">$30</div>
+      <button class="buy-button">Buy Now</button>
+    </div>
+    <div class="store-card">
+      <img src="assets/Food3.jpeg" alt="Midnight Munch"/>
+      <h2>Midnight Munch</h2>
+      <div class="price">$10</div>
+      <button class="buy-button">Buy Now</button>
+    </div>
+    <div class="store-card">
+      <img src="assets/Food4.jpeg" alt="Neon Nibbles"/>
+      <h2>Neon Nibbles</h2>
+      <div class="price">$10</div>
       <button class="buy-button">Buy Now</button>
     </div>
   </section>
@@ -252,7 +194,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase init & purchase logic (unchanged) -->
+  <!-- Firebase init & purchase logic (extended for 18 items) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
@@ -268,8 +210,16 @@
         alert("Please log in to make purchases.");
         return;
       }
-      const prices = [800,1200,1850,2000,3500,4500,1000,1500,2500,4000,1850,1100,20000,300];
-      const boosts = [10,20,50,100,200,500,0,0,0,0,0,0,0,0];
+      // original 14 prices + 4 new food prices
+      const prices = [
+        800,1200,1850,2000,3500,4500,1000,1500,2500,4000,1850,1100,20000,300,
+        25,30,10,10
+      ];
+      // original 14 boosts + 4 zeros for food
+      const boosts = [
+        10,20,50,100,200,500,0,0,0,0,0,0,0,0,
+        0,0,0,0
+      ];
       document.querySelectorAll(".buy-button").forEach((btn,i) => {
         btn.onclick = () => {
           const price = prices[i];

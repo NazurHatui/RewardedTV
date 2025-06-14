@@ -79,41 +79,59 @@
       margin-top: 0.5rem;
     }
 
-    /* ——— Video Grid & Cards ——— */
+    /* ——— Video Grid ——— */
     .video-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1.5rem;
-      margin: 2rem;
-      padding: 0 2rem;
+      margin: 2rem 0 0;
+      padding: 0 2rem 2rem;
     }
+
+    /* ——— Marketplace-style Cards ——— */
     .video-card {
       background: #1c1c1c;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      text-align: center;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      transition: transform .3s, box-shadow .3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .video-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.8);
     }
     .video-card img {
-      height: 40px;
-      margin-bottom: 0.75rem;
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      background: #000;
+      padding: 1rem;
     }
     .video-card p {
-      font-weight: 600;
       margin: 0.5rem 0 1rem;
-      color: #e0e0e0;
+      color: #f39c12;
+      font-weight: bold;
+      text-align: center;
     }
     .video-card button {
-      padding: 0.5rem 1rem;
-      background: #9b59b6;
+      margin-top: auto;
+      width: 100%;
+      padding: 0.6rem;
+      background: linear-gradient(45deg, #9b59b6, #e74c3c);
       color: #111;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-weight: 600;
       cursor: pointer;
-      font-weight: 500;
+      box-shadow: 0 0 10px rgba(231,76,60,0.7);
+      transition: background .3s;
+      text-transform: uppercase;
     }
     .video-card button:hover {
-      background: #8e44ad;
+      background: linear-gradient(45deg, #e74c3c, #9b59b6);
     }
   </style>
 </head>
@@ -143,63 +161,62 @@
   </section>
 
   <section class="video-grid">
-    <!-- All your existing video cards, unchanged except styling -->
+    <!-- Your 11 video cards, unchanged except styling -->
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Hockey</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Call of Duty</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Fortnite</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Basketball</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Book Reading</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>House Building</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Snow Removal</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Football Training</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Car Maintenance</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Drone Racing</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
     <div class="video-card">
       <img src="assets/youtube-icon.jpg" alt="YouTube">
       <p>Yoga Session</p>
-      <button onclick="window.open('https://www.youtube.com', '_blank')">▶ Watch</button>
+      <button onclick="window.open('https://www.youtube.com','_blank')">▶ Watch</button>
     </div>
-    <!-- ...and so on for all your other video entries (unchanged) ... -->
   </section>
 </body>
 </html>

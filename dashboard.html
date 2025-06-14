@@ -197,9 +197,15 @@
       document.getElementById("logout-btn").onclick = () => auth.signOut();
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data() || {};
+
+        // leave watched as-is
         const watchedCount = d.watched || 0;
-        document.getElementById("watched").innerText      = watchedCount;
-        document.getElementById("earned").innerText       = '$' + watchedCount.toLocaleString();
+        document.getElementById("watched").innerText = watchedCount;
+
+        // use rewardsEarned directly (fallback to watched if unset)
+        const earnedAmt = (d.rewardsEarned != null ? d.rewardsEarned : d.watched) || 0;
+        document.getElementById("earned").innerText = '$' + earnedAmt.toLocaleString();
+
         document.getElementById("caps").innerText         = d.caps || 0;
         document.getElementById("balance").innerText      = '$' + (d.balance || 0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost || 0) + '%';

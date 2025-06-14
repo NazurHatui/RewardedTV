@@ -5,91 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Helpers Marketplace — RewardedTV</title>
   <style>
-    body {
-      margin:0; padding:0;
-      font-family:'Segoe UI',sans-serif;
-      background:#0a0a0a;
-      color:#e0e0e0;
-    }
-    header {
+    /* Reset & Base */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;}
+
+    /* Header */
+    header{
       background:#111;
       padding:1rem 2rem;
       text-align:center;
       box-shadow:0 2px 8px rgba(0,0,0,0.5);
+      position:sticky; top:0; z-index:10;
     }
-    header h1 {
-      color:#9b59b6;
+    header h1{
       font-size:1.75rem;
+      color:#9b59b6;
       text-shadow:0 0 8px rgba(155,89,182,0.7);
-      margin:0;
     }
-    .grid {
+
+    /* Marketplace Grid */
+    .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:1rem;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:1.5rem;
       padding:2rem;
     }
-    .card {
+
+    /* Card */
+    .card{
       background:#1c1c1c;
-      border-radius:8px;
+      border-radius:10px;
       overflow:hidden;
-      position:relative;
-      box-shadow:0 4px 16px rgba(0,0,0,0.6);
-      transition:transform .2s;
+      box-shadow:0 6px 20px rgba(0,0,0,0.6);
+      transition:transform .3s, box-shadow .3s;
+      display:flex;
+      flex-direction:column;
+    }
+    .card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 12px 30px rgba(0,0,0,0.8);
+    }
+
+    /* Image */
+    .card img{
+      width:100%;
+      height:150px;
+      object-fit: contain;
+      background:#000;
+      padding:1rem;
+    }
+
+    /* Body */
+    .card-body{
+      padding:1rem;
+      flex:1;
       display:flex;
       flex-direction:column;
       align-items:center;
     }
-    .card:hover {
-      transform:translateY(-5px);
-    }
-    .card::before {
-      content:'';
-      position:absolute;
-      top:0; left:0; right:0; bottom:0;
-      box-shadow:0 0 12px rgba(155,89,182,0.8) inset;
-      opacity:0;
-      transition:opacity .2s;
-    }
-    .card:hover::before {
-      opacity:1;
-    }
-    .card img {
-      width:100%;
-      height:120px;
-      object-fit:cover;
-      border-bottom:2px solid #9b59b6;
-    }
-    .card h3 {
-      margin:0.75rem 0;
+    .card-body h3{
+      margin-bottom:0.5rem;
       color:#f39c12;
     }
-    .card button {
+    .card-body p{
+      color:#ccc;
+      font-size:0.9rem;
+      margin-bottom:1rem;
+      text-align:center;
+    }
+
+    /* Button */
+    .card-body button{
       margin-top:auto;
-      width:90%;
-      padding:0.5rem;
-      background:#9b59b6;
+      width:100%;
+      padding:0.6rem;
+      background:linear-gradient(45deg,#9b59b6,#e74c3c);
       color:#111;
       border:none;
-      border-radius:4px;
-      font-weight:500;
+      border-radius:6px;
+      font-weight:600;
       cursor:pointer;
-      box-shadow:0 0 8px rgba(155,89,182,0.6);
+      box-shadow:0 0 10px rgba(231,76,60,0.7);
+      transition:background .3s;
       text-transform:uppercase;
     }
-    .card button:hover {
-      background:#8e44ad;
+    .card-body button:hover{
+      background:linear-gradient(45deg,#e74c3c,#9b59b6);
+    }
+    .card-body button:disabled{
+      opacity:0.5;
+      cursor:default;
+      box-shadow:none;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🌐 Helpers Marketplace</h1>
+    <h1>Helpers Marketplace</h1>
   </header>
 
   <div class="grid" id="marketGrid"></div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -104,43 +121,53 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    const grid = document.getElementById('marketGrid');
-
     auth.onAuthStateChanged(user => {
       if (!user) return location.href = "index.html";
       const uid = user.uid;
+      const grid = document.getElementById('marketGrid');
 
-      // Render all 12 helpers
+      // Render 12 helpers
       for (let i = 1; i <= 12; i++) {
-        const id = 'char' + i;
+        const key = 'char' + i;
+        const url = `assets/${key}.jpeg`;
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <img src="assets/${id}.jpeg" alt="${id}" />
-          <h3>${id}</h3>
-          <button data-id="${id}">Sell for $400</button>
+          <img src="${url}" alt="${key}" />
+          <div class="card-body">
+            <h3>${key}</h3>
+            <p>Sell for <strong>$400</strong></p>
+            <button data-key="${key}">Sell</button>
+          </div>
         `;
         grid.appendChild(card);
 
-        // Sell handler: increment balance and decrement helpersActive counter
-        card.querySelector('button').onclick = () => {
-          db.collection('users').doc(uid)
-            .update({
-              balance: firebase.firestore.FieldValue.increment(400),
-              // keep track of helpersActive count in a numeric field:
-              helpersActive: firebase.firestore.FieldValue.increment(-1)
-            })
-            .then(() => {
-              alert(`${id} sold for $400!`);
-              // disable button
-              const btn = card.querySelector('button');
-              btn.innerText = 'Sold';
-              btn.disabled = true;
-            })
-            .catch(err => {
-              console.error(err);
-              alert('Failed to sell, try again.');
-            });
+        // Sell logic: increment balance, remove helper from array
+        card.querySelector('button').onclick = async e => {
+          const btn = e.target;
+          btn.disabled = true;
+          try {
+            // fetch user data
+            const ref = db.collection('users').doc(uid);
+            const snap = await ref.get();
+            const data = snap.data() || {};
+            const helpers = data.helpers || [];
+            // remove first matching helper
+            const match = helpers.find(h=>h.name===key);
+            // batch update
+            const updates = {
+              balance: firebase.firestore.FieldValue.increment(400)
+            };
+            if (match) {
+              updates.helpers = firebase.firestore.FieldValue.arrayRemove(match);
+            }
+            await ref.update(updates);
+            alert(`${key} sold!`);
+          } catch(err) {
+            console.error(err);
+            alert('Failed to sell, try again.');
+            btn.disabled = false;
+          }
         };
       }
     });

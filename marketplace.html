@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Helpers & Pets Marketplace — RewardedTV</title>
   <style>
     /* Base & Theme */
@@ -14,10 +14,42 @@
     .market-header{
       display:flex;justify-content:space-between;align-items:center;
       padding:1rem 2rem;background:#111;position:sticky;top:0;z-index:10;
+      box-shadow:0 2px 8px rgba(0,0,0,0.5);
     }
-    .market-header h1{color:#9b59b6;font-size:1.75rem;text-shadow:0 0 8px rgba(155,89,182,0.7);}
-    .market-header .controls{display:flex;gap:1rem;}
-    .market-header select,input{background:#1c1c1c;border:1px solid #9b59b6;color:#e0e0e0;padding:0.5rem;border-radius:4px;}
+    .market-header h1{
+      color:#9b59b6;font-size:1.75rem;
+      text-shadow:0 0 8px rgba(155,89,182,0.7);
+    }
+    .market-header .controls{
+      display:flex;gap:1rem;align-items:center;
+    }
+    .market-header select,
+    .market-header input,
+    .market-header button{
+      background:#1c1c1c;
+      border:1px solid #9b59b6;
+      color:#e0e0e0;
+      padding:0.5rem;
+      border-radius:4px;
+      font-size:0.9rem;
+      cursor:pointer;
+      transition:all .2s;
+    }
+    .market-header select:hover,
+    .market-header input:hover,
+    .market-header button:hover{
+      background:#2a2a2a;
+      border-color:#f39c12;
+    }
+    /* Sell Item button */
+    #sellItemBtn{
+      background:#f39c12;border:1px solid #f39c12;color:#111;
+      text-transform:uppercase;font-weight:700;
+      box-shadow:0 0 12px rgba(243,156,18,0.8);
+    }
+    #sellItemBtn:hover{
+      background:#e0ac11;border-color:#e0ac11;
+    }
 
     /* Grid Layout */
     .market-grid{padding:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
@@ -25,19 +57,26 @@
     /* Card Style */
     .card{
       background:#1c1c1c;border-radius:8px;overflow:hidden;position:relative;
-      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;
+      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s, box-shadow .2s;
     }
-    .card:hover{transform:translateY(-5px);}
-    .card img{width:100%;display:block;}
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 8px 32px rgba(0,0,0,0.7);
+    }
+    .card img{width:100%;display:block;object-fit:cover;height:150px;}
     .card-body{padding:1rem;display:flex;flex-direction:column;align-items:center;}
     .card-body h2{font-size:1.1rem;color:#f39c12;margin-bottom:0.5rem;}
-    .card-body p{margin-bottom:0.75rem;font-size:0.9rem;color:#ccc;}
+    .card-body p{margin-bottom:0.75rem;font-size:0.9rem;color:#ccc;text-align:center;}
     .btn-buy{
       background:#9b59b6;color:#111;padding:0.5rem 1rem;border:none;border-radius:4px;
       cursor:pointer;width:100%;font-weight:500;text-transform:uppercase;
       box-shadow:0 0 8px rgba(155,89,182,0.6);
+      transition:background .2s, box-shadow .2s;
     }
-    .btn-buy:hover{background:#8e44ad;}
+    .btn-buy:hover{
+      background:#8e44ad;
+      box-shadow:0 0 12px rgba(142,68,173,0.8);
+    }
 
     /* Neon Glow Overlay */
     .card::before{
@@ -50,88 +89,70 @@
 </head>
 <body>
   <header class="market-header">
-    <h1>Helpers & Pets Marketplace</h1>
+    <h1>Helpers &amp; Pets Marketplace</h1>
     <div class="controls">
-      <select id="typeFilter">
-        <option value="all">All Types</option>
-        <option value="helpers">Helper</option>
-        <option value="pets">Pet</option>
-      </select>
-      <select id="rarityFilter">
-        <option value="all">All Rarities</option>
-        <option value="Common">Common</option>
-        <option value="Rare">Rare</option>
-        <option value="Epic">Epic</option>
-      </select>
-      <input type="text" id="searchInput" placeholder="Search..." />
+      <select><option>All Types</option><option>Helper</option><option>Pet</option></select>
+      <select><option>All Rarities</option><option>Common</option><option>Rare</option><option>Epic</option></select>
+      <input type="text" placeholder="Search…"/>
+      <button id="sellItemBtn">Sell Item</button>
     </div>
   </header>
 
-  <section class="market-grid" id="marketGrid">
-    <!-- dynamically injected cards -->
+  <!-- YOUR COLLECTION TAB (hidden by default, but we'll scroll to it) -->
+  <section id="collectionSection" style="display:none;padding:2rem;color:#888;text-align:center;">
+    <h2>Your Collection</h2>
+    <p>You don’t own any items to sell.</p>
   </section>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <section class="market-grid" id="marketGrid">
+    <!-- Example cards; repeat as needed -->
+    <div class="card">
+      <img src="assets/helpers/char1.jpeg" alt="Char 1"/>
+      <div class="card-body">
+        <h2>Char 1</h2>
+        <p>Price: 500 Credits</p>
+        <button class="btn-buy">Buy Now</button>
+      </div>
+    </div>
+    <div class="card">
+      <img src="assets/pets/pet3.jpeg" alt="Pet 3"/>
+      <div class="card-body">
+        <h2>Pet 3</h2>
+        <p>Price: 750 Credits</p>
+        <button class="btn-buy">Buy Now</button>
+      </div>
+    </div>
+    <!-- …more cards… -->
+  </section>
+
   <script>
-    // ——— Init Firebase ———
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
-      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
+    // Dummy array of user‐owned items; replace with real data
+    const yourItems = [
+      { src:'assets/helpers/char2.jpeg', name:'Char 2', type:'helper', price:600 },
+      { src:'assets/pets/pet1.jpeg', name:'Pet 1', type:'pet', price:900 }
+    ];
 
-    let allItems = [];
-
-    auth.onAuthStateChanged(user => {
-      if (!user) return location.href = 'index.html';
-      db.collection('users').doc(user.uid)
-        .onSnapshot(doc => {
-          const d = doc.data() || {};
-          // combine helpers + pets
-          allItems = [
-            ...(d.helpers||[]).map(h=>({...h, type:'helpers'})),
-            ...(d.pets||[]).map(p=>({...p, type:'pets'}))
-          ];
-          renderMarketItems();
-        });
-    });
-
-    // render with current filters
-    function renderMarketItems() {
-      const grid = document.getElementById('marketGrid');
-      const typeF = document.getElementById('typeFilter').value;
-      const rarityF = document.getElementById('rarityFilter').value;
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      grid.innerHTML = '';
-
-      allItems
-        .filter(item => (typeF==='all' || item.type===typeF))
-        .filter(item => (rarityF==='all' || item.rarity===rarityF))
-        .filter(item => item.name.toLowerCase().includes(search))
-        .forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <img src="assets/${item.type}/${item.fileName}" alt="${item.name}" />
+    document.getElementById('sellItemBtn').onclick = () => {
+      if (!yourItems.length) {
+        return alert("You don’t own any helpers or pets to sell!");
+      }
+      // Render collectionSection
+      const sec = document.getElementById('collectionSection');
+      sec.style.display = 'block';
+      sec.innerHTML = '<h2>Your Collection</h2><div class="market-grid">' +
+        yourItems.map(item=>`
+          <div class="card">
+            <img src="${item.src}" alt="${item.name}"/>
             <div class="card-body">
               <h2>${item.name}</h2>
-              <p>Rarity: ${item.rarity}</p>
-              <button class="btn-buy" disabled>Owned</button>
-            </div>`;
-          grid.appendChild(card);
-        });
-    }
-
-    // wire filters
-    document.getElementById('typeFilter').onchange    =
-    document.getElementById('rarityFilter').onchange =
-    document.getElementById('searchInput').oninput    = renderMarketItems;
+              <p>Ready to sell? Price: ${item.price}₵</p>
+              <button class="btn-buy">List for Sale</button>
+            </div>
+          </div>
+        `).join('') +
+      '</div>';
+      sec.scrollIntoView({behavior:'smooth'});
+    };
   </script>
 </body>
 </html>

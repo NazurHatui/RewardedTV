@@ -302,7 +302,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase init & purchase logic (unchanged) -->
+  <!-- Firebase init & purchase logic (unchanged except food increment) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
@@ -318,7 +318,6 @@
         alert("Please log in to make purchases.");
         return;
       }
-      // updated prices array to match total 18 items
       const prices = [
         800,1200,1850,2000,3500,4500,
         1000,1500,2500,4000,1850,1100,
@@ -331,22 +330,25 @@
         0,0,
         0,0,0,0
       ];
+
       document.querySelectorAll(".buy-button").forEach((btn,i) => {
-        btn.onclick = () => {
+        btn.onclick = async () => {
           const price = prices[i];
           const boost = boosts[i];
           const ref   = db.collection("users").doc(user.uid);
-          ref.get().then(doc => {
-            const d = doc.data()||{};
-            if ((d.balance||0) < price) {
-              return alert("❌ Not enough balance.");
-            }
-            const updates = { balance: d.balance - price };
-            if (boost) updates.boost = (d.boost||0)+boost;
-            ref.update(updates)
-               .then(()=> alert("✅ Purchase complete!"))
-               .catch(()=> alert("❌ Purchase failed."));
-          });
+          const snap  = await ref.get();
+          const d     = snap.data()||{};
+          if ((d.balance||0) < price) {
+            return alert("❌ Not enough balance.");
+          }
+          const updates = { balance: d.balance - price };
+          if (boost) updates.boost = (d.boost||0) + boost;
+          // if this is one of the four foods, also increment `food`
+          if (i >= 14) {
+            updates.food = firebase.firestore.FieldValue.increment(1);
+          }
+          await ref.update(updates);
+          alert("✅ Purchase complete!");
         };
       });
     });

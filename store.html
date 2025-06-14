@@ -6,118 +6,104 @@
   <title>RewardedTV – Store</title>
   <style>
     /* ——— Global Reset & Typography ——— */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0a0a0a;
-      color: #e0e0e0;
-      line-height: 1.6;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;line-height:1.6;}
 
     /* ——— Header & Navigation ——— */
     header.header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: #111;
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 2rem;background:#111;
     }
-    .left-nav, .right-nav {
-      display: flex;
-      align-items: center;
+    .left-nav,.right-nav{display:flex;align-items:center;}
+    .nav-links{list-style:none;margin:0;padding:0;display:flex;}
+    .nav-links li{margin-left:1.5rem;}
+    .nav-links a{color:#e0e0e0;text-decoration:none;font-weight:500;}
+    .right-nav a{
+      background:#9b59b6;color:#111;padding:0.5rem 1rem;
+      border-radius:4px;text-decoration:none;font-weight:500;
     }
-    .nav-links {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-    .nav-links li {
-      margin-left: 1.5rem;
-    }
-    .nav-links a {
-      color: #e0e0e0;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .right-nav a {
-      background: #9b59b6;
-      color: #111;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .right-nav a:hover {
-      background: #8e44ad;
-    }
+    .right-nav a:hover{background:#8e44ad;}
 
     /* ——— Hero Section ——— */
-    .hero {
-      background: #111;
-      padding: 2rem;
-      text-align: center;
+    .hero{
+      background:#111;padding:2rem;text-align:center;
     }
-    .hero-title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
+    .hero-title{
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:1rem;
     }
-    .hero-logo {
-      height: 60px;
-      margin: 0 1rem;
+    .hero-logo{height:60px;margin:0 1rem;}
+    .hero h1{
+      color:#9b59b6;font-size:2.5rem;margin:0;
     }
-    .hero h1 {
-      color: #9b59b6;
-      font-size: 2.5rem;
-      margin: 0;
-    }
-    .hero p {
-      color: #e0e0e0;
-      margin-top: 0.5rem;
+    .hero p{color:#e0e0e0;margin-top:0.5rem;}
+
+    /* ——— Store Grid ——— */
+    .store-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:1.5rem;
+      margin:2rem;
+      padding:0 2rem;
     }
 
-    /* ——— Store Grid & Cards ——— */
-    .store-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem;
-      padding: 0 2rem;
+    /* ——— Marketplace‐style Card ——— */
+    .store-card{
+      background:#1c1c1c;
+      border-radius:10px;
+      overflow:hidden;
+      box-shadow:0 6px 20px rgba(0,0,0,0.6);
+      transition:transform .3s,box-shadow .3s;
+      display:flex;
+      flex-direction:column;
     }
-    .store-card {
-      background: #1c1c1c;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      text-align: center;
+    .store-card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 12px 30px rgba(0,0,0,0.8);
     }
-    .store-card img {
-      width: 60px;
-      margin-bottom: 0.75rem;
+    .store-card img{
+      width:100%;
+      height:150px;
+      object-fit:contain;
+      background:#000;
+      padding:1rem;
     }
-    .store-card h2 {
-      color: #f39c12;
-      margin: 0.5rem 0;
+    .store-card .card-body{
+      padding:1rem;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
     }
-    .store-card .price {
-      color: #f39c12;
-      font-weight: bold;
-      margin-bottom: 1rem;
+    .store-card .card-body h2{
+      margin-bottom:0.5rem;
+      color:#f39c12;
+      font-size:1.1rem;
     }
-    .store-card button {
-      padding: 0.5rem 1rem;
-      background: #9b59b6;
-      color: #111;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 500;
+    .store-card .card-body .price{
+      color:#ccc;
+      font-size:0.9rem;
+      margin-bottom:1rem;
     }
-    .store-card button:hover {
-      background: #8e44ad;
+    .store-card .card-body button{
+      margin-top:auto;
+      width:100%;
+      padding:0.6rem;
+      background:linear-gradient(45deg,#9b59b6,#e74c3c);
+      color:#111;
+      border:none;
+      border-radius:6px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 0 10px rgba(231,76,60,0.7);
+      transition:background .3s;
+      text-transform:uppercase;
+    }
+    .store-card .card-body button:hover{
+      background:linear-gradient(45deg,#e74c3c,#9b59b6);
+    }
+    .store-card .card-body button:disabled{
+      opacity:0.5;cursor:default;box-shadow:none;
     }
   </style>
 </head>
@@ -147,45 +133,167 @@
   </section>
 
   <section class="store-grid">
-    <!-- existing items... -->
+    <!-- 10% Reward Boost -->
     <div class="store-card">
       <img src="assets/boost-icon.jpeg" alt="10% Reward Boost"/>
-      <h2>10% Reward Boost</h2>
-      <div class="price">$800</div>
-      <button class="buy-button">Buy Now</button>
+      <div class="card-body">
+        <h2>10% Reward Boost</h2>
+        <div class="price">$800</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
     </div>
-    <!-- ...other boost & cap items up to 14 total... -->
+    <!-- 20% Reward Boost -->
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="20% Reward Boost"/>
+      <div class="card-body">
+        <h2>20% Reward Boost</h2>
+        <div class="price">$1200</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 50% Reward Boost -->
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="50% Reward Boost"/>
+      <div class="card-body">
+        <h2>50% Reward Boost</h2>
+        <div class="price">$1850</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 100% Reward Boost -->
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="100% Reward Boost"/>
+      <div class="card-body">
+        <h2>100% Reward Boost</h2>
+        <div class="price">$2000</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 200% Reward Boost -->
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="200% Reward Boost"/>
+      <div class="card-body">
+        <h2>200% Reward Boost</h2>
+        <div class="price">$3500</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 500% Reward Boost -->
+    <div class="store-card">
+      <img src="assets/boost-icon.jpeg" alt="500% Reward Boost"/>
+      <div class="card-body">
+        <h2>500% Reward Boost</h2>
+        <div class="price">$4500</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 100 CAP -->
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="100 CAP"/>
+      <div class="card-body">
+        <h2>100 CAP</h2>
+        <div class="price">$1000</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 200 CAP -->
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="200 CAP"/>
+      <div class="card-body">
+        <h2>200 CAP</h2>
+        <div class="price">$1500</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 500 CAP -->
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="500 CAP"/>
+      <div class="card-body">
+        <h2>500 CAP</h2>
+        <div class="price">$2500</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- 1000 CAP -->
+    <div class="store-card">
+      <img src="assets/cap-icon.jpeg" alt="1000 CAP"/>
+      <div class="card-body">
+        <h2>1000 CAP</h2>
+        <div class="price">$4000</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- Add Queue -->
+    <div class="store-card">
+      <img src="assets/add-queue-icon.jpeg" alt="Add Queue"/>
+      <div class="card-body">
+        <h2>Add Queue</h2>
+        <div class="price">$1850</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- Remove Comments -->
+    <div class="store-card">
+      <img src="assets/remove-comments-icon.jpeg" alt="Remove Comments"/>
+      <div class="card-body">
+        <h2>Remove Comments</h2>
+        <div class="price">$1100</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- Reset Watches -->
+    <div class="store-card">
+      <img src="assets/reset-watches-icon.jpeg" alt="Reset Watches"/>
+      <div class="card-body">
+        <h2>Reset Watches</h2>
+        <div class="price">$20,000</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- Boost Helper -->
     <div class="store-card">
       <img src="assets/boost-helper-icon.jpeg" alt="Boost Helper"/>
-      <h2>Boost Helper</h2>
-      <div class="price">$300</div>
-      <button class="buy-button">Buy Now</button>
+      <div class="card-body">
+        <h2>Boost Helper</h2>
+        <div class="price">$300</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
     </div>
-
-    <!-- New pet-food items -->
+    <!-- Ember Crunch -->
     <div class="store-card">
       <img src="assets/Food1.jpeg" alt="Ember Crunch"/>
-      <h2>Ember Crunch</h2>
-      <div class="price">$25</div>
-      <button class="buy-button">Buy Now</button>
+      <div class="card-body">
+        <h2>Ember Crunch</h2>
+        <div class="price">$25</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
     </div>
+    <!-- Circuit Crunch -->
     <div class="store-card">
       <img src="assets/Food2.jpeg" alt="Circuit Crunch"/>
-      <h2>Circuit Crunch</h2>
-      <div class="price">$30</div>
-      <button class="buy-button">Buy Now</button>
+      <div class="card-body">
+        <h2>Circuit Crunch</h2>
+        <div class="price">$30</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
     </div>
+    <!-- Midnight Munch -->
     <div class="store-card">
       <img src="assets/Food3.jpeg" alt="Midnight Munch"/>
-      <h2>Midnight Munch</h2>
-      <div class="price">$10</div>
-      <button class="buy-button">Buy Now</button>
+      <div class="card-body">
+        <h2>Midnight Munch</h2>
+        <div class="price">$10</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
     </div>
+    <!-- Neon Nibbles -->
     <div class="store-card">
       <img src="assets/Food4.jpeg" alt="Neon Nibbles"/>
-      <h2>Neon Nibbles</h2>
-      <div class="price">$10</div>
-      <button class="buy-button">Buy Now</button>
+      <div class="card-body">
+        <h2>Neon Nibbles</h2>
+        <div class="price">$10</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
     </div>
   </section>
 
@@ -194,7 +302,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase init & purchase logic (extended for 18 items) -->
+  <!-- Firebase init & purchase logic (unchanged) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
@@ -210,14 +318,17 @@
         alert("Please log in to make purchases.");
         return;
       }
-      // original 14 prices + 4 new food prices
+      // updated prices array to match total 18 items
       const prices = [
-        800,1200,1850,2000,3500,4500,1000,1500,2500,4000,1850,1100,20000,300,
+        800,1200,1850,2000,3500,4500,
+        1000,1500,2500,4000,1850,1100,
+        20000,300,
         25,30,10,10
       ];
-      // original 14 boosts + 4 zeros for food
       const boosts = [
-        10,20,50,100,200,500,0,0,0,0,0,0,0,0,
+        10,20,50,100,200,500,
+        0,0,0,0,0,0,
+        0,0,
         0,0,0,0
       ];
       document.querySelectorAll(".buy-button").forEach((btn,i) => {
@@ -231,7 +342,7 @@
               return alert("❌ Not enough balance.");
             }
             const updates = { balance: d.balance - price };
-            if (boost) updates.boost = (d.boost||0) + boost;
+            if (boost) updates.boost = (d.boost||0)+boost;
             ref.update(updates)
                .then(()=> alert("✅ Purchase complete!"))
                .catch(()=> alert("❌ Purchase failed."));

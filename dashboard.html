@@ -50,6 +50,19 @@
     .stat-card h3 { color:#9b59b6; margin-bottom:0.5rem; text-transform:uppercase; font-size:0.85rem; }
     .stat-card .value { font-size:1.5rem; }
 
+    /* Feed Pets button styling */
+    #feedPetsBtn {
+      margin-top:0.75rem;
+      padding:0.5rem 1rem;
+      background:#9b59b6;
+      color:#111;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      font-weight:500;
+    }
+    #feedPetsBtn:hover { background:#8e44ad; }
+
     .project-dashboard {
       background:#1c1c1c; margin:2rem auto; padding:2rem; max-width:1200px;
       border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.4);
@@ -144,6 +157,7 @@
     <div class="stat-card">
       <h3>Pets</h3>
       <div class="value" id="pets">0</div>
+      <button id="feedPetsBtn">Feed Pets</button>
     </div>
     <div class="stat-card">
       <h3>Claimed</h3>
@@ -195,17 +209,15 @@
     auth.onAuthStateChanged(user => {
       if (!user) return location.replace("index.html");
       document.getElementById("logout-btn").onclick = () => auth.signOut();
+      // Feed Pets button action
+      document.getElementById("feedPetsBtn").onclick = () => alert("Pet Fed ✅");
+
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data() || {};
-
-        // leave watched as-is
         const watchedCount = d.watched || 0;
         document.getElementById("watched").innerText = watchedCount;
-
-        // use rewardsEarned directly (fallback to watched if unset)
         const earnedAmt = (d.rewardsEarned != null ? d.rewardsEarned : d.watched) || 0;
         document.getElementById("earned").innerText = '$' + earnedAmt.toLocaleString();
-
         document.getElementById("caps").innerText         = d.caps || 0;
         document.getElementById("balance").innerText      = '$' + (d.balance || 0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost || 0) + '%';
@@ -221,20 +233,16 @@
   <script>
     const els = document.querySelectorAll('.pd-card p');
     const [elOnline, elTotal, elDaily, elPaid, elVids, elUploads, elRevenue] = els;
-
     let usersOnline    = parseInt(localStorage.getItem('usersOnline')    || elOnline.textContent.replace(/,/g,''), 10);
     usersOnline = Math.min(Math.max(usersOnline,1000),45000);
-
     let amountsPaid    = parseInt(localStorage.getItem('amountsPaid')   || '15000000', 10);
     let videosWatched  = parseInt(localStorage.getItem('videosWatched') || '3005000000', 10);
     let totalUsers     = parseInt(elTotal.textContent.replace(/,/g,''), 10);
     let dailyUsers     = parseInt(localStorage.getItem('dailyUsers')     || elDaily.textContent.replace(/,/g,''), 10);
     let uploads        = parseInt(localStorage.getItem('uploads')        || elUploads.textContent.replace(/,/g,''), 10);
     let revenueMonthly = parseInt(localStorage.getItem('revenueMonthly') || elRevenue.textContent.replace(/[\$,]/g,''), 10);
-
     const fmt = n => n.toLocaleString();
     const rnd = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
-
     function updateAndStore(el, key, value, prefix='', clamp=null) {
       if (clamp) value = Math.min(Math.max(value,clamp[0]||0), clamp[1]||Infinity);
       if (value<0) value=0;
@@ -242,65 +250,25 @@
       el.textContent = prefix + fmt(value);
       return value;
     }
-
-    setInterval(()=>{
-      usersOnline = updateAndStore(elOnline,'usersOnline',
-        usersOnline + rnd(-3000,3000),
-        '', [1000,45000]
-      );
-    },1000);
-
-    // fixed total users
+    setInterval(()=>{ usersOnline = updateAndStore(elOnline,'usersOnline', usersOnline + rnd(-3000,3000),'', [1000,45000]); },1000);
     elTotal.textContent = fmt(totalUsers);
-
-    setInterval(()=>{
-      dailyUsers = updateAndStore(elDaily,'dailyUsers',
-        dailyUsers + rnd(-3000,3000),
-        '', [1000,null]
-      );
-    },1000);
-
-    setInterval(()=>{
-      amountsPaid = updateAndStore(elPaid,'amountsPaid',
-        amountsPaid + Math.round(5500000/86400),
-        '$'
-      );
-    },1000);
-
-    setInterval(()=>{
-      videosWatched = updateAndStore(elVids,'videosWatched',
-        videosWatched + Math.round(5000000/86400)
-      );
-    },1000);
-
-    setInterval(()=>{
-      uploads = updateAndStore(elUploads,'uploads',
-        uploads + Math.max(1,Math.round(100000/86400))
-      );
-    },1000);
-
-    setInterval(()=>{
-      revenueMonthly = updateAndStore(elRevenue,'revenueMonthly',
-        revenueMonthly + Math.round(50000/3600),
-        '$'
-      );
-    },1000);
+    setInterval(()=>{ dailyUsers = updateAndStore(elDaily,'dailyUsers', dailyUsers + rnd(-3000,3000),'', [1000,null]); },1000);
+    setInterval(()=>{ amountsPaid = updateAndStore(elPaid,'amountsPaid', amountsPaid + Math.round(5500000/86400),'$'); },1000);
+    setInterval(()=>{ videosWatched = updateAndStore(elVids,'videosWatched', videosWatched + Math.round(5000000/86400)); },1000);
+    setInterval(()=>{ uploads = updateAndStore(elUploads,'uploads', uploads + Math.max(1,Math.round(100000/86400))); },1000);
+    setInterval(()=>{ revenueMonthly = updateAndStore(elRevenue,'revenueMonthly', revenueMonthly + Math.round(50000/3600),'$'); },1000);
   </script>
 
   <!-- Show red dot only if there’s a newer update than last seen -->
   <script>
-    db.collection('updates')
-      .orderBy('timestamp','desc').limit(1).get()
+    db.collection('updates').orderBy('timestamp','desc').limit(1).get()
       .then(snap => {
         if (!snap.empty) {
           const latest = snap.docs[0].data().timestamp.toMillis();
           const seen   = parseInt(localStorage.getItem('updatesLastSeen')||0, 10);
-          if (latest > seen) {
-            document.querySelector('#nav-updates .dot').style.display = 'block';
-          }
+          if (latest > seen) document.querySelector('#nav-updates .dot').style.display = 'block';
         }
-      })
-      .catch(console.error);
+      }).catch(console.error);
   </script>
 </body>
 </html>

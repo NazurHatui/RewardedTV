@@ -22,6 +22,14 @@
     /* Section Titles */
     section h2{margin:1.5rem 2rem 0.5rem;color:#f39c12;}
 
+    /* “No items” message */
+    #noOwnedMessage {
+      color:#888;
+      text-align:center;
+      margin-bottom:1.5rem;
+      font-style:italic;
+    }
+
     /* Grid Layout */
     .market-grid{padding:0 2rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
 
@@ -69,9 +77,10 @@
     </div>
   </header>
 
-  <!-- Your Collection -->
-  <section id="collectionSection" style="display:none;">
+  <!-- Your Collection (always visible) -->
+  <section id="collectionSection">
     <h2>Your Collection</h2>
+    <div id="noOwnedMessage">You don’t own any helpers or pets yet.</div>
     <div id="collectionGrid" class="market-grid"></div>
   </section>
 
@@ -95,9 +104,8 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth(), db = firebase.firestore();
 
-    // ——— Helper to build each card, falling back to assets/charN.jpeg ———
+    // ——— Build a card, fallback to local assets/charN.jpeg ———
     function makeCard(item, isOwn=false) {
-      // derive a safe image path if avatarURL missing
       let imgSrc = item.avatarURL;
       if (!imgSrc && item.name.match(/^char\d+$/i)) {
         imgSrc = `assets/${item.name.toLowerCase()}.jpeg`;
@@ -115,39 +123,42 @@
         </div>`;
     }
 
-    // ——— Load Global Listings ———
+    // ——— Load marketplace listings ———
     function loadGlobal() {
-      db.collection('marketplace')
-        .get()
-        .then(snap => {
-          const out = [];
-          snap.forEach(doc => {
-            const d = doc.data(); d.id = doc.id;
-            out.push(d);
-          });
-          document.getElementById('globalGrid').innerHTML = out.map(i=>makeCard(i,false)).join('');
+      db.collection('marketplace').get().then(snap=>{
+        const arr = [];
+        snap.forEach(doc=>{
+          const d = doc.data(); d.id = doc.id;
+          arr.push(d);
         });
+        document.getElementById('globalGrid')
+          .innerHTML = arr.map(i=>makeCard(i,false)).join('');
+      });
     }
 
-    // ——— On Auth, load your collection + global ———
+    // ——— On login, show your collection + global ———
     auth.onAuthStateChanged(user=>{
       if(!user) return location.replace('index.html');
       db.collection('users').doc(user.uid).get().then(doc=>{
         const d = doc.data()||{};
         const owned = (d.helpers||[]).concat(d.pets||[]);
+        const grid  = document.getElementById('collectionGrid');
+        const msg   = document.getElementById('noOwnedMessage');
         if(owned.length){
-          document.getElementById('collectionSection').style.display = 'block';
-          document.getElementById('collectionGrid').innerHTML =
-            owned.map(item=>{
-              item.id = item.name; // unique key
-              return makeCard(item,true);
-            }).join('');
+          msg.style.display = 'none';
+          grid.innerHTML = owned.map(item=>{
+            item.id = item.name;
+            return makeCard(item,true);
+          }).join('');
+        } else {
+          msg.style.display = 'block';
+          grid.innerHTML = '';
         }
       });
       loadGlobal();
     });
 
-    // ——— List / Buy Handlers ———
+    // ——— Handle List / Buy clicks ———
     document.body.addEventListener('click', e=>{
       if(!e.target.classList.contains('btn-buy')) return;
       const id    = e.target.dataset.id;
@@ -155,20 +166,26 @@
 
       if(isOwn){
         const price = prompt('Set your price in credits:');
-        if (!price) return;
+        if(!price) return;
         const uid = auth.currentUser.uid;
-        // remove from user
+        // remove from user record
         db.collection('users').doc(uid).update({
-          helpers: firebase.firestore.FieldValue.arrayRemove({ name: id }),
-          pets:    firebase.firestore.FieldValue.arrayRemove({ name: id })
+          helpers: firebase.firestore.FieldValue.arrayRemove({ name:id }),
+          pets:    firebase.firestore.FieldValue.arrayRemove({ name:id })
         }).then(()=>{
           // add to marketplace
-          db.collection('marketplace').add({ name:id, avatarURL:`assets/${id}.jpeg`, price })
-            .then(()=>alert('✅ Listed!'))
-            .catch(console.error);
-        });
+          return db.collection('marketplace').add({
+            name: id,
+            avatarURL: `assets/${id}.jpeg`,
+            price
+          });
+        }).then(()=>{
+          alert('✅ Listed for sale!');
+          // refresh both sections
+          auth.onAuthStateChanged(user=>{}); loadGlobal();
+        }).catch(console.error);
       } else {
-        alert('🚧 Buy flow not yet implemented');
+        alert('🚧 Purchase flow coming soon!');
       }
     });
   </script>

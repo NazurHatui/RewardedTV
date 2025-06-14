@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Helpers & Pets Marketplace — RewardedTV</title>
+  <style>
+    /* Base & Theme */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;}
+    a{color:inherit;text-decoration:none;}
+
+    /* Marketplace Header */
+    .market-header{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 2rem;background:#111;position:sticky;top:0;z-index:10;
+    }
+    .market-header h1{color:#9b59b6;font-size:1.75rem;text-shadow:0 0 8px rgba(155,89,182,0.7);}
+    .market-header .controls{display:flex;gap:1rem;}
+    .market-header select,input{background:#1c1c1c;border:1px solid #9b59b6;color:#e0e0e0;padding:0.5rem;border-radius:4px;}
+
+    /* Grid Layout */
+    .market-grid{padding:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+
+    /* Card Style */
+    .card{
+      background:#1c1c1c;border-radius:8px;overflow:hidden;position:relative;
+      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;
+    }
+    .card:hover{transform:translateY(-5px);}
+    .card img{width:100%;display:block;}
+    .card-body{padding:1rem;display:flex;flex-direction:column;align-items:center;}
+    .card-body h2{font-size:1.1rem;color:#f39c12;margin-bottom:0.5rem;}
+    .card-body p{margin-bottom:0.75rem;font-size:0.9rem;color:#ccc;}
+    .btn-buy{
+      background:#9b59b6;color:#111;padding:0.5rem 1rem;border:none;border-radius:4px;
+      cursor:pointer;width:100%;font-weight:500;text-transform:uppercase;
+      box-shadow:0 0 8px rgba(155,89,182,0.6);
+    }
+    .btn-buy:hover{background:#8e44ad;}
+
+    /* Neon Glow Overlay */
+    .card::before{
+      content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+      box-shadow:0 0 12px rgba(155,89,182,0.8) inset;
+      opacity:0;transition:opacity .2s;
+    }
+    .card:hover::before{opacity:1;}
+  </style>
+</head>
+<body>
+  <header class="market-header">
+    <h1>Helpers & Pets Marketplace</h1>
+    <div class="controls">
+      <select id="typeFilter">
+        <option value="all">All Types</option>
+        <option value="helpers">Helper</option>
+        <option value="pets">Pet</option>
+      </select>
+      <select id="rarityFilter">
+        <option value="all">All Rarities</option>
+        <option value="Common">Common</option>
+        <option value="Rare">Rare</option>
+        <option value="Epic">Epic</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Search..." />
+    </div>
+  </header>
+
+  <section class="market-grid" id="marketGrid">
+    <!-- dynamically injected cards -->
+  </section>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    // ——— Init Firebase ———
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    let allItems = [];
+
+    auth.onAuthStateChanged(user => {
+      if (!user) return location.href = 'index.html';
+      db.collection('users').doc(user.uid)
+        .onSnapshot(doc => {
+          const d = doc.data() || {};
+          // combine helpers + pets
+          allItems = [
+            ...(d.helpers||[]).map(h=>({...h, type:'helpers'})),
+            ...(d.pets||[]).map(p=>({...p, type:'pets'}))
+          ];
+          renderMarketItems();
+        });
+    });
+
+    // render with current filters
+    function renderMarketItems() {
+      const grid = document.getElementById('marketGrid');
+      const typeF = document.getElementById('typeFilter').value;
+      const rarityF = document.getElementById('rarityFilter').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      grid.innerHTML = '';
+
+      allItems
+        .filter(item => (typeF==='all' || item.type===typeF))
+        .filter(item => (rarityF==='all' || item.rarity===rarityF))
+        .filter(item => item.name.toLowerCase().includes(search))
+        .forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="assets/${item.type}/${item.fileName}" alt="${item.name}" />
+            <div class="card-body">
+              <h2>${item.name}</h2>
+              <p>Rarity: ${item.rarity}</p>
+              <button class="btn-buy" disabled>Owned</button>
+            </div>`;
+          grid.appendChild(card);
+        });
+    }
+
+    // wire filters
+    document.getElementById('typeFilter').onchange    =
+    document.getElementById('rarityFilter').onchange =
+    document.getElementById('searchInput').oninput    = renderMarketItems;
+  </script>
+</body>
+</html>

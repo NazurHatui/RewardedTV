@@ -1,113 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Helpers & Pets Marketplace — RewardedTV</title>
+  <title>Helpers Marketplace — RewardedTV</title>
   <style>
-    /* Base & Theme */
+    /* Reset & Base */
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;}
-    a{color:inherit;text-decoration:none;}
 
-    /* Marketplace Header */
-    .market-header{
-      display:flex;justify-content:space-between;align-items:center;
-      padding:1rem 2rem;background:#111;position:sticky;top:0;z-index:10;
+    /* Header */
+    header{
+      background:#111;
+      padding:1rem 2rem;
+      text-align:center;
+      box-shadow:0 2px 8px rgba(0,0,0,0.5);
+      position:sticky; top:0; z-index:10;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
-    .market-header .title-wrapper{
-      display:flex;align-items:center;
-    }
-    .market-logo{
-      height:40px;
-      margin:0 0.5rem;
-    }
-    .market-header h1{
-      color:#9b59b6;font-size:1.75rem;
+    header h1{
+      font-size:1.75rem;
+      color:#9b59b6;
       text-shadow:0 0 8px rgba(155,89,182,0.7);
-      margin:0;
+      margin:0 1rem;
     }
-    .controls{display:flex;gap:1rem;}
-    .controls select,input{
-      background:#1c1c1c;border:1px solid #9b59b6;color:#e0e0e0;
-      padding:0.5rem;border-radius:4px;
+    header .logo-icon {
+      height:32px;
+      width:auto;
     }
-    .balance-display{
-      color:#f39c12;font-weight:500;
+    /* balance in top-right */
+    #headerBalance {
+      position:absolute;
+      right:2rem;
+      top:50%;
+      transform:translateY(-50%);
+      font-weight:500;
+      color:#e0e0e0;
     }
 
-    /* Grid Layout */
-    .market-grid{padding:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+    /* Marketplace Grid */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:1.5rem;
+      padding:2rem;
+    }
 
-    /* Card Style */
+    /* Card */
     .card{
-      background:#1c1c1c;border-radius:8px;overflow:hidden;position:relative;
-      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;
+      background:#1c1c1c;
+      border-radius:10px;
+      overflow:hidden;
+      box-shadow:0 6px 20px rgba(0,0,0,0.6);
+      transition:transform .3s, box-shadow .3s;
+      display:flex;
+      flex-direction:column;
     }
-    .card:hover{transform:translateY(-5px);}
-    .card img{width:100%;display:block;}
-    .card-body{padding:1rem;display:flex;flex-direction:column;align-items:center;}
-    .card-body h2{font-size:1.1rem;color:#f39c12;margin-bottom:0.5rem;}
-    .card-body p{margin-bottom:0.75rem;font-size:0.9rem;color:#ccc;}
-    .btn-buy{
-      background:#9b59b6;color:#111;padding:0.5rem 1rem;border:none;border-radius:4px;
-      cursor:pointer;width:100%;font-weight:500;text-transform:uppercase;
-      box-shadow:0 0 8px rgba(155,89,182,0.6);
+    .card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 12px 30px rgba(0,0,0,0.8);
     }
-    .btn-buy:hover{background:#8e44ad;}
 
-    /* Neon Glow Overlay */
-    .card::before{
-      content:'';position:absolute;top:0;left:0;width:100%;height:100%;
-      box-shadow:0 0 12px rgba(155,89,182,0.8) inset;
-      opacity:0;transition:opacity .2s;
+    /* Image */
+    .card img{
+      width:100%;
+      height:150px;
+      object-fit: contain;
+      background:#000;
+      padding:1rem;
     }
-    .card:hover::before{opacity:1;}
+
+    /* Body */
+    .card-body{
+      padding:1rem;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    .card-body h3{
+      margin-bottom:0.5rem;
+      color:#f39c12;
+    }
+    .card-body p{
+      color:#ccc;
+      font-size:0.9rem;
+      margin-bottom:1rem;
+      text-align:center;
+    }
+
+    /* Button */
+    .card-body button{
+      margin-top:auto;
+      width:100%;
+      padding:0.6rem;
+      background:linear-gradient(45deg,#9b59b6,#e74c3c);
+      color:#111;
+      border:none;
+      border-radius:6px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 0 10px rgba(231,76,60,0.7);
+      transition:background .3s;
+      text-transform:uppercase;
+    }
+    .card-body button:hover{
+      background:linear-gradient(45deg,#e74c3c,#9b59b6);
+    }
+    .card-body button:disabled{
+      opacity:0.5;
+      cursor:default;
+      box-shadow:none;
+    }
   </style>
 </head>
 <body>
-  <header class="market-header">
-    <div class="title-wrapper">
-      <img src="assets/logo.png" alt="Logo Left" class="market-logo"/>
-      <h1>Helpers &amp; Pets Marketplace</h1>
-      <img src="assets/logo.png" alt="Logo Right" class="market-logo"/>
-    </div>
-    <div class="controls">
-      <select>
-        <option>All Types</option>
-        <option>Helper</option>
-        <option>Pet</option>
-      </select>
-      <select>
-        <option>All Rarities</option>
-        <option>Common</option>
-        <option>Rare</option>
-        <option>Epic</option>
-      </select>
-      <input type="text" placeholder="Search..." />
-    </div>
-    <div id="balanceDisplay" class="balance-display">$0.00</div>
+  <header>
+    <img src="assets/logo.png" class="logo-icon" alt="Logo Left"/>
+    <h1>Helpers Marketplace</h1>
+    <img src="assets/logo.png" class="logo-icon" alt="Logo Right"/>
+    <div id="headerBalance">$0.00</div>
   </header>
 
-  <section class="market-grid">
-    <!-- Example card; repeat for each asset -->
-    <div class="card">
-      <img src="assets/char1.jpeg" alt="Char 1" />
-      <div class="card-body">
-        <h2>Char 1</h2>
-        <p>Price: 500 Credits</p>
-        <button class="btn-buy" onclick="buy('char1', 500)">Buy Now</button>
-      </div>
-    </div>
-    <!-- …more cards… -->
-  </section>
+  <div class="grid" id="marketGrid"></div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // ——— Your Firebase config ———
+    // ——— Firebase Init ———
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
       authDomain: "rewardedtv-1e5b1.firebaseapp.com",
@@ -117,20 +141,61 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // Update balance display on auth state
     auth.onAuthStateChanged(user => {
-      if (!user) return document.getElementById('balanceDisplay').innerText = '$0.00';
-      db.collection('users').doc(user.uid).onSnapshot(doc => {
-        const bal = (doc.data()?.balance || 0).toFixed(2);
-        document.getElementById('balanceDisplay').innerText = '$' + bal;
-      });
-    });
+      if (!user) return location.href = "index.html";
+      const uid = user.uid;
+      const grid = document.getElementById('marketGrid');
+      const headerBalance = document.getElementById('headerBalance');
 
-    // Stub for buy button
-    function buy(id, price) {
-      alert(`Buying ${id} for ${price} credits!`);
-      // …your purchase logic…
-    }
+      // listen for balance changes to update header
+      db.collection('users').doc(uid)
+        .onSnapshot(doc => {
+          const data = doc.data() || {};
+          headerBalance.innerText = '$' + (data.balance||0).toFixed(2);
+        });
+
+      // Render 12 helpers
+      for (let i = 1; i <= 12; i++) {
+        const key = 'char' + i;
+        const url = `assets/${key}.jpeg`;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${url}" alt="${key}" />
+          <div class="card-body">
+            <h3>${key}</h3>
+            <p>Sell for <strong>$400</strong></p>
+            <button data-key="${key}">Sell</button>
+          </div>
+        `;
+        grid.appendChild(card);
+
+        // Sell logic: increment balance, remove helper from array
+        card.querySelector('button').onclick = async e => {
+          const btn = e.target;
+          btn.disabled = true;
+          try {
+            const ref = db.collection('users').doc(uid);
+            const snap = await ref.get();
+            const data = snap.data() || {};
+            const helpers = data.helpers || [];
+            const match = helpers.find(h=>h.name===key);
+            const updates = {
+              balance: firebase.firestore.FieldValue.increment(400)
+            };
+            if (match) {
+              updates.helpers = firebase.firestore.FieldValue.arrayRemove(match);
+            }
+            await ref.update(updates);
+            alert(`${key} sold!`);
+          } catch(err) {
+            console.error(err);
+            alert('Failed to sell, try again.');
+            btn.disabled = false;
+          }
+        };
+      }
+    });
   </script>
 </body>
 </html>

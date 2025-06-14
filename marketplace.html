@@ -3,196 +3,147 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Helpers & Pets Marketplace — RewardedTV</title>
+  <title>Marketplace — RewardedTV</title>
   <style>
-    /* Base & Theme */
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;}
-    a{color:inherit;text-decoration:none;}
-
-    /* Header */
-    .market-header{
-      display:flex;justify-content:space-between;align-items:center;
-      padding:1rem 2rem;background:#111;position:sticky;top:0;z-index:10;
-    }
-    .market-header h1{color:#9b59b6;font-size:1.75rem;}
-    .market-header .controls{display:flex;gap:1rem;}
-    .market-header select,input{
-      background:#1c1c1c;border:1px solid #9b59b6;color:#e0e0e0;
-      padding:0.5rem;border-radius:4px;
-    }
-
-    /* Sections */
-    .section-title {margin:2rem 2rem 1rem;color:#f39c12;font-size:1.5rem;}
-    .market-grid{padding:0 2rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
-
-    /* Card Style */
-    .card{
-      background:#1c1c1c;border-radius:8px;overflow:hidden;position:relative;
-      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;
-      display:flex;flex-direction:column;align-items:center;
-      padding:1rem;
-    }
+    body { background:#0a0a0a;color:#e0e0e0;font-family:'Segoe UI',sans-serif;padding:0;margin:0; }
+    header { display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:#111;position:sticky;top:0; }
+    .filters { display:flex;gap:1rem; }
+    select, input { background:#1c1c1c;border:1px solid #9b59b6;color:#e0e0e0;padding:0.5rem;border-radius:4px; }
+    .market-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:2rem; }
+    .card { background:#1c1c1c;border-radius:8px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;position:relative;}
     .card:hover{transform:translateY(-5px);}
-    .card img{width:100%;border-radius:4px;}
-    .card h2{margin:0.75rem 0;color:#f39c12;font-size:1.1rem;}
-    .card p{color:#ccc;font-size:0.9rem;margin-bottom:0.75rem;}
-    .btn{
-      background:#9b59b6;color:#111;padding:0.5rem 1rem;border:none;
-      border-radius:4px;cursor:pointer;font-weight:500;width:100%;
-      text-transform:uppercase;box-shadow:0 0 8px rgba(155,89,182,0.6);
-    }
-    .btn:hover{background:#8e44ad;}
+    .card img{width:100%;display:block;}
+    .card-body{padding:1rem;display:flex;flex-direction:column;align-items:center;}
+    .card-body h2{color:#f39c12;margin-bottom:0.5rem;}
+    .card-body p{color:#ccc;margin-bottom:0.75rem;}
+    .btn { padding:0.5rem 1rem;border:none;border-radius:4px;font-weight:500;width:100%;cursor:pointer; }
+    .btn-buy { background:#9b59b6;color:#111;box-shadow:0 0 8px rgba(155,89,182,0.6); }
+    .btn-sell{ background:#e74c3c;color:#fff; }
+    .btn-buy:hover{background:#8e44ad;}
+    .btn-sell:hover{background:#c0392b;}
   </style>
 </head>
 <body>
-
-  <header class="market-header">
-    <h1>Helpers & Pets Marketplace</h1>
-    <div class="controls">
+  <header>
+    <h1>🔮 Marketplace</h1>
+    <div class="filters">
       <select id="filterType">
-        <option value="">All Types</option>
-        <option value="helper">Helper</option>
-        <option value="pet">Pet</option>
+        <option value="all">All Types</option>
+        <option value="helper">Helpers</option>
+        <option value="pet">Pets</option>
       </select>
-      <select id="filterRarity">
-        <option value="">All Rarities</option>
-        <option value="common">Common</option>
-        <option value="rare">Rare</option>
-        <option value="epic">Epic</option>
-      </select>
-      <input id="searchInput" type="text" placeholder="Search..." />
+      <input id="search" placeholder="Search..." />
     </div>
   </header>
 
-  <h2 class="section-title">Your Collection</h2>
-  <div id="your-collection" class="market-grid">
-    <!-- will be populated by JS -->
-  </div>
-
-  <h2 class="section-title">Market Listings</h2>
-  <div id="listings" class="market-grid">
-    <!-- will be populated by JS -->
-  </div>
+  <section id="market-grid" class="market-grid"></section>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // ——— Init ———
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
-      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
-      projectId: "rewardedtv-1e5b1"
-    };
+    // 1) Initialize
+    const firebaseConfig = { /* your config */ };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
+    const auth = firebase.auth(), db = firebase.firestore();
 
-    // ——— Render a card ———
-    function makeCard(item, type, onButtonClick, buttonText){
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `
-        <img src="${item.avatarURL}" alt="${item.name}"/>
-        <h2>${item.name}</h2>
-        <p>Type: ${type}</p>
-      `;
-      const btn = document.createElement('button');
-      btn.className = 'btn';
-      btn.textContent = buttonText;
-      btn.onclick = () => onButtonClick(item);
-      div.appendChild(btn);
-      return div;
-    }
+    // 2) Static assets
+    const ASSETS = [
+      {id:'char1', type:'helper', label:'Char 1', price:500},
+      /* … through char12 … */,
+      {id:'pet1', type:'pet', label:'Pet 1', price:300},
+      /* … your pets … */
+    ];
 
-    // ——— Populate Your Collection ———
-    function loadCollection(user){
-      const col = document.getElementById('your-collection');
-      col.innerHTML = '';
-      db.collection('users').doc(user.uid).get().then(doc => {
-        const d = doc.data()||{};
-        const owned = (d.helpers||[]).concat(d.pets||[]);
-        if(!owned.length){
-          col.innerHTML = '<p style="padding:1rem 2rem;color:#888;">You don’t own any helpers or pets yet.</p>';
-          return;
-        }
-        owned.forEach(item => {
-          const card = makeCard(item, item.avatarURL.includes('char')?'Helper':'Pet', soldHelper, 'Sell');
-          col.appendChild(card);
-        });
-      });
-    }
-
-    // ——— Sell action: move from user → listings ———
-    function soldHelper(item){
-      const uid = auth.currentUser.uid;
-      if(!confirm(`List ${item.name} for sale at 500 credits?`)) return;
-      // 1) remove from user
-      db.collection('users').doc(uid).update({
-        helpers: firebase.firestore.FieldValue.arrayRemove(item),
-        pets:    firebase.firestore.FieldValue.arrayRemove(item)
-      });
-      // 2) add to listings
-      db.collection('listings').add({
-        seller: uid,
-        name: item.name,
-        avatarURL: item.avatarURL,
-        type: item.avatarURL.includes('char')?'helper':'pet',
-        price: 500,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-
-    // ——— Populate Market Listings ———
-    function loadListings(){
-      const ldom = document.getElementById('listings');
-      ldom.innerHTML = '';
-      db.collection('listings')
-        .orderBy('timestamp','desc')
-        .get().then(snap => {
-          snap.forEach(doc => {
-            const it = doc.data();
-            const card = makeCard(it, it.type, buyListing.bind(null, doc.id), 'Buy ('+it.price+')');
-            ldom.appendChild(card);
-          });
-        });
-    }
-
-    // ——— Buy action: remove listing & add to buyer ———
-    function buyListing(listingId){
+    // 3) Render logic
+    async function renderMarketplace() {
       const user = auth.currentUser;
-      if(!user) return alert('Log in to buy');
-      db.collection('listings').doc(listingId).get().then(doc => {
-        const it = doc.data();
-        if(!confirm(`Buy ${it.name} for ${it.price} credits?`)) return;
-        // TODO: check user balance before
-        // 1) deduct price
-        db.collection('users').doc(user.uid).update({
-          balance: firebase.firestore.FieldValue.increment(-it.price)
-        });
-        // 2) add to buyer’s collection
-        db.collection('users').doc(user.uid).update({
-          [`${it.type}s`]: firebase.firestore.FieldValue.arrayUnion({
-            name: it.name,
-            avatarURL: it.avatarURL
-          })
-        });
-        // 3) remove listing
-        db.collection('listings').doc(listingId).delete();
-        alert('Purchase successful!');
-        loadCollection(user);
-        loadListings();
+      if (!user) return location.href='index.html';
+
+      // load owned
+      const ownedSnap = await db.collection('users').doc(user.uid)
+        .collection('purchases').get();
+      const owned = new Set(ownedSnap.docs.map(d=>d.id));
+
+      // load global listings
+      const listSnap = await db.collection('listings')
+        .orderBy('timestamp','desc').get();
+      const listings = {};
+      listSnap.forEach(d => listings[d.data().assetId] = d);
+
+      // filter & search
+      const typeF = document.getElementById('filterType').value;
+      const term  = document.getElementById('search').value.toLowerCase();
+
+      const grid = document.getElementById('market-grid');
+      grid.innerHTML='';
+
+      ASSETS.filter(a=>{
+        return (typeF==='all'||a.type===typeF)
+            && a.label.toLowerCase().includes(term);
+      }).forEach(a=>{
+        const docListing = listings[a.id];
+        const owns = owned.has(a.id);
+        const card = document.createElement('div');
+        card.className='card';
+        card.innerHTML=`
+          <img src="assets/${a.id}.jpeg" alt="${a.label}" />
+          <div class="card-body">
+            <h2>${a.label}</h2>
+            <p>${ owns
+                ? `You own this${docListing?` • Listed at ${docListing.data().price}`:''}`
+                : docListing
+                  ? `For Sale: ${docListing.data().price} Credits`
+                  : `Price: ${a.price} Credits`
+              }</p>
+            <button class="btn ${ owns ? 'btn-sell' : 'btn-buy' }">
+              ${ owns
+                  ? (docListing ? 'Delist' : 'Sell')
+                  : (docListing ? 'Buy'  : 'Buy')
+                }
+            </button>
+          </div>`;
+
+        // wire up
+        const btn = card.querySelector('button');
+        btn.onclick = async () => {
+          const uid = user.uid;
+          const listingId = `${a.id}_${uid}`;
+          if (owns) {
+            if (docListing) {
+              // Delist
+              await db.collection('listings').doc(listingId).delete();
+            } else {
+              // List for sale at base price
+              await db.collection('listings').doc(listingId)
+                .set({ assetId:a.id, seller:uid, price:a.price, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            }
+          } else {
+            // Buy: remove listing, add purchase to buyer, remove from seller
+            if (!docListing) return alert('Not for sale');
+            const seller = docListing.data().seller;
+            // transfer purchase
+            await db.collection('users').doc(uid)
+              .collection('purchases').doc(a.id).set({ timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection('listings').doc(listingId).delete();
+            // optionally remove from seller's purchases
+            await db.collection('users').doc(seller)
+              .collection('purchases').doc(a.id).delete();
+          }
+          renderMarketplace();
+        };
+
+        grid.appendChild(card);
       });
     }
 
-    // ——— Auth & initial load ———
-    auth.onAuthStateChanged(user => {
-      if(!user) return location.href='index.html';
-      loadCollection(user);
-      loadListings();
+    auth.onAuthStateChanged(u => {
+      if (u) renderMarketplace();
+      else location.href='index.html';
     });
+    document.getElementById('filterType').onchange = renderMarketplace;
+    document.getElementById('search').oninput      = renderMarketplace;
   </script>
 </body>
 </html>

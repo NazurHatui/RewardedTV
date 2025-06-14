@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Helpers Marketplace — RewardedTV</title>
+  <title>Helpers & Pets Marketplace — RewardedTV</title>
   <style>
     /* Reset & Base */
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -16,19 +16,47 @@
       text-align:center;
       box-shadow:0 2px 8px rgba(0,0,0,0.5);
       position:sticky; top:0; z-index:10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
-    header img.logo {
+    /* Logo styling */
+    header .header-logo {
       height:40px;
-      margin: 0 1rem;
+      vertical-align:middle;
+      margin:0 0.75rem;
     }
     header h1{
       font-size:1.75rem;
       color:#9b59b6;
       text-shadow:0 0 8px rgba(155,89,182,0.7);
-      margin: 0;
+      display:inline-block;
+      margin:0 2rem;
+    }
+
+    /* Home link & balance */
+    header .home-link, header .balance {
+      position:absolute; top:1rem;
+      color:#e0e0e0; font-weight:500;
+    }
+    header .home-link { left:2rem; }
+    header .balance  { right:2rem; }
+
+    /* Toggle */
+    .view-toggle {
+      text-align:center;
+      margin:1rem 0;
+    }
+    .view-toggle button {
+      background:#1c1c1c;
+      color:#e0e0e0;
+      border:1px solid #9b59b6;
+      padding:0.5rem 1rem;
+      margin:0 0.5rem;
+      border-radius:4px;
+      cursor:pointer;
+      font-weight:500;
+    }
+    .view-toggle button.active {
+      background:#9b59b6;
+      color:#111;
     }
 
     /* Marketplace Grid */
@@ -36,7 +64,7 @@
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
       gap:1.5rem;
-      padding:2rem;
+      padding:0 2rem 2rem;
     }
 
     /* Card */
@@ -105,16 +133,42 @@
       cursor:default;
       box-shadow:none;
     }
+
+    /* Globle Listings Section */
+    section#global-section {
+      padding:2rem 0; background:#0a0a0a;
+    }
+    section#global-section h2 {
+      text-align:center; color:#9b59b6; margin-bottom:1rem;
+      text-shadow:0 0 8px rgba(155,89,182,0.7);
+    }
   </style>
 </head>
 <body>
   <header>
-    <img class="logo" src="assets/logo.png" alt="Logo Left"/>
-    <h1>Helpers Marketplace</h1>
-    <img class="logo" src="assets/logo.png" alt="Logo Right"/>
+    <a href="index.html" class="home-link">Home</a>
+    <img src="assets/logo.png" alt="Logo Left" class="header-logo"/>
+    <h1>Marketplace</h1>
+    <img src="assets/logo.png" alt="Logo Right" class="header-logo"/>
+    <div class="balance">Balance: <span id="marketBalance">$0.00</span></div>
   </header>
 
+  <div class="view-toggle">
+    <button id="btnHelpers" class="active">Helpers</button>
+    <button id="btnPets">Pets</button>
+  </div>
+
+  <!-- Helpers Grid -->
   <div class="grid" id="marketGrid"></div>
+
+  <!-- Pets Grid (hidden by default) -->
+  <div class="grid" id="petsGrid" style="display:none;"></div>
+
+  <!-- Globle Listings Section -->
+  <section id="global-section">
+    <h2>Globle Listings</h2>
+    <div class="grid" id="globalListings"></div>
+  </section>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -131,46 +185,47 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
+    // Asset lists
+    const helperKeys = Array.from({length:12},(_,i)=>'char'+(i+1));
+    const petKeys    = ['thecat','thefox','theowl','thephoenix'];
+
     auth.onAuthStateChanged(user => {
       if (!user) return location.href = "index.html";
       const uid = user.uid;
-      const grid = document.getElementById('marketGrid');
+      const helpersGrid = document.getElementById('marketGrid');
+      const petsGrid    = document.getElementById('petsGrid');
+      const balEl       = document.getElementById('marketBalance');
 
-      // Render 12 helpers
-      for (let i = 1; i <= 12; i++) {
-        const key = 'char' + i;
+      // show live balance
+      db.collection('users').doc(uid).onSnapshot(snap => {
+        const data = snap.data()||{};
+        balEl.innerText = '$' + ((data.balance||0).toFixed(2));
+      });
+
+      // build helper cards
+      helperKeys.forEach(key=>{
         const url = `assets/${key}.jpeg`;
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <img src="${url}" alt="${key}" />
+          <img src="${url}" alt="${key}" onerror="this.src='assets/default-avatar.png'" />
           <div class="card-body">
             <h3>${key}</h3>
             <p>Sell for <strong>$400</strong></p>
             <button data-key="${key}">Sell</button>
           </div>
         `;
-        grid.appendChild(card);
-
-        // Sell logic: increment balance, remove helper from array
         card.querySelector('button').onclick = async e => {
           const btn = e.target;
           btn.disabled = true;
           try {
-            // fetch user data
             const ref = db.collection('users').doc(uid);
             const snap = await ref.get();
-            const data = snap.data() || {};
-            const helpers = data.helpers || [];
-            // remove first matching helper
+            const d = snap.data()||{};
+            const helpers = d.helpers||[];
             const match = helpers.find(h=>h.name===key);
-            // batch update
-            const updates = {
-              balance: firebase.firestore.FieldValue.increment(400)
-            };
-            if (match) {
-              updates.helpers = firebase.firestore.FieldValue.arrayRemove(match);
-            }
+            const updates = { balance: firebase.firestore.FieldValue.increment(400) };
+            if (match) updates.helpers = firebase.firestore.FieldValue.arrayRemove(match);
             await ref.update(updates);
             alert(`${key} sold!`);
           } catch(err) {
@@ -179,7 +234,39 @@
             btn.disabled = false;
           }
         };
-      }
+        helpersGrid.appendChild(card);
+      });
+
+      // build pet cards
+      petKeys.forEach(key=>{
+        const url = `assets/${key}.png`;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${url}" alt="${key}" onerror="this.src='assets/default-avatar.png'" />
+          <div class="card-body">
+            <h3>${key}</h3>
+            <p>Sell for <strong>$400</strong></p>
+            <button data-key="${key}">Sell</button>
+          </div>
+        `;
+        card.querySelector('button').onclick = ()=>alert('Sold 400$'); // simple placeholder
+        petsGrid.appendChild(card);
+      });
+
+      // toggle logic
+      document.getElementById('btnHelpers').onclick = () => {
+        helpersGrid.style.display = '';
+        petsGrid   .style.display = 'none';
+        btnHelpers .classList.add('active');
+        btnPets    .classList.remove('active');
+      };
+      document.getElementById('btnPets').onclick = () => {
+        helpersGrid.style.display = 'none';
+        petsGrid   .style.display = '';
+        btnPets    .classList.add('active');
+        btnHelpers .classList.remove('active');
+      };
     });
   </script>
 </body>

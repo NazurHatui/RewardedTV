@@ -3,70 +3,84 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Marketplace — RewardedTV</title>
+  <title>Helpers & Pets Marketplace — RewardedTV</title>
   <style>
+    /* Base & Theme */
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;}
     a{color:inherit;text-decoration:none;}
-    header{display:flex;justify-content:space-between;align-items:center;
-      padding:1rem 2rem;background:#111;position:sticky;top:0;z-index:10;}
-    header h1{color:#9b59b6;font-size:1.5rem;}
-    .right-nav button{background:#9b59b6;color:#111;border:none;
-      padding:0.5rem 1rem;border-radius:4px;cursor:pointer;}
-    .right-nav button:hover{background:#8e44ad;}
-    .controls{padding:1rem 2rem;display:flex;gap:1rem;background:#1c1c1c;}
-    .controls select, .controls input{background:#111;border:1px solid #9b59b6;
-      color:#e0e0e0;padding:0.5rem;border-radius:4px;flex:1;}
-    .subsection{padding:1rem 2rem;background:#111;color:#9b59b6;
-      font-size:1.25rem;font-weight:500;text-shadow:0 0 4px rgba(155,89,182,0.7);}
-    .market-grid{padding:0 2rem 2rem;display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
-    .card{background:#1c1c1c;border-radius:8px;overflow:hidden;position:relative;
-      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;}
+
+    /* Header */
+    .market-header{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 2rem;background:#111;position:sticky;top:0;z-index:10;
+    }
+    .market-header h1{color:#9b59b6;font-size:1.75rem;}
+    .market-header .controls{display:flex;gap:1rem;}
+    .market-header select,input{
+      background:#1c1c1c;border:1px solid #9b59b6;color:#e0e0e0;
+      padding:0.5rem;border-radius:4px;
+    }
+
+    /* Sections */
+    .section-title {margin:2rem 2rem 1rem;color:#f39c12;font-size:1.5rem;}
+    .market-grid{padding:0 2rem 2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+
+    /* Card Style */
+    .card{
+      background:#1c1c1c;border-radius:8px;overflow:hidden;position:relative;
+      box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:transform .2s;
+      display:flex;flex-direction:column;align-items:center;
+      padding:1rem;
+    }
     .card:hover{transform:translateY(-5px);}
-    .card img{width:100%;display:block;}
-    .card-body{padding:1rem;display:flex;flex-direction:column;align-items:center;}
-    .card-body h2{font-size:1.1rem;color:#f39c12;margin-bottom:0.25rem;}
-    .card-body .count{color:#ccc;font-size:0.9rem;margin-bottom:0.5rem;}
-    .btn-list{background:#f39c12;color:#111;padding:0.5rem 1rem;border:none;
-      border-radius:4px;cursor:pointer;width:100%;font-weight:500;text-transform:uppercase;
-      box-shadow:0 0 8px rgba(243,156,18,0.6);}
-    .btn-list:hover{background:#d78c10;}
-    footer{padding:1rem 2rem;text-align:center;background:#111;color:#888;}
+    .card img{width:100%;border-radius:4px;}
+    .card h2{margin:0.75rem 0;color:#f39c12;font-size:1.1rem;}
+    .card p{color:#ccc;font-size:0.9rem;margin-bottom:0.75rem;}
+    .btn{
+      background:#9b59b6;color:#111;padding:0.5rem 1rem;border:none;
+      border-radius:4px;cursor:pointer;font-weight:500;width:100%;
+      text-transform:uppercase;box-shadow:0 0 8px rgba(155,89,182,0.6);
+    }
+    .btn:hover{background:#8e44ad;}
   </style>
 </head>
 <body>
-  <header>
-    <h1>🛒 Marketplace</h1>
-    <div class="right-nav">
-      <button onclick="location.href='index.html'">Home</button>
+
+  <header class="market-header">
+    <h1>Helpers & Pets Marketplace</h1>
+    <div class="controls">
+      <select id="filterType">
+        <option value="">All Types</option>
+        <option value="helper">Helper</option>
+        <option value="pet">Pet</option>
+      </select>
+      <select id="filterRarity">
+        <option value="">All Rarities</option>
+        <option value="common">Common</option>
+        <option value="rare">Rare</option>
+        <option value="epic">Epic</option>
+      </select>
+      <input id="searchInput" type="text" placeholder="Search..." />
     </div>
   </header>
 
-  <div class="controls">
-    <select id="filter-type">
-      <option value="all">All Types</option>
-      <option value="helper">Helpers</option>
-      <option value="pet">Pets</option>
-    </select>
-    <input id="search" placeholder="Search your items..." />
+  <h2 class="section-title">Your Collection</h2>
+  <div id="your-collection" class="market-grid">
+    <!-- will be populated by JS -->
   </div>
 
-  <div class="subsection">Your Collection</div>
-  <section id="your-collection" class="market-grid"></section>
+  <h2 class="section-title">Market Listings</h2>
+  <div id="listings" class="market-grid">
+    <!-- will be populated by JS -->
+  </div>
 
-  <div class="subsection">Global Catalog</div>
-  <section id="global-catalog" class="market-grid">
-    <!-- Optionally load global items here -->
-  </section>
-
-  <footer>&copy; 2025 RewardedTV</footer>
-
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // Init
+    // ——— Init ———
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
       authDomain: "rewardedtv-1e5b1.firebaseapp.com",
@@ -76,65 +90,109 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // Build a card element
-    function makeCard(name, type, count) {
+    // ——— Render a card ———
+    function makeCard(item, type, onButtonClick, buttonText){
       const div = document.createElement('div');
       div.className = 'card';
       div.innerHTML = `
-        <img src="assets/${name}.jpeg" alt="${name}" />
-        <div class="card-body">
-          <h2>${name}</h2>
-          <div class="count">You own: ${count}</div>
-          <p>Type: ${type}</p>
-          <button class="btn-list">List for Sale</button>
-        </div>`;
-      div.querySelector('.btn-list').onclick = () => {
-        const price = prompt(`Set sale price for ${name}:`);
-        if (!price) return;
-        // TODO: write a real listing to Firestore
-        console.log('List', name, 'type', type, 'price', price);
-        alert(`${name} listed at ${price} credits`);
-      };
+        <img src="${item.avatarURL}" alt="${item.name}"/>
+        <h2>${item.name}</h2>
+        <p>Type: ${type}</p>
+      `;
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.textContent = buttonText;
+      btn.onclick = () => onButtonClick(item);
+      div.appendChild(btn);
       return div;
     }
 
-    auth.onAuthStateChanged(user => {
-      if (!user) return location.replace('index.html');
+    // ——— Populate Your Collection ———
+    function loadCollection(user){
+      const col = document.getElementById('your-collection');
+      col.innerHTML = '';
       db.collection('users').doc(user.uid).get().then(doc => {
         const d = doc.data()||{};
-        // Combine helpers & pets, count occurrences
-        const all = [];
-        (d.helpers||[]).forEach(h => all.push({name:h.name,type:'helper'}));
-        (d.pets||[]).forEach(p => all.push({name:p.name,type:'pet'}));
-        const counts = all.reduce((m,item)=>{
-          const key = item.name+'|'+item.type;
-          m[key] = (m[key]||0)+1;
-          return m;
-        },{});
-        const container = document.getElementById('your-collection');
-        container.innerHTML = '';
-        Object.entries(counts).forEach(([key,count])=>{
-          const [name,type] = key.split('|');
-          container.appendChild(makeCard(name,type,count));
+        const owned = (d.helpers||[]).concat(d.pets||[]);
+        if(!owned.length){
+          col.innerHTML = '<p style="padding:1rem 2rem;color:#888;">You don’t own any helpers or pets yet.</p>';
+          return;
+        }
+        owned.forEach(item => {
+          const card = makeCard(item, item.avatarURL.includes('char')?'Helper':'Pet', soldHelper, 'Sell');
+          col.appendChild(card);
         });
       });
-    });
+    }
 
-    // Filtering & search
-    document.getElementById('filter-type').onchange = () => {
-      const t = document.getElementById('filter-type').value;
-      document.querySelectorAll('#your-collection .card').forEach(c=>{
-        const type = c.querySelector('p').innerText.split(': ')[1];
-        c.style.display = (t==='all'||t===type)?'':'none';
+    // ——— Sell action: move from user → listings ———
+    function soldHelper(item){
+      const uid = auth.currentUser.uid;
+      if(!confirm(`List ${item.name} for sale at 500 credits?`)) return;
+      // 1) remove from user
+      db.collection('users').doc(uid).update({
+        helpers: firebase.firestore.FieldValue.arrayRemove(item),
+        pets:    firebase.firestore.FieldValue.arrayRemove(item)
       });
-    };
-    document.getElementById('search').oninput = () => {
-      const q = document.getElementById('search').value.toLowerCase();
-      document.querySelectorAll('#your-collection .card').forEach(c=>{
-        const name = c.querySelector('h2').innerText.toLowerCase();
-        c.style.display = name.includes(q)?'':'none';
+      // 2) add to listings
+      db.collection('listings').add({
+        seller: uid,
+        name: item.name,
+        avatarURL: item.avatarURL,
+        type: item.avatarURL.includes('char')?'helper':'pet',
+        price: 500,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
-    };
+    }
+
+    // ——— Populate Market Listings ———
+    function loadListings(){
+      const ldom = document.getElementById('listings');
+      ldom.innerHTML = '';
+      db.collection('listings')
+        .orderBy('timestamp','desc')
+        .get().then(snap => {
+          snap.forEach(doc => {
+            const it = doc.data();
+            const card = makeCard(it, it.type, buyListing.bind(null, doc.id), 'Buy ('+it.price+')');
+            ldom.appendChild(card);
+          });
+        });
+    }
+
+    // ——— Buy action: remove listing & add to buyer ———
+    function buyListing(listingId){
+      const user = auth.currentUser;
+      if(!user) return alert('Log in to buy');
+      db.collection('listings').doc(listingId).get().then(doc => {
+        const it = doc.data();
+        if(!confirm(`Buy ${it.name} for ${it.price} credits?`)) return;
+        // TODO: check user balance before
+        // 1) deduct price
+        db.collection('users').doc(user.uid).update({
+          balance: firebase.firestore.FieldValue.increment(-it.price)
+        });
+        // 2) add to buyer’s collection
+        db.collection('users').doc(user.uid).update({
+          [`${it.type}s`]: firebase.firestore.FieldValue.arrayUnion({
+            name: it.name,
+            avatarURL: it.avatarURL
+          })
+        });
+        // 3) remove listing
+        db.collection('listings').doc(listingId).delete();
+        alert('Purchase successful!');
+        loadCollection(user);
+        loadListings();
+      });
+    }
+
+    // ——— Auth & initial load ———
+    auth.onAuthStateChanged(user => {
+      if(!user) return location.href='index.html';
+      loadCollection(user);
+      loadListings();
+    });
   </script>
 </body>
 </html>

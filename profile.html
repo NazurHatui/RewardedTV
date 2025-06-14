@@ -124,6 +124,20 @@
       font-weight:500;
     }
     .info-box .withdraw-btn:hover { background:#8e44ad; }
+
+    /* Referral Card */
+    .referral-card input {
+      width:100%; padding:0.5rem; margin-bottom:0.75rem;
+      background:#0a0a0a; border:1px solid #9b59b6;
+      border-radius:4px; color:#e0e0e0;
+      text-align:center;
+    }
+    .referral-card button {
+      width:100%; padding:0.5rem;
+      background:#9b59b6; color:#111; border:none;
+      border-radius:4px; cursor:pointer; font-weight:500;
+    }
+    .referral-card button:hover { background:#8e44ad; }
   </style>
 </head>
 <body>
@@ -181,6 +195,13 @@
       <p>Available: <span id="availableBalance">$0.00</span></p>
       <button class="withdraw-btn">Withdraw</button>
     </div>
+
+    <!-- Referrals -->
+    <div class="card referral-card">
+      <h2>Referrals</h2>
+      <input id="refCode" readonly placeholder="— No code yet —"/>
+      <button id="generateRefBtn">Generate</button>
+    </div>
   </div>
 
   <!-- Firebase SDKs -->
@@ -199,26 +220,59 @@
 
     auth.onAuthStateChanged(user => {
       if (!user) return location.href = "index.html";
-      const ref = db.collection("users").doc(user.uid);
+      const uid = user.uid;
+      const refField = document.getElementById("refCode");
+      const genBtn  = document.getElementById("generateRefBtn");
+
+      // load profile data
+      const refDoc = db.collection("users").doc(uid);
+      refDoc.onSnapshot(doc => {
+        const d = doc.data() || {};
+        // selectedHelper, wallet, balance handled below...
+        // now referrals:
+        if (d.referralCode) {
+          refField.value = d.referralCode;
+          genBtn.disabled = true;
+        }
+      });
+
+      // other existing snapshot logic...
+      const ref = db.collection("users").doc(uid);
       ref.onSnapshot(doc => {
         const d = doc.data()||{};
-
-        // selectedHelper instead of helpers array
+        // helper
         const sel = d.selectedHelper || {};
         document.getElementById("avatarPreview").src = sel.avatarURL || "assets/default-avatar.png";
         document.getElementById("helperName").innerText = sel.name || "None";
-
-        // Wallet
+        // wallet
         document.getElementById("walletInput").value = d.wallet||"";
         if (d.wallet) {
           document.getElementById("walletInput").disabled = true;
           document.getElementById("saveWalletBtn").style.display = "none";
         }
-
-        // Balance
+        // balance
         document.getElementById("availableBalance").innerText = "$" + ((d.balance||0).toFixed(2));
       });
     });
+
+    // generate & save referral code
+    document.getElementById("generateRefBtn").onclick = async () => {
+      const btn = document.getElementById("generateRefBtn");
+      const field = document.getElementById("refCode");
+      const uid = firebase.auth().currentUser.uid;
+      // random 8-letter uppercase
+      const code = Array.from({length:8},()=>{
+        return String.fromCharCode(65 + Math.floor(Math.random()*26));
+      }).join('');
+      try {
+        await db.collection("users").doc(uid).set({ referralCode: code }, { merge: true });
+        field.value = code;
+        btn.disabled = true;
+      } catch(e) {
+        console.error(e);
+        alert("Failed to generate code.");
+      }
+    };
 
     function saveWallet(){
       const val = document.getElementById("walletInput").value.trim();
@@ -234,7 +288,7 @@
     }
     document.getElementById("saveWalletBtn").onclick = saveWallet;
 
-    // Helper Picker (char1–char12 in assets/, .jpeg)
+    // Helper Picker code unchanged...
     document.getElementById("selectHelperBtn").onclick = () => {
       const picker = document.createElement("div");
       picker.id = "helperPicker";

@@ -209,7 +209,20 @@
     auth.onAuthStateChanged(user => {
       if (!user) return location.replace("index.html");
       document.getElementById("logout-btn").onclick = () => auth.signOut();
-      document.getElementById("feedPetsBtn").onclick = () => alert("Pet Fed ✅");
+
+      // Feed Pets logic: decrement food if >0
+      document.getElementById("feedPetsBtn").onclick = async () => {
+        const ref = db.collection("users").doc(user.uid);
+        const snap = await ref.get();
+        const d = snap.data()||{};
+        const currentFood = d.food || 0;
+        if (currentFood > 0) {
+          await ref.update({ food: firebase.firestore.FieldValue.increment(-1) });
+          alert("Pet Fed ✅");
+        } else {
+          alert("No food!");
+        }
+      };
 
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data() || {};

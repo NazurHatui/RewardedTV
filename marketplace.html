@@ -30,6 +30,23 @@
       height:32px;
       width:auto;
     }
+    /* Home button (left) */
+    #homeBtn {
+      position:absolute;
+      left:2rem;
+      top:50%;
+      transform:translateY(-50%);
+      color:#e0e0e0;
+      font-weight:500;
+      text-decoration:none;
+      padding:0.25rem 0.5rem;
+      border:1px solid #9b59b6;
+      border-radius:4px;
+    }
+    #homeBtn:hover {
+      background:#9b59b6;
+      color:#111;
+    }
     /* balance in top-right */
     #headerBalance {
       position:absolute;
@@ -118,6 +135,7 @@
 </head>
 <body>
   <header>
+    <a href="index.html" id="homeBtn">Home</a>
     <img src="assets/logo.png" class="logo-icon" alt="Logo Left"/>
     <h1>Helpers Marketplace</h1>
     <img src="assets/logo.png" class="logo-icon" alt="Logo Right"/>

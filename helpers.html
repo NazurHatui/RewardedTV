@@ -11,85 +11,76 @@
 
     /* Header */
     header.header {
-      display:flex;justify-content:space-between;align-items:center;
-      padding:1rem 2rem;background:#111;
+      background:#111;
+      padding:1rem 2rem;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
     }
-    .left-nav, .right-nav {
-      display:flex;align-items:center;
-    }
-    .nav-links {
-      list-style:none;display:flex;margin:0;padding:0;
-    }
-    .nav-links li {margin-left:1.5rem;}
-    .nav-links li:first-child {margin-left:0;}
-    .nav-links a {
-      color:#e0e0e0;text-decoration:none;font-weight:500;
-    }
+    .left-nav, .right-nav { display:flex; align-items:center; }
+    .nav-links { list-style:none; display:flex; }
+    .nav-links li { margin-left:1.5rem; }
+    .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .right-nav a {
-      background:#9b59b6;color:#111;padding:0.5rem 1rem;
-      border-radius:4px;text-decoration:none;font-weight:500;
+      background:#9b59b6; color:#111; padding:0.5rem 1rem;
+      border-radius:4px; text-decoration:none; font-weight:500;
     }
-    .right-nav a:hover {background:#8e44ad;}
+    .right-nav a:hover { background:#8e44ad; }
 
     /* Hero */
     .hero {
-      background:#111;text-align:center;padding:2rem;
+      background:#111; padding:2rem; text-align:center;
     }
     .hero-title {
-      display:flex;align-items:center;justify-content:center;margin-bottom:1rem;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:1rem;
     }
-    .hero-logo {height:60px;margin:0 1rem;}
-    .hero h1 {
-      color:#9b59b6;font-size:2.5rem;margin:0;
-    }
-    .hero p {color:#e0e0e0;margin-top:0.5rem;}
+    .hero-logo { height:60px; margin:0 1rem; }
+    .hero h1 { color:#9b59b6; font-size:2.5rem; margin:0; }
+    .hero p { margin-top:0.5rem; }
 
-    /* Marketplace‐style Grid & Cards for Helpers */
-    .grid{
+    /* Marketplace‐style Grid & Cards */
+    .helpers-list {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
       gap:1.5rem;
-      padding:0 2rem 2rem;
+      padding:2rem;
     }
-    .card{
+    .helper-card {
       background:#1c1c1c;
       border-radius:10px;
       overflow:hidden;
       box-shadow:0 6px 20px rgba(0,0,0,0.6);
-      transition:transform .3s, box-shadow .3s;
+      transition:transform .2s, box-shadow .2s;
       display:flex;
       flex-direction:column;
     }
-    .card:hover{
-      transform:translateY(-8px);
+    .helper-card:hover {
+      transform:translateY(-5px);
       box-shadow:0 12px 30px rgba(0,0,0,0.8);
     }
-    .card img{
+    .helper-card img {
       width:100%;
       height:150px;
       object-fit:contain;
       background:#000;
       padding:1rem;
     }
-    .card-body{
+    .card-body {
       padding:1rem;
       flex:1;
       display:flex;
       flex-direction:column;
       align-items:center;
     }
-    .card-body h3{
+    .card-body h3 {
       margin-bottom:0.5rem;
       color:#f39c12;
-      text-transform:capitalize;
     }
-    .card-body p{
-      color:#ccc;
-      font-size:0.9rem;
-      margin-bottom:1rem;
-      text-align:center;
+    .card-body p {
+      color:#ccc; font-size:0.9rem; margin-bottom:1rem; text-align:center;
     }
-    .card-body button{
+    .card-body button {
       margin-top:auto;
       width:100%;
       padding:0.6rem;
@@ -103,13 +94,8 @@
       transition:background .3s;
       text-transform:uppercase;
     }
-    .card-body button:hover{
+    .card-body button:hover {
       background:linear-gradient(45deg,#e74c3c,#9b59b6);
-    }
-    .card-body button:disabled{
-      opacity:0.5;
-      cursor:default;
-      box-shadow:none;
     }
   </style>
 </head>
@@ -118,7 +104,7 @@
     <div class="left-nav">
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="helpers.html" class="active">Helpers</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
         <li><a href="videos.html">Videos</a></li>
         <li><a href="store.html">Store</a></li>
         <li><a href="profile.html">Profile</a></li>
@@ -138,33 +124,112 @@
     <p>Manage your active helper bots and settings.</p>
   </section>
 
-  <div class="grid">
-    <!-- Repeat for each helper -->
-    <div class="card">
-      <img src="assets/char1.jpeg" alt="char1" onerror="this.src='assets/default-avatar.png'"/>
+  <section class="helpers-list">
+    <!-- Cards 1–12 -->
+    <div class="helper-card">
+      <img src="assets/char1.jpeg" alt="char1"/>
       <div class="card-body">
-        <h3>char1</h3>
-        <p>Price: <strong>$700</strong></p>
+        <h3>Char1</h3>
+        <p>Price: $700</p>
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
-    <div class="card">
-      <img src="assets/char2.jpeg" alt="char2" onerror="this.src='assets/default-avatar.png'"/>
+    <div class="helper-card">
+      <img src="assets/char2.jpeg" alt="char2"/>
       <div class="card-body">
-        <h3>char2</h3>
-        <p>Price: <strong>$700</strong></p>
+        <h3>Char2</h3>
+        <p>Price: $700</p>
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
-    <!-- ...char3 through char12 in identical pattern -->
-  </div>
+    <div class="helper-card">
+      <img src="assets/char3.jpeg" alt="char3"/>
+      <div class="card-body">
+        <h3>Char3</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char4.jpeg" alt="char4"/>
+      <div class="card-body">
+        <h3>Char4</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char5.jpeg" alt="char5"/>
+      <div class="card-body">
+        <h3>Char5</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char6.jpeg" alt="char6"/>
+      <div class="card-body">
+        <h3>Char6</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char7.jpeg" alt="char7"/>
+      <div class="card-body">
+        <h3>Char7</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char8.jpeg" alt="char8"/>
+      <div class="card-body">
+        <h3>Char8</h3>
+        <p>Price: $1000</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char9.jpeg" alt="char9"/>
+      <div class="card-body">
+        <h3>Char9</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char10.jpeg" alt="char10"/>
+      <div class="card-body">
+        <h3>Char10</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char11.jpeg" alt="char11"/>
+      <div class="card-body">
+        <h3>Char11</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <div class="helper-card">
+      <img src="assets/char12.jpeg" alt="char12"/>
+      <div class="card-body">
+        <h3>Char12</h3>
+        <p>Price: $700</p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+  </section>
 
   <!-- Firebase SDKs (unchanged) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase init & buy logic (unchanged) -->
+  <!-- Firebase init (unchanged) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
@@ -174,23 +239,29 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db   = firebase.firestore();
+  </script>
 
-    const helperPrices = [700,700,300,300,400,400,500,500,600,600,700,700];
+  <!-- Buy logic (unchanged) -->
+  <script>
+    const helperPrices = [700,700,700,700,700,700,700,1000,700,700,700,700];
+
     auth.onAuthStateChanged(user => {
       if (!user) return;
-      document.querySelectorAll(".buy-button").forEach((btn,i) => {
+      document.querySelectorAll(".buy-button").forEach((btn, i) => {
         btn.onclick = () => {
           const cost = helperPrices[i];
           const ref  = db.collection("users").doc(user.uid);
           ref.get().then(doc => {
-            const d = doc.data()||{};
-            if ((d.balance||0) < cost) return alert("❌ Not enough balance.");
+            const d = doc.data() || {};
+            if ((d.balance || 0) < cost) {
+              return alert("❌ Not enough balance.");
+            }
             ref.update({
-              balance: (d.balance||0)-cost,
+              balance: (d.balance || 0) - cost,
               helpers: firebase.firestore.FieldValue.arrayUnion(`char${i+1}`)
             })
-            .then(()=> alert(`✅ Purchased char${i+1}!`))
-            .catch(()=> alert("❌ Purchase failed."));
+            .then(() => alert(`✅ Purchased! New balance: $${((d.balance||0)-cost).toFixed(2)}`))
+            .catch(e => { console.error(e); alert("❌ Purchase failed."); });
           });
         };
       });

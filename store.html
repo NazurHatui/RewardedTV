@@ -295,12 +295,30 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
-    <!-- **Low Vesting** -->
+    <!-- Low Vesting -->
     <div class="store-card">
       <img src="assets/vesting.png" alt="Low Vesting"/>
       <div class="card-body">
         <h2>Low Vesting</h2>
         <div class="price">$3250</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- Twitchboost -->
+    <div class="store-card">
+      <img src="assets/twitchboost.png" alt="Twitchboost"/>
+      <div class="card-body">
+        <h2>Twitchboost</h2>
+        <div class="price">$1000</div>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- StreamBoost -->
+    <div class="store-card">
+      <img src="assets/streamboost.png" alt="StreamBoost"/>
+      <div class="card-body">
+        <h2>StreamBoost</h2>
+        <div class="price">$1500</div>
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
@@ -327,20 +345,20 @@
         alert("Please log in to make purchases.");
         return;
       }
-      // prices array extended by one entry at the end for Low Vesting
+      // prices array extended by three new items
       const prices = [
         800,1200,1850,2000,3500,4500,
         1000,1500,2500,4000,1850,1100,
         20000,300,
         25,30,10,10,
-        3250
+        3250,1000,1500
       ];
       const boosts = [
         10,20,50,100,200,500,
         0,0,0,0,0,0,
         0,0,
         0,0,0,0,
-        0
+        0,0,0
       ];
 
       document.querySelectorAll(".buy-button").forEach((btn,i) => {
@@ -355,7 +373,7 @@
           }
           const updates = { balance: d.balance - price };
           if (boost) updates.boost = (d.boost||0) + boost;
-          // only the four “Crunch” foods increment `food`
+          // only the four “Crunch” foods (indexes 14–17) increment `food`
           if (i >= 14 && i < 18) {
             updates.food = firebase.firestore.FieldValue.increment(1);
           }

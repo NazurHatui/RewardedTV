@@ -1,1 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Top Twitch Creators — RewardedTV</title>
+  <style>
+    /* ——— Global Reset & Typography ——— */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;line-height:1.6;}
 
+    /* ——— Header & Navigation ——— */
+    header.header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 2rem;background:#111;
+    }
+    .left-nav,.right-nav{display:flex;align-items:center;}
+    .nav-links{list-style:none;margin:0;padding:0;display:flex;}
+    .nav-links li{margin-left:1.5rem;}
+    .nav-links a{color:#e0e0e0;text-decoration:none;font-weight:500;}
+    .nav-links a.active{color:#9146FF;} /* Twitch purple */
+    .right-nav a{
+      background:#9146FF;color:#fff;padding:0.5rem 1rem;
+      border-radius:4px;text-decoration:none;font-weight:500;
+    }
+    .right-nav a:hover{background:#7722CC;}
+
+    /* ——— Hero Section ——— */
+    .hero{
+      background:#111;padding:2rem;text-align:center;
+    }
+    .hero-title{
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:1rem;
+    }
+    .hero-logo{height:60px;margin:0 1rem;}
+    .hero h1{
+      color:#9146FF;font-size:2.5rem;margin:0;
+    }
+    .hero p{color:#e0e0e0;margin-top:0.5rem;}
+
+    /* ——— Creators Grid ——— */
+    .store-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:1.5rem;
+      margin:2rem;
+      padding:0 2rem;
+    }
+
+    /* ——— Marketplace‐style Card ——— */
+    .store-card{
+      background:#1c1c1c;
+      border-radius:10px;
+      overflow:hidden;
+      box-shadow:0 6px 20px rgba(0,0,0,0.6);
+      transition:transform .3s,box-shadow .3s;
+      display:flex;
+      flex-direction:column;
+    }
+    .store-card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 12px 30px rgba(0,0,0,0.8);
+    }
+    .store-card img{
+      width:100%;
+      height:150px;
+      object-fit:cover;
+      background:#000;
+    }
+    .store-card .card-body{
+      padding:1rem;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+    }
+    .store-card .card-body h2{
+      margin-bottom:0.75rem;
+      color:#f39c12;
+      font-size:1.1rem;
+      text-transform:uppercase;
+    }
+    .store-card .card-body button{
+      margin-top:auto;
+      width:100%;
+      padding:0.6rem;
+      background:#9146FF;
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 0 10px rgba(145,70,255,0.7);
+      transition:background .3s;
+      text-transform:uppercase;
+    }
+    .store-card .card-body button:hover{
+      background:#7722CC;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="left-nav">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="helpers.html">Helpers</a></li>
+        <li><a href="videos.html">Videos</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="twitch.html" class="active">Twitch</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </div>
+    <div class="right-nav">
+      <a href="admin.html">Admin</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-title">
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Left"/>
+      <h1>Top Twitch Creators</h1>
+      <img src="assets/logo.png" class="hero-logo" alt="Logo Right"/>
+    </div>
+    <p>Catch your favorite streamers live on Twitch!</p>
+  </section>
+
+  <section class="store-grid">
+    <!-- Ninja -->
+    <div class="store-card">
+      <img src="assets/ninja.JPG" alt="Ninja"/>
+      <div class="card-body">
+        <h2>Ninja</h2>
+        <button onclick="window.open('https://www.twitch.tv/ninja','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- ibai -->
+    <div class="store-card">
+      <img src="assets/ibai.JPG" alt="ibai"/>
+      <div class="card-body">
+        <h2>ibai</h2>
+        <button onclick="window.open('https://www.twitch.tv/ibai','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- KaiCenat -->
+    <div class="store-card">
+      <img src="assets/kai.png" alt="KaiCenat"/>
+      <div class="card-body">
+        <h2>KaiCenat</h2>
+        <button onclick="window.open('https://www.twitch.tv/kaicenat','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- auronplay -->
+    <div class="store-card">
+      <img src="assets/auron.JPG" alt="auronplay"/>
+      <div class="card-body">
+        <h2>auronplay</h2>
+        <button onclick="window.open('https://www.twitch.tv/auronplay','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- Rubius -->
+    <div class="store-card">
+      <img src="assets/rubi.JPG" alt="Rubius"/>
+      <div class="card-body">
+        <h2>Rubius</h2>
+        <button onclick="window.open('https://www.twitch.tv/rubius','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- jadoreshayne -->
+    <div class="store-card">
+      <img src="assets/jador.JPG" alt="jadoreshayne"/>
+      <div class="card-body">
+        <h2>jadoreshayne</h2>
+        <button onclick="window.open('https://www.twitch.tv/jadoreshayne','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- TheGrefg -->
+    <div class="store-card">
+      <img src="assets/thegreg.JPG" alt="TheGrefg"/>
+      <div class="card-body">
+        <h2>TheGrefg</h2>
+        <button onclick="window.open('https://www.twitch.tv/thegrefg','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- xQc -->
+    <div class="store-card">
+      <img src="assets/xqc.JPG" alt="xQc"/>
+      <div class="card-body">
+        <h2>xQc</h2>
+        <button onclick="window.open('https://www.twitch.tv/xqc','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- shroud -->
+    <div class="store-card">
+      <img src="assets/shroud.JPG" alt="shroud"/>
+      <div class="card-body">
+        <h2>shroud</h2>
+        <button onclick="window.open('https://www.twitch.tv/shroud','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+    <!-- summit1g -->
+    <div class="store-card">
+      <img src="assets/summit.JPG" alt="summit1g"/>
+      <div class="card-body">
+        <h2>summit1g</h2>
+        <button onclick="window.open('https://www.twitch.tv/summit1g','_blank')">Watch on Twitch</button>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

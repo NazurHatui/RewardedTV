@@ -201,7 +201,7 @@
       if (!auth.currentUser) return alert("Please log in.");
       db.collection("users").doc(auth.currentUser.uid).update({
         watched: firebase.firestore.FieldValue.increment(1),
-        rewardsEarned: firebase.firestore.FieldValue.increment(0.2),
+        rewardsEarned: firebase.firestore.FieldValue.increment(1),
         caps: firebase.firestore.FieldValue.increment(1)
       }).catch(console.error);
     };

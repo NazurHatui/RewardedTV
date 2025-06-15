@@ -107,6 +107,19 @@
       margin:0; font-size:1.25rem; color:#e0e0e0; font-weight:bold;
     }
   </style>
+
+  <!-- Toggle Persistence Plugin -->
+  <script>
+    const PLATFORM_KEY = 'rtv_platform';
+    function currentPlatform() {
+      return localStorage.getItem(PLATFORM_KEY) || 'youtube';
+    }
+    function setPlatform(p) {
+      localStorage.setItem(PLATFORM_KEY, p);
+      document.getElementById('btnYoutube').classList.toggle('active', p==='youtube');
+      document.getElementById('btnTwitch').classList.toggle('active', p==='twitch');
+    }
+  </script>
 </head>
 <body>
   <header class="header">
@@ -147,7 +160,7 @@
 
   <!-- PLATFORM TOGGLE -->
   <div class="stream-toggle">
-    <button id="btnYoutube" class="active">YouTube</button>
+    <button id="btnYoutube">YouTube</button>
     <button id="btnTwitch">Twitch</button>
   </div>
 
@@ -236,13 +249,15 @@
       if (!user) return location.replace("index.html");
       document.getElementById("logout-btn").onclick = () => auth.signOut();
 
+      // Apply saved platform
+      setPlatform(currentPlatform());
+
       // Feed Pets logic
       document.getElementById("feedPetsBtn").onclick = async () => {
         const ref = db.collection("users").doc(user.uid);
         const snap = await ref.get();
         const d = snap.data()||{};
-        const currentFood = d.food||0;
-        if (currentFood>0) {
+        if ((d.food||0) > 0) {
           await ref.update({ food: firebase.firestore.FieldValue.increment(-1) });
           alert("Pet Fed ✅");
         } else {
@@ -250,24 +265,21 @@
         }
       };
 
-      // PLATFORM TOGGLE handlers
-      document.getElementById("btnYoutube").onclick = () => {
-        document.getElementById("btnYoutube").classList.add("active");
-        document.getElementById("btnTwitch").classList.remove("active");
-        // on YouTube, live snapshot will repopulate stats
-      };
-      document.getElementById("btnTwitch").onclick = () => {
-        document.getElementById("btnTwitch").classList.add("active");
-        document.getElementById("btnYoutube").classList.remove("active");
-        // zero-out for Twitch
+      // Toggle handlers
+      document.getElementById("btnYoutube").onclick = () => setPlatform('youtube');
+      document.getElementById("btnTwitch").onclick  = () => {
+        setPlatform('twitch');
         ["watched","earned","caps","balance","boost","helpersCount","pets","food","vested"]
           .forEach(id => {
             const el = document.getElementById(id);
-            el.innerText = id==="earned"||id==="balance" ? (id==="earned" ? "$0" : "$0.00") : (id==="boost"?"0%":"0");
+            el.innerText = id==="earned" ? "$0" 
+                         : id==="balance"? "$0.00"
+                         : id==="boost"  ? "0%" 
+                         : "0";
           });
       };
 
-      // live YouTube snapshot
+      // Live snapshot only updates when YouTube is active
       db.collection("users").doc(user.uid).onSnapshot(doc => {
         if (!document.getElementById("btnYoutube").classList.contains("active")) return;
         const d = doc.data()||{};

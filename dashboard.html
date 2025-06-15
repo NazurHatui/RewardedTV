@@ -5,51 +5,120 @@
   <title>RewardedTV – Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <style>
-    body { margin:0; font-family:'Segoe UI',sans-serif; background:#0a0a0a;color:#e0e0e0; }
-    header.header{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:#1a1a1a;position:sticky;top:0;}
+    /* ——— CSS Variables for easy theming ——— */
+    :root {
+      --accent: #9b59b6;       /* original purple */
+      --highlight: #f39c12;    /* original gold */
+    }
+    body.twitch-mode {
+      --accent: #6441A5;       /* Twitch purple */
+      --highlight: #E91916;    /* Twitch red */
+    }
+
+    body {
+      margin:0; font-family:'Segoe UI',sans-serif;
+      background:#0a0a0a; color:#e0e0e0;
+    }
+    header.header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:1rem 2rem;background:#1a1a1a;position:sticky;top:0;
+    }
     .nav-links{list-style:none;display:flex;padding:0;margin:0;}
     .nav-links li{margin-left:1rem;}
     .nav-links li:first-child{margin-left:0;}
     .nav-links a{color:#e0e0e0;text-decoration:none;font-weight:500;}
-    .nav-links a.active{color:#f39c12;}
+    .nav-links a.active{color:var(--highlight);}
     #nav-updates{position:relative;}
-    #nav-updates .dot{display:none;position:absolute;top:-0.2rem;right:-0.3rem;width:0.5rem;height:0.5rem;background:#e74c3c;border-radius:50%;box-shadow:0 0 4px rgba(231,76,60,0.6);}
+    #nav-updates .dot{
+      display:none;position:absolute;top:-0.2rem;right:-0.3rem;
+      width:0.5rem;height:0.5rem;background:#e74c3c;
+      border-radius:50%;box-shadow:0 0 4px rgba(231,76,60,0.6);
+    }
     .right-nav{display:flex;align-items:center;}
     .right-nav a{color:#e0e0e0;text-decoration:none;font-weight:500;margin-right:1rem;}
-    #logout-btn{padding:0.5rem 1rem;background:#9b59b6;color:#111;border:none;border-radius:4px;cursor:pointer;}
-    #logout-btn:hover{background:#8e44ad;}
-    .hero-clone{background:#111;padding:2rem 0;text-align:center;margin:1rem 2rem;border-radius:8px;}
+    #logout-btn{
+      padding:0.5rem 1rem;background:var(--accent);color:#111;
+      border:none;border-radius:4px;cursor:pointer;
+    }
+    #logout-btn:hover{background:darken(var(--accent),10%);}
+    .hero-clone{
+      background:#111;padding:2rem 0;text-align:center;
+      margin:1rem 2rem;border-radius:8px;
+    }
     .hero-title{display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
     .hero-logo{height:50px;margin:0 1rem;}
-    .hero-clone h2{color:#9b59b6;font-size:2rem;margin:0;}
+    .hero-clone h2{color:var(--accent);font-size:2rem;margin:0;}
     .hero-clone p{color:#e0e0e0;margin:1rem 0;}
-    .hero-clone button{padding:0.75rem 1.5rem;background:#9b59b6;color:#111;border:none;border-radius:4px;cursor:pointer;}
-    .hero-clone button:hover{background:#8e44ad;}
+    .hero-clone button{
+      padding:0.75rem 1.5rem;background:var(--accent);
+      color:#111;border:none;border-radius:4px;cursor:pointer;
+    }
+    .hero-clone button:hover{background:darken(var(--accent),10%);}
     .stream-toggle{text-align:center;margin:1rem 0;}
-    .stream-toggle button{background:#1c1c1c;color:#e0e0e0;border:1px solid #9b59b6;padding:0.5rem 1rem;margin:0 0.5rem;border-radius:4px;cursor:pointer;font-weight:500;}
-    .stream-toggle button.active{background:#9b59b6;color:#111;}
-    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:2rem;}
-    .stat-card{background:#1c1c1c;padding:1rem;border-radius:8px;text-align:center;}
-    .stat-card h3{color:#9b59b6;margin-bottom:0.5rem;text-transform:uppercase;font-size:0.85rem;}
+    .stream-toggle button{
+      background:#1c1c1c;color:#e0e0e0;border:1px solid var(--accent);
+      padding:0.5rem 1rem;margin:0 0.5rem;border-radius:4px;
+      cursor:pointer;font-weight:500;
+    }
+    .stream-toggle button.active{
+      background:var(--accent);color:#111;
+    }
+    .stats{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1rem;margin:2rem;
+    }
+    .stat-card{
+      background:#1c1c1c;padding:1rem;border-radius:8px;text-align:center;
+    }
+    .stat-card h3{
+      color:var(--accent);margin-bottom:0.5rem;
+      text-transform:uppercase;font-size:0.85rem;
+    }
     .stat-card .value{font-size:1.5rem;}
-    #feedPetsBtn{margin-top:0.75rem;padding:0.5rem 1rem;background:#9b59b6;color:#111;border:none;border-radius:4px;cursor:pointer;font-weight:500;}
-    #feedPetsBtn:hover{background:#8e44ad;}
-    .project-dashboard{background:#1c1c1c;margin:2rem auto;padding:2rem;max-width:1200px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.4);}
-    .project-dashboard h2{color:#9b59b6;margin-top:0;font-size:1.75rem;text-align:center;border-bottom:2px solid #9b59b6;padding-bottom:1rem;}
-    .pd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-top:1.5rem;}
-    .pd-card{background:#262626;padding:1.25rem;border-radius:8px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.4);}
-    .pd-card h3{margin:0 0 0.5rem;font-size:1rem;color:#f39c12;text-transform:uppercase;letter-spacing:0.5px;}
+    #feedPetsBtn{
+      margin-top:0.75rem;padding:0.5rem 1rem;
+      background:var(--accent);color:#111;border:none;
+      border-radius:4px;cursor:pointer;font-weight:500;
+    }
+    #feedPetsBtn:hover{background:darken(var(--accent),10%);}
+    .project-dashboard{
+      background:#1c1c1c;margin:2rem auto;padding:2rem;
+      max-width:1200px;border-radius:8px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.4);
+    }
+    .project-dashboard h2{
+      color:var(--accent);margin-top:0;font-size:1.75rem;
+      text-align:center;border-bottom:2px solid var(--accent);
+      padding-bottom:1rem;
+    }
+    .pd-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:1.5rem;margin-top:1.5rem;
+    }
+    .pd-card{
+      background:#262626;padding:1.25rem;border-radius:8px;
+      text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.4);
+    }
+    .pd-card h3{
+      margin:0 0 0.5rem;font-size:1rem;color:var(--highlight);
+      text-transform:uppercase;letter-spacing:0.5px;
+    }
     .pd-card p{margin:0;font-size:1.25rem;color:#e0e0e0;font-weight:bold;}
   </style>
 
-  <!-- Toggle Persistence Plugin -->
+  <!-- Toggle Persistence & Accent Switching -->
   <script>
     const PLATFORM_KEY = 'rtv_platform';
-    function currentPlatform() { return localStorage.getItem(PLATFORM_KEY) || 'youtube'; }
+    function currentPlatform() {
+      return localStorage.getItem(PLATFORM_KEY) || 'youtube';
+    }
     function setPlatform(p) {
       localStorage.setItem(PLATFORM_KEY, p);
+      document.body.classList.toggle('twitch-mode', p==='twitch');
       document.getElementById('btnYoutube').classList.toggle('active', p==='youtube');
       document.getElementById('btnTwitch').classList.toggle('active',  p==='twitch');
+
+      // update hero button
       const btn = document.getElementById('streamBtn');
       if (p==='twitch') {
         btn.textContent = '🔴 Stream on Twitch';
@@ -58,14 +127,15 @@
         btn.textContent = '▶ Watch on YouTube';
         btn.onclick = () => window.open('https://www.youtube.com','_blank');
       }
-      // clear all display fields on toggle, will repopulate via snapshot
-      ['watched','earned','caps','balance','boost','helpersCount','pets','food','vested','twitchWatched','twitchRewards']
+
+      // clear and let snapshot refill
+      ['watched','earned','caps','balance','boost','helpersCount','health','pets','food','vested','twitchWatched','twitchRewards']
         .forEach(id => {
           const el = document.getElementById(id);
           if (!el) return;
           if (id==='earned'||id==='twitchRewards') el.innerText = '$0.00';
           else if (id==='balance') el.innerText = '$0.00';
-          else if (id==='boost') el.innerText = '0%';
+          else if (id==='boost'||id==='health') el.innerText = '0%';
           else el.innerText = '0';
         });
     }
@@ -126,20 +196,7 @@
     <div class="stat-card"><h3>Twitch Rewards</h3><div class="value" id="twitchRewards">$0.00</div></div>
   </section>
 
-  <section class="project-dashboard">
-    <h2>Project Dashboard</h2>
-    <div class="pd-grid">
-      <div class="pd-card"><h3>Users Online</h3><p>17,434</p></div>
-      <div class="pd-card"><h3>Total Users</h3><p>308,799</p></div>
-      <div class="pd-card"><h3>Daily Users</h3><p>27,896</p></div>
-      <div class="pd-card"><h3>Amounts Paid</h3><p>$15,000,000</p></div>
-      <div class="pd-card"><h3>Videos Watched</h3><p>3,005,000,000</p></div>
-      <div class="pd-card"><h3>Uploads</h3><p>5,000,000</p></div>
-      <div class="pd-card"><h3>Revenue Monthly</h3><p>$32,000,181</p></div>
-    </div>
-  </section>
-
-  <!-- Firebase & Tracking Logic -->
+  <!-- Firebase & logic unchanged below… -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -149,39 +206,36 @@
       authDomain: "rewardedtv-1e5b1.firebaseapp.com",
       projectId: "rewardedtv-1e5b1"
     });
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
+    const auth = firebase.auth(), db = firebase.firestore();
 
-    auth.onAuthStateChanged(user => {
-      if (!user) return location.replace("index.html");
-      document.getElementById("logout-btn").onclick = () => auth.signOut();
+    auth.onAuthStateChanged(user=>{
+      if(!user) return location.replace("index.html");
+      document.getElementById("logout-btn").onclick = ()=>auth.signOut();
 
-      // initialize toggle + stream button
+      // init theme & button
       setPlatform(currentPlatform());
 
-      // Feed Pets
-      document.getElementById("feedPetsBtn").onclick = async () => {
-        const ref = db.collection("users").doc(user.uid);
-        const d   = (await ref.get()).data()||{};
-        if ((d.food||0)>0) {
-          await ref.update({ food: firebase.firestore.FieldValue.increment(-1) });
-          alert("Pet Fed ✅");
-        } else alert("No food!");
+      // Feed Pets…
+      document.getElementById("feedPetsBtn").onclick=async()=>{
+        const ref=db.collection("users").doc(user.uid),
+              d=(await ref.get()).data()||{};
+        if((d.food||0)>0){await ref.update({food:firebase.firestore.FieldValue.increment(-1)});alert("Pet Fed ✅");}
+        else alert("No food!");  
       };
 
-      // toggle handlers
-      document.getElementById("btnYoutube").onclick = () => setPlatform('youtube');
-      document.getElementById("btnTwitch").onclick  = () => setPlatform('twitch');
+      // toggles
+      document.getElementById("btnYoutube").onclick=()=>setPlatform('youtube');
+      document.getElementById("btnTwitch").onclick=()=>setPlatform('twitch');
 
-      // single snapshot listener, branch on platform
-      db.collection("users").doc(user.uid).onSnapshot(doc => {
-        const d = doc.data()||{};
-        if (currentPlatform()==='youtube') {
+      // live snapshot…
+      db.collection("users").doc(user.uid).onSnapshot(doc=>{
+        const d=doc.data()||{};
+        if(currentPlatform()==='youtube'){
           document.getElementById("watched").innerText      = d.watched||0;
-          const yE = (d.rewardsEarned!=null?d.rewardsEarned:d.watched)||0;
-          document.getElementById("earned").innerText       = '$'+yE.toLocaleString();
+          const yE=(d.rewardsEarned!=null?d.rewardsEarned:d.watched)||0;
+          document.getElementById("earned").innerText       ='$'+yE.toLocaleString();
           document.getElementById("caps").innerText         = d.caps||0;
-          document.getElementById("balance").innerText      = '$'+(d.balance||0).toFixed(2);
+          document.getElementById("balance").innerText      ='$'+(d.balance||0).toFixed(2);
           document.getElementById("boost").innerText        = (d.boost||0)+'%';
           document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
           document.getElementById("health").innerText       = (d.health||100)+'%';
@@ -190,8 +244,8 @@
           document.getElementById("vested").innerText       = d.vested||0;
         } else {
           document.getElementById("twitchWatched").innerText  = d.twitchWatched||0;
-          document.getElementById("twitchRewards").innerText = '$'+(d.twitchRewards||0).toLocaleString();
-          // and mirror everything else
+          document.getElementById("twitchRewards").innerText ='$'+(d.twitchRewards||0).toLocaleString();
+          // mirror all the rest…
           document.getElementById("caps").innerText         = d.caps||0;
           document.getElementById("balance").innerText      = '$'+(d.balance||0).toFixed(2);
           document.getElementById("boost").innerText        = (d.boost||0)+'%';
@@ -204,7 +258,5 @@
       });
     });
   </script>
-
-  <!-- Dynamic Metrics (unchanged)… -->
 </body>
 </html>

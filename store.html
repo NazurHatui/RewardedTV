@@ -6,86 +6,111 @@
   <title>RewardedTV – Store</title>
   <style>
     /* ——— Global Reset & Typography ——— */
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;line-height:1.6;}
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {font-family:'Segoe UI',sans-serif;background:#0a0a0a;color:#e0e0e0;line-height:1.6;}
+
     /* ——— Header & Navigation ——— */
     header.header {
       display:flex;justify-content:space-between;align-items:center;
       padding:1rem 2rem;background:#111;
     }
-    .left-nav,.right-nav{display:flex;align-items:center;}
-    .nav-links{list-style:none;margin:0;padding:0;display:flex;}
-    .nav-links li{margin-left:1.5rem;}
-    .nav-links a{color:#e0e0e0;text-decoration:none;font-weight:500;}
-    .right-nav a{
+    .left-nav,.right-nav {display:flex;align-items:center;}
+    .nav-links {list-style:none;margin:0;padding:0;display:flex;}
+    .nav-links li {margin-left:1.5rem;}
+    .nav-links a {color:#e0e0e0;text-decoration:none;font-weight:500;}
+    .right-nav a {
       background:#9b59b6;color:#111;padding:0.5rem 1rem;
       border-radius:4px;text-decoration:none;font-weight:500;
     }
-    .right-nav a:hover{background:#8e44ad;}
+    .right-nav a:hover {background:#8e44ad;}
+
     /* ——— Hero Section ——— */
-    .hero{
+    .hero {
       background:#111;padding:2rem;text-align:center;
     }
-    .hero-title{
-      display:flex;align-items:center;justify-content:center;margin-bottom:1rem;
+    .hero-title {
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:1rem;
     }
-    .hero-logo{height:60px;margin:0 1rem;}
-    .hero h1{color:#9b59b6;font-size:2.5rem;margin:0;}
-    .hero p{color:#e0e0e0;margin-top:0.5rem;}
+    .hero-logo {height:60px;margin:0 1rem;}
+    .hero h1 {
+      color:#9b59b6;font-size:2.5rem;margin:0;
+    }
+    .hero p {color:#e0e0e0;margin-top:0.5rem;}
+
     /* ——— Store Grid ——— */
-    .store-grid{
+    .store-grid {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
       gap:1.5rem;
       margin:2rem;
       padding:0 2rem;
     }
-    /* ——— Marketplace-style Card ——— */
-    .store-card{
-      background:#1c1c1c;border-radius:10px;overflow:hidden;
+
+    /* ——— Marketplace‐style Card ——— */
+    .store-card {
+      background:#1c1c1c;
+      border-radius:10px;
+      overflow:hidden;
       box-shadow:0 6px 20px rgba(0,0,0,0.6);
       transition:transform .3s,box-shadow .3s;
-      display:flex;flex-direction:column;
+      display:flex;
+      flex-direction:column;
     }
-    .store-card:hover{
+    .store-card:hover {
       transform:translateY(-8px);
       box-shadow:0 12px 30px rgba(0,0,0,0.8);
     }
-    .store-card img{
-      width:100%;height:150px;object-fit:contain;
-      background:#000;padding:1rem;
+    .store-card img {
+      width:100%; height:150px;
+      object-fit:contain; background:#000;
+      padding:1rem;
     }
-    .store-card .card-body{
-      padding:1rem;flex:1;display:flex;
-      flex-direction:column;align-items:center;
+    .store-card .card-body {
+      padding:1rem;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
     }
-    .store-card .card-body h2{
-      margin-bottom:0.5rem;color:#f39c12;font-size:1.1rem;
+    .store-card .card-body h2 {
+      margin-bottom:0.5rem;
+      color:#f39c12;
+      font-size:1.1rem;
     }
-    .store-card .card-body .price{
-      color:#ccc;font-size:0.9rem;margin-bottom:1rem;
+    .store-card .card-body .price {
+      color:#ccc;
+      font-size:0.9rem;
+      margin-bottom:1rem;
     }
+    /* quantity input */
     .store-card .card-body .quantity {
-      width:60px;text-align:center;margin-bottom:1rem;
-      padding:0.25rem;border-radius:4px;border:none;
+      width:60px;
+      text-align:center;
+      margin-bottom:1rem;
+      padding:0.25rem;
+      border-radius:4px;
+      border:none;
     }
-    .store-card .card-body button{
-      margin-top:auto;width:100%;padding:0.6rem;
+    .store-card .card-body button {
+      margin-top:auto;
+      width:100%;
+      padding:0.6rem;
       background:linear-gradient(45deg,#9b59b6,#e74c3c);
-      color:#111;border:none;border-radius:6px;
-      font-weight:600;cursor:pointer;
+      color:#111;
+      border:none;
+      border-radius:6px;
+      font-weight:600;
+      cursor:pointer;
       box-shadow:0 0 10px rgba(231,76,60,0.7);
-      transition:background .3s;text-transform:uppercase;
+      transition:background .3s;
+      text-transform:uppercase;
     }
-    .store-card .card-body button:hover{
+    .store-card .card-body button:hover {
       background:linear-gradient(45deg,#e74c3c,#9b59b6);
     }
-    .store-card .card-body button:disabled{
+    .store-card .card-body button:disabled {
       opacity:0.5;cursor:default;box-shadow:none;
-    }
-    /* Low Vesting stock display */
-    #lowVestingStock {
-      color:#ccc;font-size:0.9rem;margin-bottom:1rem;
     }
   </style>
 </head>
@@ -301,7 +326,9 @@
       <div class="card-body">
         <h2>Low Vesting</h2>
         <div class="price">$3250</div>
-        <div id="lowVestingStock">Quantity Left: 10,000</div>
+        <div id="stock" style="color:#ccc;font-size:0.9rem;margin-bottom:1rem;">
+          Quantity Left: <span id="stock-count">10000</span>
+        </div>
         <input class="quantity" type="number" min="1" value="1"/>
         <button class="buy-button">Buy Now</button>
       </div>
@@ -342,30 +369,37 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase init & purchase logic (with live stock update) -->
   <script>
-    firebase.initializeApp({
+    const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
       authDomain: "rewardedtv-1e5b1.firebaseapp.com",
       projectId: "rewardedtv-1e5b1"
-    });
+    };
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    auth.onAuthStateChanged(async user => {
-      if (!user) return location.replace("index.html");
+    // track low-vesting stock in Firestore under a document 'store/lowVesting'
+    const stockRef = db.collection('store').doc('lowVesting');
 
-      // seed or load shared stock doc
-      const stockRef = db.collection('store').doc('stock');
-      const stockSnap = await stockRef.get();
-      if (!stockSnap.exists) {
-        await stockRef.set({ lowVesting: 10000 });
+    // initialize stock display
+    stockRef.onSnapshot(doc => {
+      const count = (doc.data() && doc.data().stock) || 0;
+      document.getElementById('stock-count').innerText = count;
+      // disable button if sold out
+      const btn = document.querySelectorAll('.store-card')[18].querySelector('.buy-button');
+      if (count <= 0) btn.disabled = true;
+    });
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        alert("Please log in to make purchases.");
+        return;
       }
-      stockRef.onSnapshot(doc => {
-        document.getElementById('lowVestingStock').innerText =
-          'Quantity Left: ' + doc.data().lowVesting.toLocaleString();
-      });
 
-      // your prices & boosts in the exact order above (length 22)
+      // updated prices + boosts arrays
       const prices = [
         800,1200,1850,2000,3500,4500,
         1000,1500,2500,4000,1850,1100,
@@ -381,33 +415,36 @@
         0,0,0,0
       ];
 
-      const qtyInputs  = document.querySelectorAll('.quantity');
-      const buyButtons = document.querySelectorAll('.buy-button');
+      const qtyInputs = document.querySelectorAll(".quantity");
+      const buyButtons = document.querySelectorAll(".buy-button");
 
       buyButtons.forEach((btn,i) => {
         btn.onclick = async () => {
-          const qty        = Math.max(1,Number(qtyInputs[i].value)||1);
-          const totalPrice = prices[i]*qty;
-          const userRef    = db.collection('users').doc(user.uid);
-          const snap       = await userRef.get();
-          const data       = snap.data()||{};
-          if ((data.balance||0) < totalPrice) {
-            return alert('❌ Not enough balance for '+qty+' item(s).');
+          const qty = Math.max(1, Number(qtyInputs[i].value) || 1);
+          const totalPrice = prices[i] * qty;
+          const ref   = db.collection("users").doc(user.uid);
+          const snap  = await ref.get();
+          const d     = snap.data()||{};
+          if ((d.balance||0) < totalPrice) {
+            return alert("❌ Not enough balance for " + qty + " item(s).");
           }
-          const batch = db.batch();
-          batch.update(userRef, {
-            balance: data.balance - totalPrice,
-            ...(boosts[i]?{ boost: (data.boost||0) + boosts[i]*qty }:{}),
-            ...(i>=14 && i<18?{ food: firebase.firestore.FieldValue.increment(qty) }:{})
-          });
-          // if Low Vesting (index 18), decrement shared stock:
-          if (i===18) {
-            batch.update(stockRef, {
-              lowVesting: firebase.firestore.FieldValue.increment(-qty)
+          const updates = { balance: d.balance - totalPrice };
+          if (boosts[i]) updates.boost = (d.boost||0) + boosts[i] * qty;
+          // increment food for crunch items
+          if (i >= 14 && i < 18) {
+            updates.food = firebase.firestore.FieldValue.increment(qty);
+          }
+
+          // decrement low-vesting stock in Firestore
+          if (i === 18) {
+            // low vesting is index 18
+            await stockRef.update({
+              stock: firebase.firestore.FieldValue.increment(-qty)
             });
           }
-          await batch.commit();
-          alert(`✅ Purchased ${qty} x item(s)!`);
+
+          await ref.update(updates);
+          alert(`✅ Purchased ${qty} x item(s) successfully!`);
         };
       });
     });

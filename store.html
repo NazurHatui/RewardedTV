@@ -377,7 +377,7 @@
       const stockEl = document.getElementById("lowVestingStock");
       const stockRef = db.collection("store").doc("lowVesting");
       stockRef.onSnapshot(doc => {
-        const stock = doc.exists ? doc.data().stock : 0;
+        const stock = doc.exists ? doc.data().stock : 10000;
         stockEl.innerText = `Quantity Left: ${stock.toLocaleString()}`;
         document.querySelector("#low-vesting-card .buy-button")
                 .disabled = stock <= 0;

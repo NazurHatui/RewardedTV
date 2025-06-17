@@ -102,7 +102,7 @@
     }
     .wallet-card button:hover { background:#8e44ad; }
 
-    /* Deposit & Balance Cards */
+    /* Info Box */
     .info-box {
       width:100%;
       text-align:center;
@@ -113,9 +113,8 @@
     .info-box .wallet-address,
     .info-box p {
       margin:0.5rem 0; color:#e0e0e0;
-      /* force-wrap long strings */
-      word-break: break-all;
-      overflow-wrap: anywhere;
+      word-break:break-all;
+      overflow-wrap:anywhere;
     }
     .info-box .withdraw-btn {
       margin-top:0.75rem; padding:0.5rem;
@@ -164,7 +163,7 @@
   </section>
 
   <div class="profile-dashboard">
-    <!-- Avatar from selectedHelper -->
+    <!-- 1) Avatar Card -->
     <div class="card avatar-card">
       <h2>Your Helper</h2>
       <img id="avatarPreview" src="assets/default-avatar.png" alt="Helper Avatar"/>
@@ -172,15 +171,30 @@
       <button id="selectHelperBtn">Select Helper</button>
     </div>
 
-    <!-- Wallet -->
+    <!-- 2) Badge Card -->
+    <div class="card">
+      <h2>Your Badges</h2>
+      <img src="assets/badges.png" alt="Badges" style="max-width:100px; margin-bottom:1rem;"/>
+      <p>Collect & display your achievements</p>
+    </div>
+
+    <!-- 3) YouTube Wallet Address -->
     <div class="card wallet-card">
       <h3>Wallet Address</h3>
-      <label for="walletInput">Address</label>
+      <label for="walletInput">YouTube Address</label>
       <input id="walletInput" placeholder="0xABCD...1234" type="text"/>
       <button id="saveWalletBtn">Save</button>
     </div>
 
-    <!-- Deposit -->
+    <!-- 4) Twitch Wallet -->
+    <div class="card wallet-card">
+      <h3>Twitch Wallet</h3>
+      <label for="twitchWallet">Twitch Address</label>
+      <input id="twitchWallet" placeholder="0xFFFF...FFFF" type="text"/>
+      <button id="saveTwitchBtn">Save</button>
+    </div>
+
+    <!-- 5) Deposit -->
     <div class="card info-box">
       <h3>Deposit</h3>
       <img class="qr-code" src="https://raw.githubusercontent.com/nazurhatui/RewardedTV/main/qr.png" alt="QR Code"/>
@@ -189,14 +203,20 @@
       </div>
     </div>
 
-    <!-- Balance -->
+    <!-- 6) Balance -->
     <div class="card info-box">
       <h3>Balance</h3>
       <p>Available: <span id="availableBalance">$0.00</span></p>
       <button class="withdraw-btn">Withdraw</button>
     </div>
 
-    <!-- Referrals -->
+    <!-- 7) Badge Info -->
+    <div class="card">
+      <h2>Badge Info</h2>
+      <p>Details about your earned badges will appear here.</p>
+    </div>
+
+    <!-- 8) Referrals -->
     <div class="card referral-card">
       <h2>Referrals</h2>
       <input id="refCode" readonly placeholder="— No code yet —"/>
@@ -204,7 +224,7 @@
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDKs & JS -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -221,107 +241,91 @@
     auth.onAuthStateChanged(user => {
       if (!user) return location.href = "index.html";
       const uid = user.uid;
-      const refField = document.getElementById("refCode");
-      const genBtn  = document.getElementById("generateRefBtn");
-
-      // load profile data
       const refDoc = db.collection("users").doc(uid);
+
+      // Real-time profile snapshot
       refDoc.onSnapshot(doc => {
         const d = doc.data() || {};
-        // selectedHelper, wallet, balance handled below...
-        // now referrals:
-        if (d.referralCode) {
-          refField.value = d.referralCode;
+
+        // Avatar/helper
+        const sel = d.selectedHelper || {};
+        document.getElementById("avatarPreview").src = sel.avatarURL || "assets/default-avatar.png";
+        document.getElementById("helperName").innerText = sel.name || "None";
+
+        // YouTube wallet
+        const w = d.wallet || "";
+        const wi = document.getElementById("walletInput");
+        wi.value = w;
+        if (w) { wi.disabled = true; document.getElementById("saveWalletBtn").style.display = "none"; }
+
+        // Twitch wallet
+        const tw = d.twitchWallet || "";
+        const ti = document.getElementById("twitchWallet");
+        ti.value = tw;
+        if (tw) { ti.disabled = true; document.getElementById("saveTwitchBtn").style.display = "none"; }
+
+        // balance
+        document.getElementById("availableBalance").innerText = "$" + ((d.balance||0).toFixed(2));
+
+        // referral
+        const refCode = d.referralCode;
+        const refField = document.getElementById("refCode");
+        const genBtn   = document.getElementById("generateRefBtn");
+        if (refCode) {
+          refField.value = refCode;
           genBtn.disabled = true;
         }
       });
 
-      // other existing snapshot logic...
-      const ref = db.collection("users").doc(uid);
-      ref.onSnapshot(doc => {
-        const d = doc.data()||{};
-        // helper
-        const sel = d.selectedHelper || {};
-        document.getElementById("avatarPreview").src = sel.avatarURL || "assets/default-avatar.png";
-        document.getElementById("helperName").innerText = sel.name || "None";
-        // wallet
-        document.getElementById("walletInput").value = d.wallet||"";
-        if (d.wallet) {
-          document.getElementById("walletInput").disabled = true;
-          document.getElementById("saveWalletBtn").style.display = "none";
-        }
-        // balance
-        document.getElementById("availableBalance").innerText = "$" + ((d.balance||0).toFixed(2));
-      });
-    });
+      // Save YouTube wallet
+      document.getElementById("saveWalletBtn").onclick = async () => {
+        const val = document.getElementById("walletInput").value.trim();
+        if (!val) return alert("Enter wallet");
+        await db.collection("users").doc(uid).set({ wallet: val }, { merge: true });
+      };
 
-    // generate & save referral code
-    document.getElementById("generateRefBtn").onclick = async () => {
-      const btn = document.getElementById("generateRefBtn");
-      const field = document.getElementById("refCode");
-      const uid = firebase.auth().currentUser.uid;
-      // random 8-letter uppercase
-      const code = Array.from({length:8},()=>{
-        return String.fromCharCode(65 + Math.floor(Math.random()*26));
-      }).join('');
-      try {
-        await db.collection("users").doc(uid).set({ referralCode: code }, { merge: true });
-        field.value = code;
-        btn.disabled = true;
-      } catch(e) {
-        console.error(e);
-        alert("Failed to generate code.");
-      }
-    };
+      // Save Twitch wallet
+      document.getElementById("saveTwitchBtn").onclick = async () => {
+        const val = document.getElementById("twitchWallet").value.trim();
+        if (!val) return alert("Enter Twitch wallet");
+        await db.collection("users").doc(uid).set({ twitchWallet: val }, { merge: true });
+      };
 
-    function saveWallet(){
-      const val = document.getElementById("walletInput").value.trim();
-      if (!val) return alert("Enter wallet");
-      db.collection("users").doc(auth.currentUser.uid)
-        .set({wallet: val},{merge:true})
-        .then(()=>{
-          alert("Saved!");
-          document.getElementById("walletInput").disabled = true;
-          document.getElementById("saveWalletBtn").style.display = "none";
-        })
-        .catch(()=>alert("Error"));
-    }
-    document.getElementById("saveWalletBtn").onclick = saveWallet;
+      // Generate referral
+      document.getElementById("generateRefBtn").onclick = async () => {
+        const btn = document.getElementById("generateRefBtn");
+        const field = document.getElementById("refCode");
+        const code = Array.from({length:8},()=>String.fromCharCode(65 + Math.floor(Math.random()*26))).join('');
+        await refDoc.set({ referralCode: code }, { merge:true });
+      };
 
-    // Helper Picker code unchanged...
-    document.getElementById("selectHelperBtn").onclick = () => {
-      const picker = document.createElement("div");
-      picker.id = "helperPicker";
-      Object.assign(picker.style, {
-        position:'fixed', top:0, left:0, width:'100%', height:'100%',
-        background:'rgba(0,0,0,0.8)', display:'flex',
-        flexWrap:'wrap', alignItems:'center', justifyContent:'center',
-        overflow:'auto', padding:'2rem', zIndex:1000
-      });
-      for (let i = 1; i <= 12; i++) {
-        const img = document.createElement("img");
-        img.src = `assets/char${i}.jpeg`;
-        Object.assign(img.style, {
-          width:'100px', height:'100px', margin:'0.5rem',
-          cursor:'pointer', border:'2px solid #2a2a2a',
-          borderRadius:'8px', background:'#000'
+      // Helper picker unchanged...
+      document.getElementById("selectHelperBtn").onclick = () => {
+        const picker = document.createElement("div");
+        picker.id = "helperPicker";
+        Object.assign(picker.style, {
+          position:'fixed', top:0, left:0, width:'100%', height:'100%',
+          background:'rgba(0,0,0,0.8)', display:'flex',
+          flexWrap:'wrap', alignItems:'center', justifyContent:'center',
+          overflow:'auto', padding:'2rem', zIndex:1000
         });
-        img.onclick = () => {
-          db.collection("users").doc(auth.currentUser.uid)
-            .set({
-              selectedHelper: { name:`char${i}`, avatarURL:img.src }
-            }, {merge:true})
-            .then(()=>{
-              document.getElementById("avatarPreview").src = img.src;
-              document.getElementById("helperName").innerText = `char${i}`;
-              document.body.removeChild(picker);
-              alert("Helper approved!");
-            });
-        };
-        picker.appendChild(img);
-      }
-      document.body.appendChild(picker);
-    };
+        for (let i=1;i<=12;i++){
+          const img = document.createElement("img");
+          img.src = `assets/char${i}.jpeg`;
+          Object.assign(img.style, {
+            width:'100px', height:'100px', margin:'0.5rem',
+            cursor:'pointer', border:'2px solid #2a2a2a',
+            borderRadius:'8px', background:'#000'
+          });
+          img.onclick = async () => {
+            await refDoc.set({ selectedHelper:{name:`char${i}`,avatarURL:img.src} },{merge:true});
+            document.body.removeChild(picker);
+          };
+          picker.appendChild(img);
+        }
+        document.body.appendChild(picker);
+      };
+    });
   </script>
 </body>
 </html>

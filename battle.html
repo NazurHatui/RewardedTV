@@ -21,12 +21,23 @@
     /* —— Main container —— */
     main { padding:2rem; max-width:1200px; margin:0 auto; }
 
-    /* —— Battle Zone Title —— */
-    #battleTitle {
+    /* —— Battle Zone Banner —— */
+    #battleBanner {
+      background:rgba(243,156,18,0.1);
+      border:2px solid #f39c12;
+      border-radius:8px;
+      padding:1rem;
       text-align:center;
+      margin-bottom:1rem;
+    }
+    #battleBanner h1 {
       font-size:2.5rem;
       color:#f39c12;
-      margin-bottom:1.5rem;
+      margin-bottom:0.5rem;
+    }
+    #battleBanner p {
+      color:#ccc;
+      font-size:1rem;
     }
 
     /* —— Balance & Battle Pass —— */
@@ -114,8 +125,11 @@
   </header>
 
   <main>
-    <!-- Battle Zone Title -->
-    <div id="battleTitle">Battle Zone</div>
+    <!-- Battle Zone Banner -->
+    <div id="battleBanner">
+      <h1>Battle Zone</h1>
+      <p>Welcome to the battle field</p>
+    </div>
 
     <!-- Status Bar -->
     <div id="statusBar">
@@ -170,40 +184,33 @@
     const db   = firebase.firestore();
 
     // — DOM refs —
-    const balanceEl = document.getElementById('balance');
-    const btnPass   = document.getElementById('btnPass');
-    const charGrid  = document.getElementById('charGrid');
-    const btnBegin  = document.getElementById('btnBegin');
-    const loader    = document.getElementById('loader');
+    const balanceEl   = document.getElementById('balance');
+    const btnPass     = document.getElementById('btnPass');
+    const charGrid    = document.getElementById('charGrid');
+    const btnBegin    = document.getElementById('btnBegin');
+    const loader      = document.getElementById('loader');
     const resultPanel = document.getElementById('resultPanel');
-    const youImg    = document.getElementById('youImg');
-    const oppImg    = document.getElementById('oppImg');
-    const outcomeEl = document.getElementById('outcome');
-    const btnReset  = document.getElementById('btnReset');
-    const logoutBtn = document.getElementById('logout');
+    const youImg      = document.getElementById('youImg');
+    const oppImg      = document.getElementById('oppImg');
+    const outcomeEl   = document.getElementById('outcome');
+    const btnReset    = document.getElementById('btnReset');
+    const logoutBtn   = document.getElementById('logout');
 
     // — State —
-    let userRef, userData;
-    let selectedChar = null;
+    let userRef, userData, selectedChar = null;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
 
     auth.onAuthStateChanged(user => {
       if (!user) return location.replace('index.html');
       logoutBtn.onclick = () => auth.signOut();
       userRef = db.collection('users').doc(user.uid);
-
-      // listen realtime
-      userRef.onSnapshot(doc => {
-        userData = doc.data()||{};
-        updateStatus();
-      });
-
+      userRef.onSnapshot(doc => { userData = doc.data()||{}; updateStatus(); });
       renderChars();
     });
 
     function updateStatus(){
       balanceEl.textContent = `Balance: $${(userData.balance||0).toLocaleString()}`;
-      if (userData.battlePass){
+      if (userData.battlePass) {
         btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Battle Pass Owned';
         btnPass.disabled = true;
       } else {
@@ -243,7 +250,7 @@
     }
 
     btnBegin.onclick = () => {
-      loader.style.display  = 'block';
+      loader.style.display   = 'block';
       btnBegin.style.display = 'none';
       setTimeout(runBattle, 2000);
     };

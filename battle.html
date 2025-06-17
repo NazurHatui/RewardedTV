@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>RewardedTV – Battle</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <style>
+    /* —— Global & Reset —— */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
+
+    /* —— Header (reuse your site’s header style) —— */
+    header.header {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:1rem 2rem; background:#111; position:sticky; top:0; z-index:10;
+    }
+    .nav-links { list-style:none; display:flex; gap:1rem; }
+    .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
+    .nav-links a.active { color:#f39c12; }
+
+    /* —— Main container —— */
+    main { padding:2rem; max-width:1200px; margin:0 auto; }
+
+    /* —— Balance & Battle Pass —— */
+    #statusBar {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:2rem;
+    }
+    #balance { font-size:1.25rem; }
+    .btn-pass {
+      padding:0.75rem 1.5rem; background:linear-gradient(45deg,#9b59b6,#e74c3c);
+      color:#111; border:none; border-radius:6px; cursor:pointer;
+      text-transform:uppercase; font-weight:600;
+      box-shadow:0 4px 12px rgba(231,76,60,0.5);
+      transition:opacity .3s;
+    }
+    .btn-pass:disabled { opacity:0.5; cursor:default; }
+
+    /* —— Character Grid —— */
+    #charGrid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+      gap:1.5rem; margin-bottom:2rem;
+    }
+    .char-card {
+      background:#1c1c1c; border-radius:8px;
+      padding:1rem; text-align:center;
+      box-shadow:0 4px 16px rgba(0,0,0,0.6);
+      transition:transform .3s,box-shadow .3s;
+      cursor:pointer;
+      position:relative;
+      perspective:1000px;
+    }
+    .char-card.selected {
+      box-shadow:0 0 0 4px #f39c12;
+      transform:scale(1.05);
+    }
+    .char-card img {
+      width:100%; border-radius:4px; margin-bottom:0.5rem;
+      transform: translateZ(20px);
+    }
+    .char-card .label {
+      color:#ccc; margin-bottom:.5rem;
+    }
+
+    /* —— Begin Fight Button —— */
+    #btnBegin {
+      display:block; margin:0 auto 2rem;
+      padding:0.75rem 2rem; font-size:1rem;
+      background:linear-gradient(45deg,#e74c3c,#9b59b6);
+      color:#111; border:none; border-radius:6px; cursor:pointer;
+      text-transform:uppercase; font-weight:600;
+      box-shadow:0 4px 12px rgba(231,76,60,0.5);
+      transition:opacity .3s;
+    }
+    #btnBegin:disabled { opacity:0.5; cursor:default; }
+
+    /* —— VS Loader & Panels —— */
+    #loader, #resultPanel { text-align:center; margin-top:3rem; }
+    .vs-panel {
+      display:flex; justify-content:space-around; align-items:center;
+      gap:2rem; margin-top:2rem;
+    }
+    .panel { background:#1c1c1c; padding:1rem; border-radius:8px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.6); width:200px; }
+    .panel img { width:100%; border-radius:4px; }
+    .panel h3 { margin-top:.5rem; font-size:1.1rem; color:#f39c12; }
+
+    /* —— Reset —— */
+    #btnReset {
+      margin-top:2rem; padding:.5rem 1.5rem; background:#444;
+      border:none; border-radius:4px; color:#e0e0e0; cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="store.html">Store</a></li>
+      <li><a href="battle.html" class="active">Battle</a></li>
+      <li><a href="profile.html">Profile</a></li>
+    </ul>
+    <button id="logout" class="btn-pass">Logout</button>
+  </header>
+
+  <main>
+    <!-- Status Bar -->
+    <div id="statusBar">
+      <div id="balance">Balance: $0</div>
+      <button id="btnPass" class="btn-pass">Buy Battle Pass – $3,000</button>
+    </div>
+
+    <!-- Character Selection -->
+    <div id="charGrid"></div>
+
+    <!-- Begin Fight -->
+    <button id="btnBegin" disabled>Begin Fight</button>
+
+    <!-- VS Loader -->
+    <div id="loader" style="display:none;">
+      <h2>Finding Opponent…</h2>
+      <div style="margin-top:1rem; animation:spin 1s linear infinite;">🔄</div>
+    </div>
+
+    <!-- Battle Panels & Result -->
+    <div id="resultPanel" style="display:none;">
+      <div class="vs-panel">
+        <div class="panel">
+          <h3>You</h3>
+          <img id="youImg" src="" alt="Your character"/>
+        </div>
+        <div class="panel">
+          <h3>Opponent</h3>
+          <img id="oppImg" src="" alt="CPU character"/>
+        </div>
+      </div>
+      <h2 id="outcome" style="margin-top:2rem;"></h2>
+      <button id="btnReset">Reset Match</button>
+    </div>
+  </main>
+
+  <!-- Firebase & Logic -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    // — Firebase init —
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
+      authDomain: "rewardedtv-1e5b1.firebaseapp.com",
+      projectId: "rewardedtv-1e5b1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    // — DOM refs —
+    const balanceEl = document.getElementById('balance');
+    const btnPass   = document.getElementById('btnPass');
+    const charGrid  = document.getElementById('charGrid');
+    const btnBegin  = document.getElementById('btnBegin');
+    const loader    = document.getElementById('loader');
+    const resultPanel = document.getElementById('resultPanel');
+    const youImg    = document.getElementById('youImg');
+    const oppImg    = document.getElementById('oppImg');
+    const outcomeEl = document.getElementById('outcome');
+    const btnReset  = document.getElementById('btnReset');
+    const logoutBtn = document.getElementById('logout');
+
+    // — State —
+    let userRef, userData;
+    let selectedChar = null;
+    const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
+
+    auth.onAuthStateChanged(user => {
+      if (!user) return location.replace('index.html');
+      logoutBtn.onclick = () => auth.signOut();
+      userRef = db.collection('users').doc(user.uid);
+
+      // listen realtime
+      userRef.onSnapshot(doc => {
+        userData = doc.data()||{};
+        updateStatus();
+      });
+
+      renderChars();
+    });
+
+    function updateStatus(){
+      balanceEl.textContent = `Balance: $${(userData.balance||0).toLocaleString()}`;
+      // Battle Pass button
+      if (userData.battlePass){
+        btnPass.textContent = 'Battle Pass Owned';
+        btnPass.disabled = true;
+      } else {
+        btnPass.textContent = 'Buy Battle Pass – $3,000';
+        btnPass.disabled = (userData.balance||0) < 3000;
+      }
+      // Enable character grid only if pass owned
+      charGrid.style.display   = userData.battlePass ? 'grid' : 'none';
+      btnBegin.style.display   = userData.battlePass ? 'block' : 'none';
+      btnBegin.disabled        = !selectedChar;
+    }
+
+    btnPass.onclick = async () => {
+      if ((userData.balance||0) < 3000) return alert('Not enough balance.');
+      await userRef.update({
+        battlePass: true,
+        balance: firebase.firestore.FieldValue.increment(-3000)
+      });
+    };
+
+    function renderChars(){
+      charGrid.innerHTML = '';
+      chars.forEach((src,i) => {
+        const card = document.createElement('div');
+        card.className = 'char-card';
+        card.innerHTML = `
+          <img src="${src}" alt="Char ${i+1}">
+          <div class="label">Char ${i+1}</div>
+        `;
+        card.onclick = () => {
+          document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedChar = src;
+          updateStatus();
+        };
+        charGrid.append(card);
+      });
+    }
+
+    btnBegin.onclick = () => {
+      // start loader
+      document.querySelector('main').scrollIntoView();
+      loader.style.display = 'block';
+      btnBegin.style.display = 'none';
+      setTimeout(runBattle, 2000);
+    };
+
+    function runBattle(){
+      // pick CPU char
+      const cpuSrc = chars[Math.floor(Math.random()*chars.length)];
+      youImg.src = selectedChar;
+      oppImg.src = cpuSrc;
+      loader.style.display = 'none';
+      resultPanel.style.display = 'block';
+
+      // resolve
+      const payout = Math.floor(Math.random()*996)+5; // 5–1000
+      const win = Math.random()<0.45;
+      const delta = win ? payout : -payout;
+      const text  = win
+                   ? `🎉 Victory! You earned $${payout}`
+                   : `😢 Defeat… You lost $${payout}`;
+      outcomeEl.textContent = text;
+
+      // update Firestore
+      userRef.update({
+        balance: firebase.firestore.FieldValue.increment(delta)
+      });
+    }
+
+    btnReset.onclick = () => {
+      // reset all state
+      resultPanel.style.display = 'none';
+      selectedChar = null;
+      document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
+      btnBegin.style.display = 'block';
+      updateStatus();
+    };
+
+    // loading spinner animation
+    document.head.insertAdjacentHTML('beforeend',`
+      <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+    `);
+  </script>
+</body>
+</html>

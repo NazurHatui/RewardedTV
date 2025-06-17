@@ -365,12 +365,11 @@
     </div>
   </section>
 
-  <!-- Firebase SDKs -->
+    <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase init & purchase logic (with live stock update) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAZJwv-o931FA_nRB68UiT7gHIuzx-e5rQ",
@@ -381,16 +380,23 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // track low-vesting stock in Firestore under a document 'store/lowVesting'
+    // reference to our lowVesting stock doc
     const stockRef = db.collection('store').doc('lowVesting');
 
-    // initialize stock display
+    // ensure doc exists with initial stock
+    stockRef.get().then(doc => {
+      if (!doc.exists) {
+        return stockRef.set({ stock: 10000 });
+      }
+    }).catch(console.error);
+
+    // live update of stock display
     stockRef.onSnapshot(doc => {
       const count = (doc.data() && doc.data().stock) || 0;
       document.getElementById('stock-count').innerText = count;
-      // disable button if sold out
-      const btn = document.querySelectorAll('.store-card')[18].querySelector('.buy-button');
-      if (count <= 0) btn.disabled = true;
+      // disable if sold out
+      const lowVestingBtn = document.querySelectorAll('.store-card')[18].querySelector('.buy-button');
+      lowVestingBtn.disabled = count <= 0;
     });
 
     auth.onAuthStateChanged(user => {
@@ -399,7 +405,7 @@
         return;
       }
 
-      // updated prices + boosts arrays
+      // prices and boosts (including Remove Vesting at end)
       const prices = [
         800,1200,1850,2000,3500,4500,
         1000,1500,2500,4000,1850,1100,
@@ -422,32 +428,31 @@
         btn.onclick = async () => {
           const qty = Math.max(1, Number(qtyInputs[i].value) || 1);
           const totalPrice = prices[i] * qty;
-          const ref   = db.collection("users").doc(user.uid);
-          const snap  = await ref.get();
-          const d     = snap.data()||{};
-          if ((d.balance||0) < totalPrice) {
-            return alert("❌ Not enough balance for " + qty + " item(s).");
+
+          // check user balance
+          const userRef = db.collection("users").doc(user.uid);
+          const snap    = await userRef.get();
+          const data    = snap.data()||{};
+          if ((data.balance||0) < totalPrice) {
+            return alert(`❌ Not enough balance for ${qty} item(s).`);
           }
-          const updates = { balance: d.balance - totalPrice };
-          if (boosts[i]) updates.boost = (d.boost||0) + boosts[i] * qty;
-          // increment food for crunch items
+
+          // prepare user updates
+          const updates = { balance: data.balance - totalPrice };
+          if (boosts[i]) updates.boost = (data.boost||0) + boosts[i] * qty;
           if (i >= 14 && i < 18) {
             updates.food = firebase.firestore.FieldValue.increment(qty);
           }
 
-          // decrement low-vesting stock in Firestore
+          // decrement low-vesting stock when buying that item (index 18)
           if (i === 18) {
-            // low vesting is index 18
-            await stockRef.update({
-              stock: firebase.firestore.FieldValue.increment(-qty)
-            });
+            await stockRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
           }
 
-          await ref.update(updates);
+          // commit user update
+          await userRef.update(updates);
           alert(`✅ Purchased ${qty} x item(s) successfully!`);
         };
       });
     });
   </script>
-</body>
-</html>

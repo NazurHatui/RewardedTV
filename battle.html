@@ -65,7 +65,7 @@
       gap:1.5rem; margin-bottom:2rem;
     }
     .char-card {
-      background:#1c1c1c; border-radius:8px;
+      background:#1c1c0c; border-radius:8px;
       padding:1rem; text-align:center;
       box-shadow:0 4px 16px rgba(0,0,0,0.6);
       transition:transform .3s,box-shadow .3s;
@@ -81,6 +81,52 @@
     }
     .char-card .label {
       color:#ccc; margin-bottom:.5rem;
+    }
+
+    /* —— Battle Items Grid —— */
+    #itemGrid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1.5rem; margin:2rem 0;
+    }
+    .item-card {
+      background:#1c1c1c; border-radius:8px; overflow:hidden;
+      box-shadow:0 6px 20px rgba(0,0,0,0.6);
+      display:flex; flex-direction:column;
+      transition:transform .3s,box-shadow .3s;
+    }
+    .item-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 12px 30px rgba(0,0,0,0.8);
+    }
+    .item-card img {
+      width:100%; height:120px; object-fit:contain;
+      background:#000; padding:1rem;
+    }
+    .item-card .body {
+      padding:1rem; flex:1; display:flex; flex-direction:column; align-items:center;
+    }
+    .item-card .body h3 {
+      color:#f39c12; margin-bottom:0.5rem; font-size:1.1rem;
+    }
+    .item-card .body .stat {
+      color:#ccc; font-size:0.9rem; margin-bottom:0.5rem;
+    }
+    .item-card .body .price {
+      color:#ccc; font-size:0.9rem; margin-bottom:0.5rem;
+    }
+    .item-card .body .quantity {
+      width:60px; text-align:center; margin-bottom:1rem;
+      padding:0.25rem; border-radius:4px; border:none;
+    }
+    .item-card .body button {
+      margin-top:auto; width:100%; padding:0.6rem;
+      background:linear-gradient(45deg,#9b59b6,#e74c3c);
+      color:#111; border:none; border-radius:6px;
+      font-weight:600; cursor:pointer; text-transform:uppercase;
+      box-shadow:0 0 10px rgba(231,76,60,0.7); transition:background .3s;
+    }
+    .item-card .body button:hover {
+      background:linear-gradient(45deg,#e74c3c,#9b59b6);
     }
 
     /* —— Begin Fight Button —— */
@@ -142,6 +188,10 @@
     <!-- Character Selection -->
     <div id="charGrid"></div>
 
+    <!-- Battle Items Section -->
+    <h2 style="color:#f39c12; margin-top:2rem; text-align:center;">Battle Items</h2>
+    <div id="itemGrid"></div>
+
     <!-- Begin Fight -->
     <button id="btnBegin" disabled>Begin Fight</button>
 
@@ -168,7 +218,7 @@
     </div>
   </main>
 
-  <!-- Firebase & Logic (unchanged) -->
+  <!-- Firebase & Logic (with item-buy logic added) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -187,6 +237,7 @@
     const balanceEl   = document.getElementById('balance');
     const btnPass     = document.getElementById('btnPass');
     const charGrid    = document.getElementById('charGrid');
+    const itemGrid    = document.getElementById('itemGrid');
     const btnBegin    = document.getElementById('btnBegin');
     const loader      = document.getElementById('loader');
     const resultPanel = document.getElementById('resultPanel');
@@ -199,13 +250,24 @@
     // — State —
     let userRef, userData, selectedChar = null;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
+    // New battle items
+    const items = [
+      { name:'Shield',       statLabel:'Protection +50',  price:15,  asset:'assets/shield.jpeg'  },
+      { name:'Sword',        statLabel:'Attack +15',      price:15,  asset:'assets/swords.jpeg'  },
+      { name:'Potion',       statLabel:'Block +100',      price:20,  asset:'assets/potion.jpeg'  },
+      { name:'Speed',        statLabel:'Atk Speed +200',  price:15,  asset:'assets/shoe.jpeg'    },
+    ];
 
     auth.onAuthStateChanged(user => {
       if (!user) return location.replace('index.html');
       logoutBtn.onclick = () => auth.signOut();
       userRef = db.collection('users').doc(user.uid);
-      userRef.onSnapshot(doc => { userData = doc.data()||{}; updateStatus(); });
+      userRef.onSnapshot(doc => {
+        userData = doc.data()||{};
+        updateStatus();
+      });
       renderChars();
+      renderItems();
     });
 
     function updateStatus(){
@@ -217,9 +279,9 @@
         btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Buy Battle Pass – $3,000';
         btnPass.disabled = (userData.balance||0) < 3000;
       }
-      charGrid.style.display = userData.battlePass ? 'grid' : 'none';
-      btnBegin.style.display = userData.battlePass ? 'block' : 'none';
-      btnBegin.disabled     = !selectedChar;
+      charGrid.style.display  = userData.battlePass ? 'grid' : 'none';
+      btnBegin.style.display  = userData.battlePass ? 'block' : 'none';
+      btnBegin.disabled       = !selectedChar;
     }
 
     btnPass.onclick = async () => {
@@ -249,6 +311,38 @@
       });
     }
 
+    function renderItems(){
+      itemGrid.innerHTML = '';
+      items.forEach((it, idx) => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.innerHTML = `
+          <img src="${it.asset}" alt="${it.name}">
+          <div class="body">
+            <h3>${it.name}</h3>
+            <div class="stat">${it.statLabel}</div>
+            <div class="price">Price: $${it.price}</div>
+            <input class="quantity" type="number" min="1" value="1"/>
+            <button>Buy</button>
+          </div>
+        `;
+        const btn  = card.querySelector('button');
+        const qtyI = card.querySelector('.quantity');
+        btn.onclick = async () => {
+          const qty = Math.max(1, Number(qtyI.value)||1);
+          const cost = it.price * qty;
+          if ((userData.balance||0) < cost) {
+            return alert('❌ Not enough balance.');
+          }
+          await userRef.update({
+            balance: firebase.firestore.FieldValue.increment(-cost)
+          });
+          alert(`✅ Purchased ${qty}× ${it.name}!`);
+        };
+        itemGrid.append(card);
+      });
+    }
+
     btnBegin.onclick = () => {
       loader.style.display   = 'block';
       btnBegin.style.display = 'none';
@@ -259,7 +353,7 @@
       const cpuSrc = chars[Math.floor(Math.random()*chars.length)];
       youImg.src = selectedChar;
       oppImg.src = cpuSrc;
-      loader.style.display = 'none';
+      loader.style.display    = 'none';
       resultPanel.style.display = 'block';
 
       const payout = Math.floor(Math.random()*996)+5; // 5–1000
@@ -269,9 +363,7 @@
         ? `🎉 Victory! You earned $${payout}`
         : `😢 Defeat… You lost $${payout}`;
 
-      userRef.update({
-        balance: firebase.firestore.FieldValue.increment(delta)
-      });
+      userRef.update({ balance: firebase.firestore.FieldValue.increment(delta) });
     }
 
     btnReset.onclick = () => {

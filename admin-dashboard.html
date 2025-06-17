@@ -37,9 +37,10 @@
           <th>Caps</th>
           <th>Balance</th>
           <th>Wallet</th>
+          <th>Twitch Wallet Address</th>
           <th>Health</th>
           <th>Pets</th>
-          <th>Claimed</th>
+          <th>Food</th>
           <th>Vested</th>
           <th>Action</th>
         </tr>
@@ -73,17 +74,18 @@
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${d.email}</td>
-            <td><input class="watched"         data-id="${doc.id}" value="${d.watched        || 0}" /></td>
-            <td><input class="rewardsEarned"   data-id="${doc.id}" value="${d.rewardsEarned  || 0}" /></td>
-            <td><input class="twitchWatched"   data-id="${doc.id}" value="${d.twitchWatched  || 0}" /></td>
-            <td><input class="twitchRewards"   data-id="${doc.id}" value="${d.twitchRewards  || 0}" /></td>
-            <td><input class="caps"            data-id="${doc.id}" value="${d.caps           || 0}" /></td>
-            <td><input class="balance"         data-id="${doc.id}" value="${d.balance        || 0}" /></td>
-            <td><input class="wallet"          data-id="${doc.id}" value="${d.wallet         || ''}" /></td>
-            <td><input class="health"          data-id="${doc.id}" value="${d.health         || 0}" /></td>
-            <td><input class="pets"            data-id="${doc.id}" value="${d.pets           || 0}" /></td>
-            <td><input class="claimed"         data-id="${doc.id}" value="${d.claimed        || 0}" /></td>
-            <td><input class="vested"          data-id="${doc.id}" value="${d.vested         || 0}" /></td>
+            <td><input class="watched"            data-id="${doc.id}" value="${d.watched             || 0}" /></td>
+            <td><input class="rewardsEarned"      data-id="${doc.id}" value="${d.rewardsEarned       || 0}" /></td>
+            <td><input class="twitchWatched"      data-id="${doc.id}" value="${d.twitchWatched       || 0}" /></td>
+            <td><input class="twitchRewards"      data-id="${doc.id}" value="${d.twitchRewards       || 0}" /></td>
+            <td><input class="caps"               data-id="${doc.id}" value="${d.caps                || 0}" /></td>
+            <td><input class="balance"            data-id="${doc.id}" value="${d.balance             || 0}" /></td>
+            <td><input class="wallet"             data-id="${doc.id}" value="${d.wallet              || ''}" /></td>
+            <td><input class="twitchWalletAddress"data-id="${doc.id}" value="${d.twitchWalletAddress|| ''}" /></td>
+            <td><input class="health"             data-id="${doc.id}" value="${d.health              || 0}" /></td>
+            <td><input class="pets"               data-id="${doc.id}" value="${d.pets                || 0}" /></td>
+            <td><input class="food"               data-id="${doc.id}" value="${d.food                || 0}" /></td>
+            <td><input class="vested"             data-id="${doc.id}" value="${d.vested              || 0}" /></td>
             <td>
               <button class="save-btn"          data-id="${doc.id}">Save</button>
               <button class="reset-boost-btn"   data-id="${doc.id}">Reset Boost</button>
@@ -100,17 +102,18 @@
       const row = e.target.closest("tr");
 
       if (e.target.classList.contains("save-btn")) {
-        const watched        = Number(row.querySelector(".watched").value);
-        const rewardsEarned  = Number(row.querySelector(".rewardsEarned").value);
-        const twitchWatched  = Number(row.querySelector(".twitchWatched").value);
-        const twitchRewards  = Number(row.querySelector(".twitchRewards").value);
-        const caps           = Number(row.querySelector(".caps").value);
-        const balance        = Number(row.querySelector(".balance").value);
-        const wallet         = row.querySelector(".wallet").value;
-        const health         = Number(row.querySelector(".health").value);
-        const pets           = Number(row.querySelector(".pets").value);
-        const claimed        = Number(row.querySelector(".claimed").value);
-        const vested         = Number(row.querySelector(".vested").value);
+        const watched             = Number(row.querySelector(".watched").value);
+        const rewardsEarned       = Number(row.querySelector(".rewardsEarned").value);
+        const twitchWatched       = Number(row.querySelector(".twitchWatched").value);
+        const twitchRewards       = Number(row.querySelector(".twitchRewards").value);
+        const caps                = Number(row.querySelector(".caps").value);
+        const balance             = Number(row.querySelector(".balance").value);
+        const wallet              = row.querySelector(".wallet").value;
+        const twitchWalletAddress = row.querySelector(".twitchWalletAddress").value;
+        const health              = Number(row.querySelector(".health").value);
+        const pets                = Number(row.querySelector(".pets").value);
+        const food                = Number(row.querySelector(".food").value);
+        const vested              = Number(row.querySelector(".vested").value);
 
         db.collection("users").doc(id).update({
           watched,
@@ -120,9 +123,10 @@
           caps,
           balance,
           wallet,
+          twitchWalletAddress,
           health,
           pets,
-          claimed,
+          food,
           vested
         })
         .then(() => alert("✅ Saved!"))

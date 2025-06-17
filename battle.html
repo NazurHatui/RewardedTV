@@ -65,7 +65,7 @@
       gap:1.5rem; margin-bottom:2rem;
     }
     .char-card {
-      background:#1c1c0c; border-radius:8px;
+      background:#1c1c1c; border-radius:8px;
       padding:1rem; text-align:center;
       box-shadow:0 4px 16px rgba(0,0,0,0.6);
       transition:transform .3s,box-shadow .3s;
@@ -93,6 +93,7 @@
       box-shadow:0 6px 20px rgba(0,0,0,0.6);
       display:flex; flex-direction:column;
       transition:transform .3s,box-shadow .3s;
+      position:relative;
     }
     .item-card:hover {
       transform:translateY(-6px);
@@ -108,9 +109,7 @@
     .item-card .body h3 {
       color:#f39c12; margin-bottom:0.5rem; font-size:1.1rem;
     }
-    .item-card .body .stat {
-      color:#ccc; font-size:0.9rem; margin-bottom:0.5rem;
-    }
+    .item-card .body .stat,
     .item-card .body .price {
       color:#ccc; font-size:0.9rem; margin-bottom:0.5rem;
     }
@@ -127,6 +126,12 @@
     }
     .item-card .body button:hover {
       background:linear-gradient(45deg,#e74c3c,#9b59b6);
+    }
+    /* Owned badge */
+    .item-card .owned {
+      position:absolute; top:8px; right:8px;
+      background:rgba(0,0,0,0.6); color:#f39c12;
+      padding:2px 6px; border-radius:4px; font-size:0.75rem;
     }
 
     /* —— Begin Fight Button —— */
@@ -218,7 +223,7 @@
     </div>
   </main>
 
-  <!-- Firebase & Logic (with item-buy logic added) -->
+  <!-- Firebase & Logic (with item-buy and owned/decrement logic) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -250,12 +255,11 @@
     // — State —
     let userRef, userData, selectedChar = null;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
-    // New battle items
     const items = [
-      { name:'Shield',       statLabel:'Protection +50',  price:15,  asset:'assets/shield.jpeg'  },
-      { name:'Sword',        statLabel:'Attack +15',      price:15,  asset:'assets/swords.jpeg'  },
-      { name:'Potion',       statLabel:'Block +100',      price:20,  asset:'assets/potion.jpeg'  },
-      { name:'Speed',        statLabel:'Atk Speed +200',  price:15,  asset:'assets/shoe.jpeg'    },
+      { name:'Shield', stat:'Protection +50', price:15, asset:'assets/shield.jpeg'  },
+      { name:'Sword',  stat:'Attack +15',     price:15, asset:'assets/swords.jpeg'  },
+      { name:'Potion', stat:'Block +100',     price:20, asset:'assets/potion.jpeg'  },
+      { name:'Speed',  stat:'Atk Speed +200', price:15, asset:'assets/shoe.jpeg'    },
     ];
 
     auth.onAuthStateChanged(user => {
@@ -265,23 +269,26 @@
       userRef.onSnapshot(doc => {
         userData = doc.data()||{};
         updateStatus();
+        renderItems();
       });
       renderChars();
-      renderItems();
     });
 
     function updateStatus(){
       balanceEl.textContent = `Balance: $${(userData.balance||0).toLocaleString()}`;
+      // battle pass button
       if (userData.battlePass) {
         btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Battle Pass Owned';
-        btnPass.disabled = true;
+        btnPass.disabled  = true;
       } else {
         btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Buy Battle Pass – $3,000';
-        btnPass.disabled = (userData.balance||0) < 3000;
+        btnPass.disabled  = (userData.balance||0) < 3000;
       }
-      charGrid.style.display  = userData.battlePass ? 'grid' : 'none';
-      btnBegin.style.display  = userData.battlePass ? 'block' : 'none';
-      btnBegin.disabled       = !selectedChar;
+      // show/hide sections
+      charGrid.style.display   = userData.battlePass ? 'grid' : 'none';
+      itemGrid.style.display   = userData.battlePass ? 'grid' : 'none';
+      btnBegin.style.display   = userData.battlePass ? 'block' : 'none';
+      btnBegin.disabled        = !selectedChar;
     }
 
     btnPass.onclick = async () => {
@@ -313,14 +320,16 @@
 
     function renderItems(){
       itemGrid.innerHTML = '';
-      items.forEach((it, idx) => {
+      items.forEach(it => {
+        const ownedCount = (userData.itemsOwned && userData.itemsOwned[it.name]) || 0;
         const card = document.createElement('div');
         card.className = 'item-card';
         card.innerHTML = `
+          <div class="owned">Owned: ${ownedCount}</div>
           <img src="${it.asset}" alt="${it.name}">
           <div class="body">
             <h3>${it.name}</h3>
-            <div class="stat">${it.statLabel}</div>
+            <div class="stat">${it.stat}</div>
             <div class="price">Price: $${it.price}</div>
             <input class="quantity" type="number" min="1" value="1"/>
             <button>Buy</button>
@@ -331,11 +340,11 @@
         btn.onclick = async () => {
           const qty = Math.max(1, Number(qtyI.value)||1);
           const cost = it.price * qty;
-          if ((userData.balance||0) < cost) {
-            return alert('❌ Not enough balance.');
-          }
+          if ((userData.balance||0) < cost) return alert('❌ Not enough balance.');
+          // purchase: decrement balance, increment owned
           await userRef.update({
-            balance: firebase.firestore.FieldValue.increment(-cost)
+            balance:     firebase.firestore.FieldValue.increment(-cost),
+            [`itemsOwned.${it.name}`]: firebase.firestore.FieldValue.increment(qty)
           });
           alert(`✅ Purchased ${qty}× ${it.name}!`);
         };
@@ -344,8 +353,8 @@
     }
 
     btnBegin.onclick = () => {
-      loader.style.display   = 'block';
-      btnBegin.style.display = 'none';
+      loader.style.display    = 'block';
+      btnBegin.style.display  = 'none';
       setTimeout(runBattle, 2000);
     };
 
@@ -363,7 +372,16 @@
         ? `🎉 Victory! You earned $${payout}`
         : `😢 Defeat… You lost $${payout}`;
 
-      userRef.update({ balance: firebase.firestore.FieldValue.increment(delta) });
+      // update balance + decrement one of each owned item
+      const updates = { balance: firebase.firestore.FieldValue.increment(delta) };
+      if (userData.itemsOwned) {
+        Object.keys(userData.itemsOwned).forEach(name => {
+          if ((userData.itemsOwned[name]||0) > 0) {
+            updates[`itemsOwned.${name}`] = firebase.firestore.FieldValue.increment(-1);
+          }
+        });
+      }
+      userRef.update(updates);
     }
 
     btnReset.onclick = () => {

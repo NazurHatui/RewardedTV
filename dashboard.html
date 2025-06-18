@@ -114,6 +114,20 @@
     .pd-card input[type="file"] {
       display:none;
     }
+
+    /* Make the Verify Videos button match your accent buttons */
+    #verifyVideosBtn {
+      background: var(--accent);
+      color: #111;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    #verifyVideosBtn:hover {
+      filter: brightness(1.1);
+    }
   </style>
 
   <!-- Toggle Persistence & Accent Switching -->
@@ -206,7 +220,7 @@
       <button id="feedPetsBtn">Feed Pets</button>
     </div>
     <div class="stat-card"><h3>Food</h3><div class="value" id="food">0</div></div>
-    <div class="stat-card"><h3>Vested</h3><div class="value" id="vested">0</div></div>
+    <div class="stat-card"><h3>Vested</h3><div class="value" id="vested">0</div></iondiv>
     <div class="stat-card"><h3>Twitch Watched</h3><div class="value" id="twitchWatched">0</div></div>
     <div class="stat-card"><h3>Twitch Rewards</h3><div class="value" id="twitchRewards">$0.00</div></div>
   </section>
@@ -314,7 +328,8 @@
         document.getElementById("caps").innerText         = d.caps||0;
         document.getElementById("balance").innerText      = '$'+(d.balance||0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost||0)+'%';
-        document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
+        document.getElementById("helpersCount").innerText = (d.helpers||[]).
+length;
         document.getElementById("health").innerText       = (d.health||100)+'%';
         document.getElementById("pets").innerText         = d.pets||0;
         document.getElementById("food").innerText         = d.food||0;

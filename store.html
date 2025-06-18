@@ -83,7 +83,6 @@
       font-size:0.9rem;
       margin-bottom:1rem;
     }
-    /* quantity input */
     .store-card .card-body .quantity {
       width:60px;
       text-align:center;
@@ -200,6 +199,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 100 CAP -->
     <div class="store-card">
       <img src="assets/cap-icon.jpeg" alt="100 CAP"/>
@@ -232,7 +232,7 @@
     </div>
     <!-- 2000 CAP -->
     <div class="store-card">
-      <img src="assets/cap-icon.jpeg" alt="1000 CAP"/>
+      <img src="assets/cap-icon.jpeg" alt="2000 CAP"/>
       <div class="card-body">
         <h2>2000 CAP</h2>
         <div class="price">$2000</div>
@@ -240,6 +240,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Add Queue -->
     <div class="store-card">
       <img src="assets/add-queue-icon.jpeg" alt="Add Queue"/>
@@ -265,7 +266,7 @@
       <img src="assets/reset-watches-icon.jpeg" alt="Reset Watches"/>
       <div class="card-body">
         <h2>Reset Watches</h2>
-        <div class="price">$20,000</div>
+        <div class="price">$20000</div>
         <input class="quantity" type="number" min="1" value="1"/>
         <button class="buy-button">Buy Now</button>
       </div>
@@ -280,6 +281,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Ember Crunch -->
     <div class="store-card">
       <img src="assets/Food1.jpeg" alt="Ember Crunch"/>
@@ -320,6 +322,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Low Vesting -->
     <div class="store-card">
       <img src="assets/vesting.png" alt="Low Vesting"/>
@@ -358,14 +361,46 @@
       <img src="assets/removevesting.png" alt="Remove Vesting"/>
       <div class="card-body">
         <h2>Remove Vesting</h2>
-        <div class="price">$25,000</div>
+        <div class="price">$25000</div>
+        <input class="quantity" type="number" min="1" value="1"/>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+
+    <!-- —— New Items —— -->
+    <!-- Marathon Pass -->
+    <div class="store-card">
+      <img src="assets/marathon.png" alt="Marathon Pass"/>
+      <div class="card-body">
+        <h2>Marathon Pass</h2>
+        <div class="price">$1000</div>
+        <input class="quantity" type="number" min="1" value="1"/>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- Ultra Marathon Pass -->
+    <div class="store-card">
+      <img src="assets/marathonultra.png" alt="Ultra Marathon Pass"/>
+      <div class="card-body">
+        <h2>Ultra Marathon Pass</h2>
+        <div class="price">$2000</div>
+        <input class="quantity" type="number" min="1" value="1"/>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+    <!-- AutoPilot -->
+    <div class="store-card">
+      <img src="assets/autopilot.png" alt="AutoPilot"/>
+      <div class="card-body">
+        <h2>AutoPilot</h2>
+        <div class="price">$3800</div>
         <input class="quantity" type="number" min="1" value="1"/>
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
   </section>
 
-    <!-- Firebase SDKs -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -380,23 +415,21 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // reference to our lowVesting stock doc
+    // reference to lowVesting stock doc
     const stockRef = db.collection('store').doc('lowVesting');
 
-    // ensure doc exists with initial stock
     stockRef.get().then(doc => {
       if (!doc.exists) {
         return stockRef.set({ stock: 10000 });
       }
     }).catch(console.error);
 
-    // live update of stock display
     stockRef.onSnapshot(doc => {
       const count = (doc.data() && doc.data().stock) || 0;
       document.getElementById('stock-count').innerText = count;
-      // disable if sold out
-      const lowVestingBtn = document.querySelectorAll('.store-card')[18].querySelector('.buy-button');
-      lowVestingBtn.disabled = count <= 0;
+      // disable sold-out button (index 18)
+      document.querySelectorAll('.store-card')[18]
+        .querySelector('.buy-button').disabled = count <= 0;
     });
 
     auth.onAuthStateChanged(user => {
@@ -405,20 +438,22 @@
         return;
       }
 
-      // prices and boosts (including Remove Vesting at end)
+      // updated prices & boosts arrays
       const prices = [
         800,1200,1850,2000,3500,4500,
-        1000,1500,2500,4000,1850,1100,
-        20000,300,
-        25,30,10,10,
-        3250,1000,1500,25000
+        100,500,1000,2000,
+        1850,1100,20000,900,
+        60,55,45,40,
+        3250,1000,1500,25000,
+        1000,2000,3800
       ];
       const boosts = [
         10,20,50,100,200,500,
-        0,0,0,0,0,0,
-        0,0,
         0,0,0,0,
-        0,0,0,0
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0,0,
+        0,0,0
       ];
 
       const qtyInputs = document.querySelectorAll(".quantity");
@@ -429,7 +464,6 @@
           const qty = Math.max(1, Number(qtyInputs[i].value) || 1);
           const totalPrice = prices[i] * qty;
 
-          // check user balance
           const userRef = db.collection("users").doc(user.uid);
           const snap    = await userRef.get();
           const data    = snap.data()||{};
@@ -437,22 +471,20 @@
             return alert(`❌ Not enough balance for ${qty} item(s).`);
           }
 
-          // prepare user updates
           const updates = { balance: data.balance - totalPrice };
           if (boosts[i]) updates.boost = (data.boost||0) + boosts[i] * qty;
           if (i >= 14 && i < 18) {
             updates.food = firebase.firestore.FieldValue.increment(qty);
           }
-
-          // decrement low-vesting stock when buying that item (index 18)
           if (i === 18) {
             await stockRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
           }
 
-          // commit user update
           await userRef.update(updates);
           alert(`✅ Purchased ${qty} x item(s) successfully!`);
         };
       });
     });
   </script>
+</body>
+</html>

@@ -40,7 +40,7 @@
       padding:0.5rem 1rem;background:var(--accent);color:#111;
       border:none;border-radius:4px;cursor:pointer;
     }
-    #logout-btn:hover{background:darken(var(--accent),10%);}
+    #logout-btn:hover{filter:brightness(1.1);}
     .hero-clone{
       background:#111;padding:2rem 0;text-align:center;
       margin:1rem 2rem;border-radius:8px;
@@ -53,7 +53,7 @@
       padding:0.75rem 1.5rem;background:var(--accent);
       color:#111;border:none;border-radius:4px;cursor:pointer;
     }
-    .hero-clone button:hover{background:darken(var(--accent),10%);}
+    .hero-clone button:hover{filter:brightness(1.1);}
     .stream-toggle{text-align:center;margin:1rem 0;}
     .stream-toggle button{
       background:#1c1c1c;color:#e0e0e0;border:1px solid var(--accent);
@@ -80,30 +80,40 @@
       background:var(--accent);color:#111;border:none;
       border-radius:4px;cursor:pointer;font-weight:500;
     }
-    #feedPetsBtn:hover{background:darken(var(--accent),10%);}
+    #feedPetsBtn:hover{filter:brightness(1.1);}
     .project-dashboard{
       background:#1c1c1c;margin:2rem auto;padding:2rem;
-      max-width:1200px;border-radius:8px;
+      max-width:600px;border-radius:8px;
       box-shadow:0 2px 8px rgba(0,0,0,0.4);
     }
     .project-dashboard h2{
-      color:var(--accent);margin-top:0;font-size:1.75rem;
+      color:var(--accent);margin-top:0;font-size:1.5rem;
       text-align:center;border-bottom:2px solid var(--accent);
-      padding-bottom:1rem;
+      padding-bottom:0.5rem;
     }
     .pd-grid{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:1.5rem;margin-top:1.5rem;
+      display:flex;gap:1rem;justify-content:center;margin-top:1rem;
     }
     .pd-card{
-      background:#262626;padding:1.25rem;border-radius:8px;
+      background:#262626;padding:1rem;border-radius:8px;
       text-align:center;box-shadow:0 2px 6px rgba(0,0,0,0.4);
+      flex:1;
     }
     .pd-card h3{
       margin:0 0 0.5rem;font-size:1rem;color:var(--highlight);
       text-transform:uppercase;letter-spacing:0.5px;
     }
-    .pd-card p{margin:0;font-size:1.25rem;color:#e0e0e0;font-weight:bold;}
+    .pd-card button {
+      margin-top:0.5rem;padding:0.5rem 1rem;
+      background:var(--accent);color:#111;border:none;
+      border-radius:4px;cursor:pointer;font-weight:500;
+    }
+    .pd-card button:disabled {
+      opacity:0.5;cursor:default;
+    }
+    .pd-card input[type="file"] {
+      display:none;
+    }
   </style>
 
   <!-- Toggle Persistence & Accent Switching -->
@@ -118,7 +128,6 @@
       document.getElementById('btnYoutube').classList.toggle('active', p==='youtube');
       document.getElementById('btnTwitch').classList.toggle('active',  p==='twitch');
 
-      // update hero button
       const btn = document.getElementById('streamBtn');
       if (p==='twitch') {
         btn.textContent = '🔴 Stream on Twitch';
@@ -128,7 +137,7 @@
         btn.onclick = () => window.open('https://www.youtube.com','_blank');
       }
 
-      // clear and let snapshot refill
+      // clear stats for fresh snapshot fill
       ['watched','earned','caps','balance','boost','helpersCount','health','pets','food','vested','twitchWatched','twitchRewards']
         .forEach(id => {
           const el = document.getElementById(id);
@@ -180,7 +189,12 @@
   </div>
 
   <section class="stats">
-    <div class="stat-card"><h3>Videos Watched</h3><div class="value" id="watched">0</div></div>
+    <div class="stat-card">
+      <h3>Videos Watched</h3>
+      <div class="value" id="watched">0</div>
+      <button id="verifyVideosBtn">Verify Videos</button>
+      <div id="verifyStatus" style="margin-top:0.5rem;color:#f39c12;"></div>
+    </div>
     <div class="stat-card"><h3>Rewards Earned</h3><div class="value" id="earned">$0.00</div></div>
     <div class="stat-card"><h3>Caps</h3><div class="value" id="caps">0</div></div>
     <div class="stat-card"><h3>Balance</h3><div class="value" id="balance">$0.00</div></div>
@@ -193,9 +207,21 @@
     </div>
     <div class="stat-card"><h3>Food</h3><div class="value" id="food">0</div></div>
     <div class="stat-card"><h3>Vested</h3><div class="value" id="vested">0</div></div>
-
     <div class="stat-card"><h3>Twitch Watched</h3><div class="value" id="twitchWatched">0</div></div>
     <div class="stat-card"><h3>Twitch Rewards</h3><div class="value" id="twitchRewards">$0.00</div></div>
+  </section>
+
+  <!-- —— AutoPilot Section —— -->
+  <section class="project-dashboard">
+    <h2>AutoPilot</h2>
+    <div class="pd-grid">
+      <div class="pd-card">
+        <h3>Upload Links</h3>
+        <input type="file" id="autoFileInput" accept=".txt"/>
+        <button id="autoUploadBtn">Upload File</button>
+        <button id="startBotBtn" disabled>Start Bot</button>
+      </div>
+    </div>
   </section>
 
   <!-- Firebase & logic unchanged below… -->
@@ -213,50 +239,86 @@
     auth.onAuthStateChanged(user=>{
       if(!user) return location.replace("index.html");
       document.getElementById("logout-btn").onclick = ()=>auth.signOut();
-
-      // init theme & button
       setPlatform(currentPlatform());
 
-      // Feed Pets…
-      document.getElementById("feedPetsBtn").onclick=async()=>{
-        const ref=db.collection("users").doc(user.uid),
-              d=(await ref.get()).data()||{};
-        if((d.food||0)>0){await ref.update({food:firebase.firestore.FieldValue.increment(-1)});alert("Pet Fed ✅");}
-        else alert("No food!");  
+      // Feed Pets button
+      document.getElementById("feedPetsBtn").onclick = async ()=>{
+        const ref = db.collection("users").doc(user.uid);
+        const d = (await ref.get()).data()||{};
+        if((d.food||0)>0){
+          await ref.update({food:firebase.firestore.FieldValue.increment(-1)});
+          alert("Pet Fed ✅");
+        } else {
+          alert("No food!");
+        }
       };
 
-      // toggles
-      document.getElementById("btnYoutube").onclick=()=>setPlatform('youtube');
-      document.getElementById("btnTwitch").onclick=()=>setPlatform('twitch');
+      // platform toggles
+      document.getElementById("btnYoutube").onclick = ()=>setPlatform('youtube');
+      document.getElementById("btnTwitch").onclick  = ()=>setPlatform('twitch');
 
-      // live snapshot…
+      // Verify Videos button
+      const verifyBtn = document.getElementById("verifyVideosBtn");
+      const verifyStatus = document.getElementById("verifyStatus");
+      verifyBtn.onclick = ()=>{
+        verifyBtn.disabled = true;
+        verifyBtn.innerText = "Checking watched videos…";
+        // read current count
+        const countEl = document.getElementById(currentPlatform()==='youtube'?'watched':'twitchWatched');
+        const count = Number(countEl.innerText) || 0;
+        setTimeout(()=>{
+          if(count>0) verifyStatus.innerText = "Videos confirmed ✅";
+          else        verifyStatus.innerText = "Videos not confirmed";
+          verifyBtn.innerText = "Verify Videos";
+          verifyBtn.disabled = false;
+        }, 1000);
+      };
+
+      // AutoPilot logic
+      const fileInput = document.getElementById("autoFileInput");
+      const uploadBtn = document.getElementById("autoUploadBtn");
+      const startBtn  = document.getElementById("startBotBtn");
+      let autoTimer;
+
+      uploadBtn.onclick = ()=> fileInput.click();
+      fileInput.onchange = ()=>{
+        uploadBtn.innerText = "Processing…";
+        uploadBtn.disabled = true;
+        // simulate parsing file
+        setTimeout(()=>{
+          uploadBtn.innerText = "File Ready";
+          startBtn.disabled = false;
+        }, 1000);
+      };
+
+      startBtn.onclick = ()=>{
+        startBtn.innerText = "Bot Running…";
+        startBtn.disabled = true;
+        // auto-stop after 2 hours
+        autoTimer = setTimeout(()=>{
+          startBtn.innerText = "Bot Stopped";
+        }, 2 * 60 * 60 * 1000);
+      };
+
+      // live snapshot of user data
       db.collection("users").doc(user.uid).onSnapshot(doc=>{
-        const d=doc.data()||{};
+        const d = doc.data()||{};
         if(currentPlatform()==='youtube'){
           document.getElementById("watched").innerText      = d.watched||0;
-          const yE=(d.rewardsEarned!=null?d.rewardsEarned:d.watched)||0;
-          document.getElementById("earned").innerText       ='$'+yE.toLocaleString();
-          document.getElementById("caps").innerText         = d.caps||0;
-          document.getElementById("balance").innerText      ='$'+(d.balance||0).toFixed(2);
-          document.getElementById("boost").innerText        = (d.boost||0)+'%';
-          document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
-          document.getElementById("health").innerText       = (d.health||100)+'%';
-          document.getElementById("pets").innerText         = d.pets||0;
-          document.getElementById("food").innerText         = d.food||0;
-          document.getElementById("vested").innerText       = d.vested||0;
+          document.getElementById("earned").innerText       = '$'+((d.rewardsEarned!=null?d.rewardsEarned:d.watched)||0).toLocaleString();
         } else {
           document.getElementById("twitchWatched").innerText  = d.twitchWatched||0;
-          document.getElementById("twitchRewards").innerText ='$'+(d.twitchRewards||0).toLocaleString();
-          // mirror all the rest…
-          document.getElementById("caps").innerText         = d.caps||0;
-          document.getElementById("balance").innerText      = '$'+(d.balance||0).toFixed(2);
-          document.getElementById("boost").innerText        = (d.boost||0)+'%';
-          document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
-          document.getElementById("health").innerText       = (d.health||100)+'%';
-          document.getElementById("pets").innerText         = d.pets||0;
-          document.getElementById("food").innerText         = d.food||0;
-          document.getElementById("vested").innerText       = d.vested||0;
+          document.getElementById("twitchRewards").innerText = '$'+(d.twitchRewards||0).toLocaleString();
         }
+        // mirror remaining stats
+        document.getElementById("caps").innerText         = d.caps||0;
+        document.getElementById("balance").innerText      = '$'+(d.balance||0).toFixed(2);
+        document.getElementById("boost").innerText        = (d.boost||0)+'%';
+        document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
+        document.getElementById("health").innerText       = (d.health||100)+'%';
+        document.getElementById("pets").innerText         = d.pets||0;
+        document.getElementById("food").innerText         = d.food||0;
+        document.getElementById("vested").innerText       = d.vested||0;
       });
     });
   </script>

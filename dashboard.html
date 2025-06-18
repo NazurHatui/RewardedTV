@@ -75,6 +75,18 @@
       text-transform:uppercase;font-size:0.85rem;
     }
     .stat-card .value{font-size:1.5rem;}
+    #verifyVideosBtn {
+      background: var(--accent);
+      color: #111;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    #verifyVideosBtn:hover {
+      filter: brightness(1.1);
+    }
     #feedPetsBtn{
       margin-top:0.75rem;padding:0.5rem 1rem;
       background:var(--accent);color:#111;border:none;
@@ -114,23 +126,8 @@
     .pd-card input[type="file"] {
       display:none;
     }
-
-    /* Make the Verify Videos button match your accent buttons */
-    #verifyVideosBtn {
-      background: var(--accent);
-      color: #111;
-      border: none;
-      border-radius: 4px;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    #verifyVideosBtn:hover {
-      filter: brightness(1.1);
-    }
   </style>
 
-  <!-- Toggle Persistence & Accent Switching -->
   <script>
     const PLATFORM_KEY = 'rtv_platform';
     function currentPlatform() {
@@ -141,7 +138,6 @@
       document.body.classList.toggle('twitch-mode', p==='twitch');
       document.getElementById('btnYoutube').classList.toggle('active', p==='youtube');
       document.getElementById('btnTwitch').classList.toggle('active',  p==='twitch');
-
       const btn = document.getElementById('streamBtn');
       if (p==='twitch') {
         btn.textContent = '🔴 Stream on Twitch';
@@ -150,8 +146,6 @@
         btn.textContent = '▶ Watch on YouTube';
         btn.onclick = () => window.open('https://www.youtube.com','_blank');
       }
-
-      // clear stats for fresh snapshot fill
       ['watched','earned','caps','balance','boost','helpersCount','health','pets','food','vested','twitchWatched','twitchRewards']
         .forEach(id => {
           const el = document.getElementById(id);
@@ -220,7 +214,7 @@
       <button id="feedPetsBtn">Feed Pets</button>
     </div>
     <div class="stat-card"><h3>Food</h3><div class="value" id="food">0</div></div>
-    <div class="stat-card"><h3>Vested</h3><div class="value" id="vested">0</div></iondiv>
+    <div class="stat-card"><h3>Vested</h3><div class="value" id="vested">0</div></div>
     <div class="stat-card"><h3>Twitch Watched</h3><div class="value" id="twitchWatched">0</div></div>
     <div class="stat-card"><h3>Twitch Rewards</h3><div class="value" id="twitchRewards">$0.00</div></div>
   </section>
@@ -238,7 +232,6 @@
     </div>
   </section>
 
-  <!-- Firebase & logic unchanged below… -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -255,7 +248,6 @@
       document.getElementById("logout-btn").onclick = ()=>auth.signOut();
       setPlatform(currentPlatform());
 
-      // Feed Pets button
       document.getElementById("feedPetsBtn").onclick = async ()=>{
         const ref = db.collection("users").doc(user.uid);
         const d = (await ref.get()).data()||{};
@@ -267,54 +259,43 @@
         }
       };
 
-      // platform toggles
       document.getElementById("btnYoutube").onclick = ()=>setPlatform('youtube');
       document.getElementById("btnTwitch").onclick  = ()=>setPlatform('twitch');
 
-      // Verify Videos button
       const verifyBtn = document.getElementById("verifyVideosBtn");
       const verifyStatus = document.getElementById("verifyStatus");
       verifyBtn.onclick = ()=>{
         verifyBtn.disabled = true;
         verifyBtn.innerText = "Checking watched videos…";
-        // read current count
         const countEl = document.getElementById(currentPlatform()==='youtube'?'watched':'twitchWatched');
         const count = Number(countEl.innerText) || 0;
         setTimeout(()=>{
-          if(count>0) verifyStatus.innerText = "Videos confirmed ✅";
-          else        verifyStatus.innerText = "Videos not confirmed";
+          verifyStatus.innerText = count>0 ? "Videos confirmed ✅" : "Videos not confirmed";
           verifyBtn.innerText = "Verify Videos";
           verifyBtn.disabled = false;
         }, 1000);
       };
 
-      // AutoPilot logic
       const fileInput = document.getElementById("autoFileInput");
       const uploadBtn = document.getElementById("autoUploadBtn");
       const startBtn  = document.getElementById("startBotBtn");
-      let autoTimer;
-
       uploadBtn.onclick = ()=> fileInput.click();
       fileInput.onchange = ()=>{
         uploadBtn.innerText = "Processing…";
         uploadBtn.disabled = true;
-        // simulate parsing file
         setTimeout(()=>{
           uploadBtn.innerText = "File Ready";
           startBtn.disabled = false;
         }, 1000);
       };
-
       startBtn.onclick = ()=>{
         startBtn.innerText = "Bot Running…";
         startBtn.disabled = true;
-        // auto-stop after 2 hours
-        autoTimer = setTimeout(()=>{
+        setTimeout(()=>{
           startBtn.innerText = "Bot Stopped";
         }, 2 * 60 * 60 * 1000);
       };
 
-      // live snapshot of user data
       db.collection("users").doc(user.uid).onSnapshot(doc=>{
         const d = doc.data()||{};
         if(currentPlatform()==='youtube'){
@@ -324,12 +305,10 @@
           document.getElementById("twitchWatched").innerText  = d.twitchWatched||0;
           document.getElementById("twitchRewards").innerText = '$'+(d.twitchRewards||0).toLocaleString();
         }
-        // mirror remaining stats
         document.getElementById("caps").innerText         = d.caps||0;
         document.getElementById("balance").innerText      = '$'+(d.balance||0).toFixed(2);
         document.getElementById("boost").innerText        = (d.boost||0)+'%';
-        document.getElementById("helpersCount").innerText = (d.helpers||[]).
-length;
+        document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
         document.getElementById("health").innerText       = (d.health||100)+'%';
         document.getElementById("pets").innerText         = d.pets||0;
         document.getElementById("food").innerText         = d.food||0;

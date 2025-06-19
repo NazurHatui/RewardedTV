@@ -233,7 +233,6 @@
     </div>
   </main>
 
-  <!-- Firebase & Logic (with turn-by-turn battle log) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -292,8 +291,8 @@
         btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Battle Pass Owned';
         btnPass.disabled  = true;
       } else {
-        btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Buy Battle Pass – $3,000';
-        btnPass.disabled  = (userData.balance||0) < 3000;
+        btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Buy Battle Pass – $1,000';
+        btnPass.disabled  = (userData.balance||0) < 1000;
       }
       charGrid.style.display   = userData.battlePass ? 'grid' : 'none';
       itemGrid.style.display   = userData.battlePass ? 'grid' : 'none';
@@ -302,10 +301,10 @@
     }
 
     btnPass.onclick = async () => {
-      if ((userData.balance||0) < 3000) return alert('Not enough balance.');
+      if ((userData.balance||0) < 1000) return alert('Not enough balance.');
       await userRef.update({
         battlePass: true,
-        balance: firebase.firestore.FieldValue.increment(-3000)
+        balance: firebase.firestore.FieldValue.increment(-1000)
       });
     };
 
@@ -371,7 +370,6 @@
 
     function runBattle(){
       loader.style.display = 'none';
-      // build log
       const log = ['Battle begun…'];
       let attacker = 'You', defender = 'Opponent';
       for (let i=0; i<6; i++){
@@ -384,7 +382,6 @@
         }
         [attacker, defender] = [defender, attacker];
       }
-      // show log
       battleLog.textContent = '';
       battleLog.style.display = 'block';
       let idx = 0;
@@ -399,20 +396,18 @@
     }
 
     function showResult(){
-      // pick images & payout
       const cpuSrc = chars[Math.floor(Math.random()*chars.length)];
       youImg.src = selectedChar;
       oppImg.src = cpuSrc;
       resultPanel.style.display = 'block';
 
       const payout = Math.floor(Math.random()*996)+5;
-      const win    = Math.random()<0.45;
+      const win    = Math.random()<0.6;  // increased win chance
       const delta  = win ? payout : -payout;
       outcomeEl.textContent = win
         ? `🎉 Victory! You earned $${payout}`
         : `😢 Defeat… You lost $${payout}`;
 
-      // update balance & decrement one of each owned item
       const updates = { balance: firebase.firestore.FieldValue.increment(delta) };
       if (userData.itemsOwned){
         Object.keys(userData.itemsOwned).forEach(name => {
@@ -433,7 +428,6 @@
       updateStatus();
     };
 
-    // spinner animation
     document.head.insertAdjacentHTML('beforeend',`
       <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
     `);

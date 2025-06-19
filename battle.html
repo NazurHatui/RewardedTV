@@ -169,6 +169,24 @@
       margin-top:2rem; padding:.5rem 1.5rem; background:#444;
       border:none; border-radius:4px; color:#e0e0e0; cursor:pointer;
     }
+
+    /* —— Double or Nothing Button —— */
+    #doubleBtn {
+      display:block;
+      margin:1rem auto;
+      padding:0.75rem 2rem;
+      background:#f39c12;
+      color:#111;
+      font-size:1rem;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-weight:600;
+      text-transform:uppercase;
+      box-shadow:0 4px 12px rgba(243,156,18,0.5);
+      transition:opacity .3s;
+    }
+    #doubleBtn:disabled { opacity:0.5; cursor:default; }
   </style>
 </head>
 <body>
@@ -229,6 +247,7 @@
         </div>
       </div>
       <h2 id="outcome" style="margin-top:2rem;"></h2>
+      <button id="doubleBtn" style="display:none;">Double or Nothing</button>
       <button id="btnReset">Reset Match</button>
     </div>
   </main>
@@ -259,10 +278,14 @@
     const youImg      = document.getElementById('youImg');
     const oppImg      = document.getElementById('oppImg');
     const outcomeEl   = document.getElementById('outcome');
+    const doubleBtn   = document.getElementById('doubleBtn');
     const btnReset    = document.getElementById('btnReset');
     const logoutBtn   = document.getElementById('logout');
 
-    // — State —
+    // — State for double-or-nothing —
+    let lastStake = 0, doubleClicks = 0;
+
+    // — Characters & Items —
     let userRef, userData, selectedChar = null;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
     const items = [
@@ -334,8 +357,7 @@
         card.className = 'item-card';
         card.innerHTML = `
           <div class="owned">Owned: ${ownedCount}</div>
-          <img src="${it.asset}" alt="${it.name}">
-          <div class="body">
+          <img src="${it.asset}" alt="${it.name}"><div class="body">
             <h3>${it.name}</h3>
             <div class="stat">${it.stat}</div>
             <div class="price">Price: $${it.price}</div>
@@ -364,6 +386,7 @@
       btnBegin.style.display = 'none';
       battleLog.style.display = 'none';
       resultPanel.style.display = 'none';
+      doubleBtn.style.display = 'none';
       setTimeout(runBattle, 1000);
     };
 
@@ -394,45 +417,64 @@
       }, 700);
     }
 
-    function showResult(){
+    async function showResult(){
       const cpuSrc = chars[Math.floor(Math.random()*chars.length)];
       youImg.src = selectedChar;
       oppImg.src = cpuSrc;
       resultPanel.style.display = 'block';
 
       const payout = Math.floor(Math.random()*996)+5;
-
-      // fully random with lower base win chance
       let winChance = 0.45;
-      // bonus if owning Sword + Shield
       if ((userData.itemsOwned?.Sword || 0) >= 1 && (userData.itemsOwned?.Shield || 0) >= 1) {
         winChance += 0.15;
       }
       winChance = Math.min(winChance, 0.85);
-
       const win = Math.random() < winChance;
       const delta = win ? payout : -payout;
       outcomeEl.textContent = win
         ? `🎉 Victory! You earned $${payout}`
         : `😢 Defeat… You lost $${payout}`;
 
-      const updates = { balance: firebase.firestore.FieldValue.increment(delta) };
-      if (userData.itemsOwned){
-        Object.keys(userData.itemsOwned).forEach(name => {
-          if ((userData.itemsOwned[name]||0) > 0){
-            updates[`itemsOwned.${name}`] = firebase.firestore.FieldValue.increment(-1);
-          }
-        });
+      await userRef.update({ balance: firebase.firestore.FieldValue.increment(delta) });
+
+      if (win) {
+        lastStake = payout;
+        doubleClicks = 0;
+        doubleBtn.disabled = false;
+        doubleBtn.style.display = 'block';
+      } else {
+        doubleBtn.style.display = 'none';
       }
-      userRef.update(updates);
     }
+
+    doubleBtn.onclick = async () => {
+      doubleClicks++;
+      const stake = lastStake * 2;
+      if (doubleClicks >= 3) {
+        await userRef.update({ balance: firebase.firestore.FieldValue.increment(-lastStake) });
+        alert(`💥 You lost ${lastStake} on double-or-nothing.`);
+        doubleBtn.disabled = true;
+        return;
+      }
+      const win = Math.random() < 0.5;
+      if (win) {
+        await userRef.update({ balance: firebase.firestore.FieldValue.increment(stake) });
+        lastStake = stake;
+        alert(`🎉 You won! Your stake doubled to $${stake}.`);
+      } else {
+        await userRef.update({ balance: firebase.firestore.FieldValue.increment(-stake) });
+        alert(`😢 You lost $${stake}!`);
+        doubleBtn.disabled = true;
+      }
+    };
 
     btnReset.onclick = () => {
       resultPanel.style.display = 'none';
-      battleLog.style.display   = 'none';
+      doubleBtn.style.display = 'none';
+      btnBegin.style.display = 'block';
+      battleLog.style.display = 'none';
       selectedChar = null;
       document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
-      btnBegin.style.display = 'block';
       updateStatus();
     };
 

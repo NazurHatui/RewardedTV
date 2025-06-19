@@ -264,6 +264,7 @@
 
     // — State —
     let userRef, userData, selectedChar = null;
+    let battleCount = 0;  // counter to ensure 3 wins out of every 5
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
     const items = [
       { name:'Shield', stat:'Protection +50', price:15, asset:'assets/shield.jpeg'  },
@@ -396,14 +397,16 @@
     }
 
     function showResult(){
+      battleCount++;
       const cpuSrc = chars[Math.floor(Math.random()*chars.length)];
       youImg.src = selectedChar;
       oppImg.src = cpuSrc;
       resultPanel.style.display = 'block';
 
+      // deterministic: win exactly 3 out of each 5 battles
+      const win = ((battleCount - 1) % 5) < 3;
       const payout = Math.floor(Math.random()*996)+5;
-      const win    = Math.random()<0.6;  // increased win chance
-      const delta  = win ? payout : -payout;
+      const delta = win ? payout : -payout;
       outcomeEl.textContent = win
         ? `🎉 Victory! You earned $${payout}`
         : `😢 Defeat… You lost $${payout}`;

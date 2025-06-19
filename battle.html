@@ -207,7 +207,7 @@
 
     /* —— Tournament Button —— */
     #tournyBtn {
-      display:block; margin:1rem auto; padding:0.75rem 2rem;
+      display:block; margin:0 auto 2rem; padding:0.75rem 2rem;
       background:#f39c12; color:#111; border:none; border-radius:6px;
       text-transform:uppercase; font-weight:600; cursor:pointer;
       box-shadow:0 4px 12px rgba(243,156,18,0.5);
@@ -257,7 +257,7 @@
     <div id="itemGrid"></div>
 
     <button id="btnBegin" disabled>Begin Fight</button>
-    <button id="tournyBtn">🏟️ Tournament</button>
+    <button id="tournyBtn">🏟️ Tournament – $500</button>
 
     <div id="loader" style="display:none;">
       <h2>Finding Opponent…</h2>
@@ -316,10 +316,8 @@
     const btnReset    = document.getElementById('btnReset');
     const logoutBtn   = document.getElementById('logout');
 
-    // Double-or-nothing state
-    let lastStake = 0, doubleClicks = 0;
-
-    // Characters & Items
+    // State
+    let lastStake = 0, doubleClicks = 0, tournamentCount = 0;
     let userRef, userData, selectedChar = null;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
     const items = [
@@ -331,7 +329,10 @@
 
     // Fake bets feed
     function randomBetLine() {
-      const amt = (Math.random()*(500-1)+1).toFixed(2);
+      // mostly whole-dollar, occasionally cents
+      let amt = Math.random() < 0.8
+        ? Math.floor(Math.random()*500 + 1)
+        : (Math.random()*499+1).toFixed(2);
       const stars = '*****'.slice(0, Math.floor(Math.random()*5)+1);
       const p = document.createElement('p');
       p.innerText = `${stars} bet $${amt}`;
@@ -351,7 +352,7 @@
       });
       renderChars();
 
-      // Override Begin Fight
+      // Begin Fight override
       btnBegin.onclick = async () => {
         const bet = Math.max(1, Number(betInput.value)||1);
         let winChance = 0.45;
@@ -366,34 +367,28 @@
         runBattle(winChance, bet);
       };
 
-      // Tournament button
+      // Tournament override
       tournyBtn.onclick = async () => {
-        // Deduct entry fee
-        if ((userData.balance||0) < 500) {
-          return alert('Need $500 to enter the tournament.');
-        }
+        if ((userData.balance||0) < 500) return alert('Need $500 to enter.');
         await userRef.update({ balance: firebase.firestore.FieldValue.increment(-500) });
+        tournamentCount++;
+        const forceWin = (tournamentCount%3) === 0;
         tournyBtn.disabled = true;
         battleLog.innerHTML = '';
         battleLog.style.display = 'block';
         let allWin = true;
         for (let i=1; i<=20; i++){
-          await new Promise(r => setTimeout(r, 1200));
-          const win = Math.random() < 0.5;
+          await new Promise(r=>setTimeout(r,1200));
+          const win = forceWin || (Math.random() < 0.5);
           const p = document.createElement('p');
           p.style.color = win? '#9b39b6':'#e74c3c';
           p.innerText = `Round ${i}: ${win? 'Win':'Loss'}`;
           battleLog.appendChild(p);
-          if (!win) {
-            alert(`🏁 Eliminated in round ${i}`);
-            allWin = false;
-            break;
-          }
+          if (!win) { alert(`🏁 Eliminated round ${i}`); allWin=false; break; }
         }
-        // Grand prize if all 20 won
         if (allWin) {
           await userRef.update({ balance: firebase.firestore.FieldValue.increment(10000) });
-          alert('🏆 You won the tournament! Prize: $10,000');
+          alert('🏆 You won the tournament! $10,000 prize');
         }
         tournyBtn.disabled = false;
       };
@@ -408,15 +403,16 @@
         btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Buy Battle Pass – $1,000';
         btnPass.disabled  = (userData.balance||0) < 1000;
       }
-      charGrid.style.display = userData.battlePass? 'grid':'none';
-      itemGrid.style.display = userData.battlePass? 'grid':'none';
-      btnBegin.style.display = userData.battlePass? 'block':'none';
-      btnBegin.disabled      = !selectedChar;
+      charGrid.style.display  = userData.battlePass? 'grid':'none';
+      itemGrid.style.display  = userData.battlePass? 'grid':'none';
+      btnBegin.style.display  = userData.battlePass? 'block':'none';
+      btnBegin.disabled       = !selectedChar;
     }
 
     btnPass.onclick = async () => {
       if ((userData.balance||0) < 1000) return alert('Not enough balance.');
-      await userRef.update({ battlePass:true, balance:firebase.firestore.FieldValue.increment(-1000) });
+      await userRef.update({ battlePass:true,
+        balance:firebase.firestore.FieldValue.increment(-1000) });
     };
 
     function renderChars(){
@@ -429,7 +425,8 @@
           <div class="label">Char ${i+1}</div>
         `;
         card.onclick = () => {
-          document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
+          document.querySelectorAll('.char-card')
+            .forEach(c=>c.classList.remove('selected'));
           card.classList.add('selected');
           selectedChar = src;
           updateStatus();
@@ -441,11 +438,11 @@
     function renderItems(){
       itemGrid.innerHTML = '';
       items.forEach(it => {
-        const ownedCount = (userData.itemsOwned && userData.itemsOwned[it.name])||0;
+        const owned = (userData.itemsOwned?.[it.name]||0);
         const card = document.createElement('div');
         card.className = 'item-card';
         card.innerHTML = `
-          <div class="owned">Owned: ${ownedCount}</div>
+          <div class="owned">Owned: ${owned}</div>
           <img src="${it.asset}" alt="${it.name}">
           <div class="body">
             <h3>${it.name}</h3>
@@ -458,9 +455,8 @@
         const btn  = card.querySelector('button');
         const qtyI = card.querySelector('.quantity');
         btn.onclick = async () => {
-          const qty = Math.max(1, Number(qtyI.value)||1);
-          const cost = it.price * qty;
-          if ((userData.balance||0) < cost) return alert('❌ Not enough balance.');
+          const qty = Math.max(1,Number(qtyI.value)||1), cost=it.price*qty;
+          if ((userData.balance||0)<cost) return alert('❌ Not enough balance.');
           await userRef.update({
             balance: firebase.firestore.FieldValue.increment(-cost),
             [`itemsOwned.${it.name}`]: firebase.firestore.FieldValue.increment(qty)
@@ -477,64 +473,55 @@
       battleLog.style.display = 'none';
       resultPanel.style.display = 'none';
       doubleBtn.style.display   = 'none';
-      setTimeout(() => {
-        loader.style.display = 'none';
-        battleLog.style.display = 'block';
-        showResult(winChance, bet);
-      }, 1000);
+      setTimeout(()=>{ loader.style.display='none'; battleLog.style.display='block';
+        showResult(winChance,bet); },1000);
     }
 
     async function showResult(winChance, bet){
-      const cpuSrc = chars[Math.floor(Math.random()*chars.length)];
-      youImg.src = selectedChar;
-      oppImg.src = cpuSrc;
+      const cpu = chars[Math.floor(Math.random()*chars.length)];
+      youImg.src = selectedChar; oppImg.src = cpu;
       resultPanel.style.display = 'block';
-
-      const win = Math.random() < winChance;
+      const win = Math.random()<winChance;
       const delta = win? bet : -bet;
       outcomeEl.textContent = win
         ? `🎉 Victory! You won $${bet}`
         : `😢 Defeat… You lost $${bet}`;
-
-      await userRef.update({ balance:firebase.firestore.FieldValue.increment(delta) });
-
+      await userRef.update({ balance: firebase.firestore.FieldValue.increment(delta) });
       if (win){
-        lastStake   = bet;
-        doubleClicks= 0;
-        doubleBtn.disabled = false;
-        doubleBtn.style.display = 'block';
+        lastStake=bet; doubleClicks=0;
+        doubleBtn.disabled=false; doubleBtn.style.display='block';
       } else {
-        doubleBtn.style.display = 'none';
+        doubleBtn.style.display='none';
       }
     }
 
-    doubleBtn.onclick = async () => {
+    doubleBtn.onclick = async ()=>{
       doubleClicks++;
-      const stake = lastStake * 2;
-      if (doubleClicks >= 3) {
+      const stake=lastStake*2;
+      if (doubleClicks>=3){
         await userRef.update({ balance: firebase.firestore.FieldValue.increment(-lastStake) });
-        alert(`💥 You lost $${lastStake} on double-or-nothing.`);
-        doubleBtn.disabled = true;
+        alert(`💥 You lost $${lastStake}!`);
+        doubleBtn.disabled=true;
         return;
       }
-      const win = Math.random() < 0.5;
-      if (win) {
+      const win = Math.random()<0.5;
+      if (win){
         await userRef.update({ balance: firebase.firestore.FieldValue.increment(stake) });
-        lastStake = stake;
-        alert(`🎉 You won! Your stake doubled to $${stake}.`);
+        lastStake=stake;
+        alert(`🎉 You doubled to $${stake}!`);
       } else {
         await userRef.update({ balance: firebase.firestore.FieldValue.increment(-stake) });
         alert(`😢 You lost $${stake}!`);
-        doubleBtn.disabled = true;
+        doubleBtn.disabled=true;
       }
     };
 
-    btnReset.onclick = () => {
-      resultPanel.style.display = 'none';
-      doubleBtn.style.display   = 'none';
-      btnBegin.style.display    = 'block';
-      battleLog.style.display   = 'none';
-      selectedChar = null;
+    btnReset.onclick = ()=>{
+      resultPanel.style.display='none';
+      doubleBtn.style.display='none';
+      btnBegin.style.display='block';
+      battleLog.style.display='none';
+      selectedChar=null;
       document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
       updateStatus();
     };

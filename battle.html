@@ -17,7 +17,7 @@
       overflow-y:auto;
     }
     #fakeBets h3 { color:#f39c12; margin-bottom:0.5rem; }
-    #fakeBets p  { font-size:0.9rem; margin:0.25rem 0; color:#ccc; }
+    #fakeBets p { font-size:0.9rem; margin:0.25rem 0; color:#ccc; }
 
     /* —— Header —— */
     header.header {
@@ -37,7 +37,7 @@
       border-radius:8px; padding:1rem; text-align:center; margin-bottom:1rem;
     }
     #battleBanner h1 { font-size:2.5rem; color:#f39c12; margin-bottom:0.5rem; }
-    #battleBanner p  { color:#ccc; font-size:1rem; }
+    #battleBanner p { color:#ccc; font-size:1rem; }
 
     /* —— Status Bar —— */
     #statusBar {
@@ -106,7 +106,7 @@
       gap:1.5rem; margin-bottom:2rem;
     }
     .item-card {
-      position:relative;              /* ← fix: badge stays in its own card */
+      position:relative;
       background:#1c1c1c; border-radius:8px; overflow:hidden;
       box-shadow:0 6px 20px rgba(0,0,0,0.6);
       display:flex; flex-direction:column;
@@ -167,6 +167,48 @@
       transition:opacity .3s;
     }
     #doubleBtn:disabled, #btnReset:disabled { opacity:0.5; cursor:default; }
+
+
+    /* ==== CLEANUP FOR LIVE BETS LAYOUT ==== */
+
+    /* 1) Body flex needs a fixed sidebar + fluid main */
+    body {
+      overflow: hidden;       /* prevent horizontal scroll */
+    }
+    #fakeBets {
+      flex-shrink: 0;         /* never collapse */
+      width: 180px;           /* a bit narrower */
+      padding: 0.75rem;       /* slightly tighter */
+    }
+    main {
+      flex-grow: 1;           /* fill the rest */
+      overflow-y: auto;       /* scroll main content if tall */
+    }
+
+    /* 2) Restore header/nav sizing */
+    header.header {
+      padding: 1.5rem 2rem;   /* a touch more breathing room */
+    }
+    header.header .nav-links a {
+      font-size: 1rem;        /* ensure links aren’t shrunk */
+    }
+
+    /* 3) Dial back the live-bets type so it’s visually lighter */
+    #fakeBets h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    #fakeBets p {
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: #999;           /* a bit lighter than #ccc */
+      margin: 0.2rem 0;
+    }
+
+    /* 4) Semi-transparent backdrop so sidebar sits “behind” main */
+    #fakeBets {
+      background: rgba(17,17,17,0.9);
+    }
   </style>
 </head>
 <body>
@@ -200,7 +242,9 @@
 
     <div id="charGrid"></div>
 
-    <h2 style="color:#f39c12; margin:2rem 0 1rem; text-align:center;">Battle Items</h2>
+    <h2 style="color:#f39c12; margin:2rem 0 1rem; text-align:center;">
+      Battle Items
+    </h2>
     <div id="itemGrid"></div>
 
     <div id="fightControls">
@@ -219,8 +263,14 @@
 
     <div id="resultPanel" style="display:none;">
       <div class="vs-panel">
-        <div class="panel"><h3>You</h3><img id="youImg" src="" alt="Your character"/></div>
-        <div class="panel"><h3>Opponent</h3><img id="oppImg" src="" alt="CPU character"/></div>
+        <div class="panel">
+          <h3>You</h3>
+          <img id="youImg" src="" alt="Your character"/>
+        </div>
+        <div class="panel">
+          <h3>Opponent</h3>
+          <img id="oppImg" src="" alt="CPU character"/>
+        </div>
       </div>
       <h2 id="outcome" style="margin-bottom:1rem;"></h2>
       <button id="doubleBtn" style="display:none;">Double or Nothing</button>
@@ -266,10 +316,10 @@
     let userRef, userData, selectedChar = null;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
     const items = [
-      { name:'Shield', stat:'Protection +50', price:15, asset:'assets/shield.jpeg' },
-      { name:'Sword',  stat:'Attack +15',     price:15, asset:'assets/swords.jpeg' },
-      { name:'Potion', stat:'Block +100',     price:20, asset:'assets/potion.jpeg' },
-      { name:'Speed',  stat:'Atk Speed +200', price:15, asset:'assets/shoe.jpeg'   },
+      { name:'Shield', stat:'Protection +50', price:15, asset:'assets/shield.jpeg'  },
+      { name:'Sword',  stat:'Attack +15',     price:15, asset:'assets/swords.jpeg'  },
+      { name:'Potion', stat:'Block +100',     price:20, asset:'assets/potion.jpeg'  },
+      { name:'Speed',  stat:'Atk Speed +200', price:15, asset:'assets/shoe.jpeg'    },
     ];
 
     // Fake bets feed
@@ -401,7 +451,7 @@
         card.className='item-card';
         card.innerHTML=`
           <div class="owned">Owned: ${owned}</div>
-          <img src="${it.asset}"/>
+          <img src="${it.asset}" alt="${it.name}"/>
           <div class="body">
             <h3>${it.name}</h3>
             <div class="stat">${it.stat}</div>

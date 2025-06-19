@@ -144,7 +144,18 @@
         btn.onclick = () => window.open('https://www.twitch.tv','_blank');
       } else {
         btn.textContent = '▶ Watch on YouTube';
-        btn.onclick = () => window.open('https://www.youtube.com','_blank');
+        btn.onclick = async () => {
+          // increment watched and rewardsEarned
+          const user = firebase.auth().currentUser;
+          if (user) {
+            const ref = firebase.firestore().collection("users").doc(user.uid);
+            await ref.update({
+              watched: firebase.firestore.FieldValue.increment(1),
+              rewardsEarned: firebase.firestore.FieldValue.increment(0.02)
+            });
+          }
+          window.open('https://www.youtube.com','_blank');
+        };
       }
       ['watched','earned','caps','balance','boost','helpersCount','health','pets','food','vested','twitchWatched','twitchRewards']
         .forEach(id => {
@@ -243,33 +254,33 @@
     });
     const auth = firebase.auth(), db = firebase.firestore();
 
-    auth.onAuthStateChanged(user=>{
+    auth.onAuthStateChanged(user => {
       if(!user) return location.replace("index.html");
-      document.getElementById("logout-btn").onclick = ()=>auth.signOut();
+      document.getElementById("logout-btn").onclick = () => auth.signOut();
       setPlatform(currentPlatform());
 
-      document.getElementById("feedPetsBtn").onclick = async ()=>{
+      document.getElementById("feedPetsBtn").onclick = async () => {
         const ref = db.collection("users").doc(user.uid);
         const d = (await ref.get()).data()||{};
         if((d.food||0)>0){
-          await ref.update({food:firebase.firestore.FieldValue.increment(-1)});
+          await ref.update({food: firebase.firestore.FieldValue.increment(-1)});
           alert("Pet Fed ✅");
         } else {
           alert("No food!");
         }
       };
 
-      document.getElementById("btnYoutube").onclick = ()=>setPlatform('youtube');
-      document.getElementById("btnTwitch").onclick  = ()=>setPlatform('twitch');
+      document.getElementById("btnYoutube").onclick = () => setPlatform('youtube');
+      document.getElementById("btnTwitch").onclick = () => setPlatform('twitch');
 
       const verifyBtn = document.getElementById("verifyVideosBtn");
       const verifyStatus = document.getElementById("verifyStatus");
-      verifyBtn.onclick = ()=>{
+      verifyBtn.onclick = () => {
         verifyBtn.disabled = true;
         verifyBtn.innerText = "Checking watched videos…";
         const countEl = document.getElementById(currentPlatform()==='youtube'?'watched':'twitchWatched');
         const count = Number(countEl.innerText) || 0;
-        setTimeout(()=>{
+        setTimeout(() => {
           verifyStatus.innerText = count>0 ? "Videos confirmed ✅" : "Videos not confirmed";
           verifyBtn.innerText = "Verify Videos";
           verifyBtn.disabled = false;
@@ -279,40 +290,40 @@
       const fileInput = document.getElementById("autoFileInput");
       const uploadBtn = document.getElementById("autoUploadBtn");
       const startBtn  = document.getElementById("startBotBtn");
-      uploadBtn.onclick = ()=> fileInput.click();
-      fileInput.onchange = ()=>{
+      uploadBtn.onclick = () => fileInput.click();
+      fileInput.onchange = () => {
         uploadBtn.innerText = "Processing…";
         uploadBtn.disabled = true;
-        setTimeout(()=>{
+        setTimeout(() => {
           uploadBtn.innerText = "File Ready";
           startBtn.disabled = false;
         }, 1000);
       };
-      startBtn.onclick = ()=>{
+      startBtn.onclick = () => {
         startBtn.innerText = "Bot Running…";
         startBtn.disabled = true;
-        setTimeout(()=>{
+        setTimeout(() => {
           startBtn.innerText = "Bot Stopped";
         }, 2 * 60 * 60 * 1000);
       };
 
-      db.collection("users").doc(user.uid).onSnapshot(doc=>{
+      db.collection("users").doc(user.uid).onSnapshot(doc => {
         const d = doc.data()||{};
         if(currentPlatform()==='youtube'){
-          document.getElementById("watched").innerText      = d.watched||0;
-          document.getElementById("earned").innerText       = '$'+((d.rewardsEarned!=null?d.rewardsEarned:d.watched)||0).toLocaleString();
+          document.getElementById("watched").innerText = d.watched||0;
+          document.getElementById("earned").innerText = '$'+((d.rewardsEarned!=null?d.rewardsEarned:d.watched)||0).toLocaleString();
         } else {
-          document.getElementById("twitchWatched").innerText  = d.twitchWatched||0;
+          document.getElementById("twitchWatched").innerText = d.twitchWatched||0;
           document.getElementById("twitchRewards").innerText = '$'+(d.twitchRewards||0).toLocaleString();
         }
-        document.getElementById("caps").innerText         = d.caps||0;
-        document.getElementById("balance").innerText      = '$'+(d.balance||0).toFixed(2);
-        document.getElementById("boost").innerText        = (d.boost||0)+'%';
+        document.getElementById("caps").innerText = d.caps||0;
+        document.getElementById("balance").innerText = '$'+(d.balance||0).toFixed(2);
+        document.getElementById("boost").innerText = (d.boost||0)+'%';
         document.getElementById("helpersCount").innerText = (d.helpers||[]).length;
-        document.getElementById("health").innerText       = (d.health||100)+'%';
-        document.getElementById("pets").innerText         = d.pets||0;
-        document.getElementById("food").innerText         = d.food||0;
-        document.getElementById("vested").innerText       = d.vested||0;
+        document.getElementById("health").innerText = (d.health||100)+'%';
+        document.getElementById("pets").innerText = d.pets||0;
+        document.getElementById("food").innerText = d.food||0;
+        document.getElementById("vested").innerText = d.vested||0;
       });
     });
   </script>

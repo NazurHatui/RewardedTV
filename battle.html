@@ -76,18 +76,33 @@
     }
     .btn-pass:disabled { opacity:0.5; cursor:default; }
 
-    /* —— Custom Bet & Pet Toggle —— */
-    #betControls {
-      display:flex; gap:1rem; margin-bottom:1rem; align-items:center;
+    /* —— Fight Controls (bet, pet, begin, tourney) —— */
+    #fightControls {
+      display:flex; gap:1rem; justify-content:center;
+      align-items:center; margin-bottom:2rem;
     }
-    #betAmount {
+    #fightControls input[type="number"] {
       width:100px; padding:0.5rem; border-radius:4px; border:none;
       text-align:center;
     }
-    #petToggle {
+    #fightControls label {
       display:flex; align-items:center; gap:0.5rem;
+      color:#e0e0e0;
     }
-    #petToggle input { margin-right:0.25rem; }
+    #fightControls label input { margin-right:0.25rem; }
+    #fightControls button {
+      padding:0.75rem 1.5rem; font-size:1rem;
+      border:none; border-radius:6px; cursor:pointer;
+      font-weight:600; text-transform:uppercase;
+      box-shadow:0 4px 12px rgba(231,76,60,0.5);
+      transition:opacity .3s;
+      background:linear-gradient(45deg,#e74c3c,#9b59b6);
+      color:#111;
+    }
+    #fightControls button:disabled { opacity:0.5; cursor:default; }
+    #fightControls #tournyBtn {
+      background:#f39c12; box-shadow:0 4px 12px rgba(243,156,18,0.5);
+    }
 
     /* —— Character Grid —— */
     #charGrid {
@@ -97,12 +112,11 @@
     .char-card {
       background:#1c1c1c; border-radius:8px; padding:1rem;
       text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.6);
-      transition:transform .3s,box-shadow .3s;
-      cursor:pointer; position:relative; perspective:1000px;
+      transition:transform .3s,box-shadow .3s; cursor:pointer;
+      position:relative; perspective:1000px;
     }
     .char-card.selected {
-      box-shadow:0 0 0 4px #f39c12;
-      transform:scale(1.05);
+      box-shadow:0 0 0 4px #f39c12; transform:scale(1.05);
     }
     .char-card img {
       width:100%; border-radius:4px; margin-bottom:0.5rem;
@@ -122,8 +136,7 @@
       transition:transform .3s,box-shadow .3s; position:relative;
     }
     .item-card:hover {
-      transform:translateY(-6px);
-      box-shadow:0 12px 30px rgba(0,0,0,0.8);
+      transform:translateY(-6px); box-shadow:0 12px 30px rgba(0,0,0,0.8);
     }
     .item-card img {
       width:100%; height:120px; object-fit:contain;
@@ -161,22 +174,10 @@
       background:linear-gradient(45deg,#e74c3c,#9b59b6);
     }
 
-    /* —— Begin Fight Button —— */
-    #btnBegin {
-      display:block; margin:0 auto 2rem;
-      padding:0.75rem 2rem; font-size:1rem;
-      background:linear-gradient(45deg,#e74c3c,#9b59b6);
-      color:#111; border:none; border-radius:6px; cursor:pointer;
-      text-transform:uppercase; font-weight:600;
-      box-shadow:0 4px 12px rgba(231,76,60,0.5);
-      transition:opacity .3s;
-    }
-    #btnBegin:disabled { opacity:0.5; cursor:default; }
-
     /* —— VS Loader, Battle Log & Panels —— */
     #loader, #battleLog, #resultPanel { text-align:center; margin-top:3rem; }
     #battleLog {
-      white-space: pre-wrap; max-height: 200px; overflow-y: auto;
+      white-space: pre-wrap; max-height:200px; overflow-y:auto;
       color:#ccc; font-family:monospace; margin-top:1rem;
     }
     .vs-panel {
@@ -204,14 +205,6 @@
       transition:opacity .3s;
     }
     #doubleBtn:disabled { opacity:0.5; cursor:default; }
-
-    /* —— Tournament Button —— */
-    #tournyBtn {
-      display:block; margin:0 auto 2rem; padding:0.75rem 2rem;
-      background:#f39c12; color:#111; border:none; border-radius:6px;
-      text-transform:uppercase; font-weight:600; cursor:pointer;
-      box-shadow:0 4px 12px rgba(243,156,18,0.5);
-    }
   </style>
 </head>
 <body>
@@ -243,21 +236,19 @@
       </button>
     </div>
 
-    <div id="betControls">
+    <div id="fightControls">
       <input id="betAmount" type="number" min="1" value="1" placeholder="Bet $"/>
-      <label id="petToggle">
-        <input type="checkbox" id="bringPet"/>
-        Bring Pet ($200)
+      <label>
+        <input type="checkbox" id="bringPet"/> Bring Pet ($200)
       </label>
+      <button id="btnBegin" disabled>Begin Fight</button>
+      <button id="tournyBtn">🏟️ Tournament – $500</button>
     </div>
 
     <div id="charGrid"></div>
 
     <h2 style="color:#f39c12; margin-top:2rem; text-align:center;">Battle Items</h2>
     <div id="itemGrid"></div>
-
-    <button id="btnBegin" disabled>Begin Fight</button>
-    <button id="tournyBtn">🏟️ Tournament – $500</button>
 
     <div id="loader" style="display:none;">
       <h2>Finding Opponent…</h2>
@@ -329,7 +320,6 @@
 
     // Fake bets feed
     function randomBetLine() {
-      // mostly whole-dollar, occasionally cents
       let amt = Math.random() < 0.8
         ? Math.floor(Math.random()*500 + 1)
         : (Math.random()*499+1).toFixed(2);
@@ -518,9 +508,9 @@
 
     btnReset.onclick = ()=>{
       resultPanel.style.display='none';
-      doubleBtn.style.display='none';
-      btnBegin.style.display='block';
-      battleLog.style.display='none';
+      doubleBtn.style.display   ='none';
+      btnBegin.style.display    ='block';
+      battleLog.style.display   ='none';
       selectedChar=null;
       document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
       updateStatus();

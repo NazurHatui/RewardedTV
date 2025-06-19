@@ -7,19 +7,36 @@
   <style>
     /* —— Global & Reset —— */
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; }
+    body { font-family:'Segoe UI',sans-serif; background:#0a0a0a; color:#e0e0e0; display:flex; }
+
+    /* —— Fake Bets Sidebar —— */
+    #fakeBets {
+      width:200px;
+      background:#111;
+      padding:1rem;
+      overflow-y:auto;
+    }
+    #fakeBets h3 {
+      color:#f39c12;
+      margin-bottom:0.5rem;
+    }
+    #fakeBets p {
+      font-size:0.9rem;
+      margin:0.25rem 0;
+      color:#ccc;
+    }
 
     /* —— Header (reuse your site’s header style) —— */
     header.header {
       display:flex; justify-content:space-between; align-items:center;
-      padding:1rem 2rem; background:#111; position:sticky; top:0; z-index:10;
+      padding:1rem 2rem; background:#111; position:sticky; top:0; z-index:10; width:100%;
     }
     .nav-links { list-style:none; display:flex; gap:1rem; }
     .nav-links a { color:#e0e0e0; text-decoration:none; font-weight:500; }
     .nav-links a.active { color:#f39c12; }
 
     /* —— Main container —— */
-    main { padding:2rem; max-width:1200px; margin:0 auto; }
+    main { padding:2rem; max-width:1000px; margin:0 auto; flex:1; }
 
     /* —— Battle Zone Banner —— */
     #battleBanner {
@@ -43,7 +60,7 @@
     /* —— Status Bar —— */
     #statusBar {
       display:flex; justify-content:space-between; align-items:center;
-      margin-bottom:2rem;
+      margin-bottom:1rem;
     }
     #balance { font-size:1.25rem; }
     .btn-pass {
@@ -59,15 +76,27 @@
     }
     .btn-pass:disabled { opacity:0.5; cursor:default; }
 
+    /* —— Custom Bet & Pet Toggle —— */
+    #betControls {
+      display:flex; gap:1rem; margin-bottom:1rem; align-items:center;
+    }
+    #betAmount {
+      width:100px; padding:0.5rem; border-radius:4px; border:none;
+      text-align:center;
+    }
+    #petToggle {
+      display:flex; align-items:center; gap:0.5rem;
+    }
+    #petToggle input { margin-right:0.25rem; }
+
     /* —— Character Grid —— */
     #charGrid {
       display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
       gap:1.5rem; margin-bottom:2rem;
     }
     .char-card {
-      background:#1c1c1c; border-radius:8px;
-      padding:1rem; text-align:center;
-      box-shadow:0 4px 16px rgba(0,0,0,0.6);
+      background:#1c1c1c; border-radius:8px; padding:1rem;
+      text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.6);
       transition:transform .3s,box-shadow .3s;
       cursor:pointer; position:relative; perspective:1000px;
     }
@@ -79,9 +108,7 @@
       width:100%; border-radius:4px; margin-bottom:0.5rem;
       transform: translateZ(20px);
     }
-    .char-card .label {
-      color:#ccc; margin-bottom:.5rem;
-    }
+    .char-card .label { color:#ccc; margin-bottom:.5rem; }
 
     /* —— Battle Items Grid —— */
     #itemGrid {
@@ -92,8 +119,7 @@
       background:#1c1c1c; border-radius:8px; overflow:hidden;
       box-shadow:0 6px 20px rgba(0,0,0,0.6);
       display:flex; flex-direction:column;
-      transition:transform .3s,box-shadow .3s;
-      position:relative;
+      transition:transform .3s,box-shadow .3s; position:relative;
     }
     .item-card:hover {
       transform:translateY(-6px);
@@ -109,7 +135,8 @@
       padding:2px 6px; border-radius:4px; font-size:0.75rem;
     }
     .item-card .body {
-      padding:1rem; flex:1; display:flex; flex-direction:column; align-items:center;
+      padding:1rem; flex:1; display:flex; flex-direction:column;
+      align-items:center;
     }
     .item-card .body h3 {
       color:#f39c12; margin-bottom:0.5rem; font-size:1.1rem;
@@ -127,7 +154,8 @@
       background:linear-gradient(45deg,#9b59b6,#e74c3c);
       color:#111; border:none; border-radius:6px;
       font-weight:600; cursor:pointer; text-transform:uppercase;
-      box-shadow:0 0 10px rgba(231,76,60,0.7); transition:background .3s;
+      box-shadow:0 0 10px rgba(231,76,60,0.7);
+      transition:background .3s;
     }
     .item-card .body button:hover {
       background:linear-gradient(45deg,#e74c3c,#9b59b6);
@@ -148,93 +176,96 @@
     /* —— VS Loader, Battle Log & Panels —— */
     #loader, #battleLog, #resultPanel { text-align:center; margin-top:3rem; }
     #battleLog {
-      white-space: pre-wrap;
-      max-height: 200px;
-      overflow-y: auto;
-      color: #ccc;
-      font-family: monospace;
-      margin-top: 1rem;
+      white-space: pre-wrap; max-height: 200px; overflow-y: auto;
+      color:#ccc; font-family:monospace; margin-top:1rem;
     }
     .vs-panel {
       display:flex; justify-content:space-around; align-items:center;
       gap:2rem; margin-top:2rem;
     }
-    .panel { background:#1c1c1c; padding:1rem; border-radius:8px;
-      box-shadow:0 4px 16px rgba(0,0,0,0.6); width:200px; }
+    .panel {
+      background:#1c1c1c; padding:1rem; border-radius:8px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.6); width:200px;
+    }
     .panel img { width:100%; border-radius:4px; }
     .panel h3 { margin-top:.5rem; font-size:1.1rem; color:#f39c12; }
 
-    /* —— Reset —— */
+    /* —— Reset & Double Buttons —— */
     #btnReset {
       margin-top:2rem; padding:.5rem 1.5rem; background:#444;
       border:none; border-radius:4px; color:#e0e0e0; cursor:pointer;
     }
-
-    /* —— Double or Nothing Button —— */
     #doubleBtn {
-      display:block;
-      margin:1rem auto;
-      padding:0.75rem 2rem;
-      background:#f39c12;
-      color:#111;
-      font-size:1rem;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      font-weight:600;
-      text-transform:uppercase;
+      display:block; margin:1rem auto;
+      padding:0.75rem 2rem; background:#f39c12; color:#111;
+      font-size:1rem; border:none; border-radius:6px; cursor:pointer;
+      font-weight:600; text-transform:uppercase;
       box-shadow:0 4px 12px rgba(243,156,18,0.5);
       transition:opacity .3s;
     }
     #doubleBtn:disabled { opacity:0.5; cursor:default; }
+
+    /* —— Tournament Button —— */
+    #tournyBtn {
+      display:block; margin:1rem auto; padding:0.75rem 2rem;
+      background:#f39c12; color:#111; border:none; border-radius:6px;
+      text-transform:uppercase; font-weight:600; cursor:pointer;
+      box-shadow:0 4px 12px rgba(243,156,18,0.5);
+    }
   </style>
 </head>
 <body>
-  <header class="header">
-    <ul class="nav-links">
-      <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="store.html">Store</a></li>
-      <li><a href="battle.html" class="active">Battle</a></li>
-      <li><a href="profile.html">Profile</a></li>
-    </ul>
-    <button id="logout" class="btn-pass">Logout</button>
-  </header>
+  <div id="fakeBets">
+    <h3>Live Bets</h3>
+  </div>
 
   <main>
-    <!-- Battle Zone Banner -->
+    <header class="header">
+      <ul class="nav-links">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="battle.html" class="active">Battle</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+      <button id="logout" class="btn-pass">Logout</button>
+    </header>
+
     <div id="battleBanner">
       <h1>Battle Zone</h1>
       <p>Welcome to the battle field</p>
     </div>
 
-    <!-- Status Bar -->
     <div id="statusBar">
       <div id="balance">Balance: $0</div>
       <button id="btnPass" class="btn-pass">
-        <img src="assets/battlepass.png" alt="Battle Pass"/>Buy Battle Pass – $1,000
+        <img src="assets/battlepass.png" alt="Battle Pass"/>
+        Buy Battle Pass – $1,000
       </button>
     </div>
 
-    <!-- Character Selection -->
+    <div id="betControls">
+      <input id="betAmount" type="number" min="1" value="1" placeholder="Bet $"/>
+      <label id="petToggle">
+        <input type="checkbox" id="bringPet"/>
+        Bring Pet ($200)
+      </label>
+    </div>
+
     <div id="charGrid"></div>
 
-    <!-- Battle Items Section -->
     <h2 style="color:#f39c12; margin-top:2rem; text-align:center;">Battle Items</h2>
     <div id="itemGrid"></div>
 
-    <!-- Begin Fight -->
     <button id="btnBegin" disabled>Begin Fight</button>
+    <button id="tournyBtn">🏟️ Tournament</button>
 
-    <!-- VS Loader -->
     <div id="loader" style="display:none;">
       <h2>Finding Opponent…</h2>
       <div style="margin-top:1rem; animation:spin 1s linear infinite;">🔄</div>
     </div>
 
-    <!-- Battle Log -->
     <div id="battleLog" style="display:none;"></div>
 
-    <!-- Battle Panels & Result -->
     <div id="resultPanel" style="display:none;">
       <div class="vs-panel">
         <div class="panel">
@@ -263,10 +294,13 @@
       projectId: "rewardedtv-1e5b1"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
+    const auth = firebase.auth(), db = firebase.firestore();
 
-    // — DOM refs —
+    // DOM refs
+    const fakeBetsBox = document.getElementById('fakeBets');
+    const betInput    = document.getElementById('betAmount');
+    const petCheckbox = document.getElementById('bringPet');
+    const tournyBtn   = document.getElementById('tournyBtn');
     const balanceEl   = document.getElementById('balance');
     const btnPass     = document.getElementById('btnPass');
     const charGrid    = document.getElementById('charGrid');
@@ -282,10 +316,10 @@
     const btnReset    = document.getElementById('btnReset');
     const logoutBtn   = document.getElementById('logout');
 
-    // — State for double-or-nothing —
+    // Double-or-nothing state
     let lastStake = 0, doubleClicks = 0;
 
-    // — Characters & Items —
+    // Characters & Items
     let userRef, userData, selectedChar = null;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
     const items = [
@@ -294,6 +328,17 @@
       { name:'Potion', stat:'Block +100',     price:20, asset:'assets/potion.jpeg'  },
       { name:'Speed',  stat:'Atk Speed +200', price:15, asset:'assets/shoe.jpeg'    },
     ];
+
+    // Fake bets feed
+    function randomBetLine() {
+      const amt = (Math.random()*(500-1)+1).toFixed(2);
+      const stars = '*****'.slice(0, Math.floor(Math.random()*5)+1);
+      const p = document.createElement('p');
+      p.innerText = `${stars} bet $${amt}`;
+      fakeBetsBox.appendChild(p);
+      if (fakeBetsBox.children.length > 50) fakeBetsBox.removeChild(fakeBetsBox.firstChild);
+    }
+    setInterval(randomBetLine, 1500);
 
     auth.onAuthStateChanged(user => {
       if (!user) return location.replace('index.html');
@@ -305,6 +350,53 @@
         renderItems();
       });
       renderChars();
+
+      // Override Begin Fight
+      btnBegin.onclick = async () => {
+        const bet = Math.max(1, Number(betInput.value)||1);
+        let winChance = 0.45;
+        if (petCheckbox.checked && (userData.balance||0) >= 200) {
+          await userRef.update({ balance: firebase.firestore.FieldValue.increment(-200) });
+          winChance += 0.57;
+        }
+        if ((userData.itemsOwned?.Sword||0)>=1 && (userData.itemsOwned?.Shield||0)>=1) {
+          winChance += 0.15;
+        }
+        winChance = Math.min(winChance, 0.95);
+        runBattle(winChance, bet);
+      };
+
+      // Tournament button
+      tournyBtn.onclick = async () => {
+        // Deduct entry fee
+        if ((userData.balance||0) < 500) {
+          return alert('Need $500 to enter the tournament.');
+        }
+        await userRef.update({ balance: firebase.firestore.FieldValue.increment(-500) });
+        tournyBtn.disabled = true;
+        battleLog.innerHTML = '';
+        battleLog.style.display = 'block';
+        let allWin = true;
+        for (let i=1; i<=20; i++){
+          await new Promise(r => setTimeout(r, 1200));
+          const win = Math.random() < 0.5;
+          const p = document.createElement('p');
+          p.style.color = win? '#9b39b6':'#e74c3c';
+          p.innerText = `Round ${i}: ${win? 'Win':'Loss'}`;
+          battleLog.appendChild(p);
+          if (!win) {
+            alert(`🏁 Eliminated in round ${i}`);
+            allWin = false;
+            break;
+          }
+        }
+        // Grand prize if all 20 won
+        if (allWin) {
+          await userRef.update({ balance: firebase.firestore.FieldValue.increment(10000) });
+          alert('🏆 You won the tournament! Prize: $10,000');
+        }
+        tournyBtn.disabled = false;
+      };
     });
 
     function updateStatus(){
@@ -316,18 +408,15 @@
         btnPass.innerHTML = '<img src="assets/battlepass.png" alt="Battle Pass"/>Buy Battle Pass – $1,000';
         btnPass.disabled  = (userData.balance||0) < 1000;
       }
-      charGrid.style.display   = userData.battlePass ? 'grid' : 'none';
-      itemGrid.style.display   = userData.battlePass ? 'grid' : 'none';
-      btnBegin.style.display   = userData.battlePass ? 'block' : 'none';
-      btnBegin.disabled        = !selectedChar;
+      charGrid.style.display = userData.battlePass? 'grid':'none';
+      itemGrid.style.display = userData.battlePass? 'grid':'none';
+      btnBegin.style.display = userData.battlePass? 'block':'none';
+      btnBegin.disabled      = !selectedChar;
     }
 
     btnPass.onclick = async () => {
       if ((userData.balance||0) < 1000) return alert('Not enough balance.');
-      await userRef.update({
-        battlePass: true,
-        balance: firebase.firestore.FieldValue.increment(-1000)
-      });
+      await userRef.update({ battlePass:true, balance:firebase.firestore.FieldValue.increment(-1000) });
     };
 
     function renderChars(){
@@ -352,12 +441,13 @@
     function renderItems(){
       itemGrid.innerHTML = '';
       items.forEach(it => {
-        const ownedCount = (userData.itemsOwned && userData.itemsOwned[it.name]) || 0;
+        const ownedCount = (userData.itemsOwned && userData.itemsOwned[it.name])||0;
         const card = document.createElement('div');
         card.className = 'item-card';
         card.innerHTML = `
           <div class="owned">Owned: ${ownedCount}</div>
-          <img src="${it.asset}" alt="${it.name}"><div class="body">
+          <img src="${it.asset}" alt="${it.name}">
+          <div class="body">
             <h3>${it.name}</h3>
             <div class="stat">${it.stat}</div>
             <div class="price">Price: $${it.price}</div>
@@ -381,65 +471,36 @@
       });
     }
 
-    btnBegin.onclick = () => {
+    function runBattle(winChance, bet){
       loader.style.display   = 'block';
       btnBegin.style.display = 'none';
       battleLog.style.display = 'none';
       resultPanel.style.display = 'none';
-      doubleBtn.style.display = 'none';
-      setTimeout(runBattle, 1000);
-    };
-
-    function runBattle(){
-      loader.style.display = 'none';
-      const log = ['Battle begun…'];
-      let attacker = 'You', defender = 'Opponent';
-      for (let i=0; i<6; i++){
-        log.push(`${attacker} attacks ${defender}`);
-        if (Math.random()<0.5){
-          log.push(`${defender} blocks`);
-        } else {
-          const dmg = Math.floor(Math.random()*200)+50;
-          log.push(`${defender} takes ${dmg}`);
-        }
-        [attacker, defender] = [defender, attacker];
-      }
-      battleLog.textContent = '';
-      battleLog.style.display = 'block';
-      let idx = 0;
-      const interval = setInterval(()=>{
-        if (idx < log.length){
-          battleLog.textContent += log[idx++] + '\n';
-        } else {
-          clearInterval(interval);
-          showResult();
-        }
-      }, 700);
+      doubleBtn.style.display   = 'none';
+      setTimeout(() => {
+        loader.style.display = 'none';
+        battleLog.style.display = 'block';
+        showResult(winChance, bet);
+      }, 1000);
     }
 
-    async function showResult(){
+    async function showResult(winChance, bet){
       const cpuSrc = chars[Math.floor(Math.random()*chars.length)];
       youImg.src = selectedChar;
       oppImg.src = cpuSrc;
       resultPanel.style.display = 'block';
 
-      const payout = Math.floor(Math.random()*996)+5;
-      let winChance = 0.45;
-      if ((userData.itemsOwned?.Sword || 0) >= 1 && (userData.itemsOwned?.Shield || 0) >= 1) {
-        winChance += 0.15;
-      }
-      winChance = Math.min(winChance, 0.85);
       const win = Math.random() < winChance;
-      const delta = win ? payout : -payout;
+      const delta = win? bet : -bet;
       outcomeEl.textContent = win
-        ? `🎉 Victory! You earned $${payout}`
-        : `😢 Defeat… You lost $${payout}`;
+        ? `🎉 Victory! You won $${bet}`
+        : `😢 Defeat… You lost $${bet}`;
 
-      await userRef.update({ balance: firebase.firestore.FieldValue.increment(delta) });
+      await userRef.update({ balance:firebase.firestore.FieldValue.increment(delta) });
 
-      if (win) {
-        lastStake = payout;
-        doubleClicks = 0;
+      if (win){
+        lastStake   = bet;
+        doubleClicks= 0;
         doubleBtn.disabled = false;
         doubleBtn.style.display = 'block';
       } else {
@@ -452,7 +513,7 @@
       const stake = lastStake * 2;
       if (doubleClicks >= 3) {
         await userRef.update({ balance: firebase.firestore.FieldValue.increment(-lastStake) });
-        alert(`💥 You lost ${lastStake} on double-or-nothing.`);
+        alert(`💥 You lost $${lastStake} on double-or-nothing.`);
         doubleBtn.disabled = true;
         return;
       }
@@ -470,9 +531,9 @@
 
     btnReset.onclick = () => {
       resultPanel.style.display = 'none';
-      doubleBtn.style.display = 'none';
-      btnBegin.style.display = 'block';
-      battleLog.style.display = 'none';
+      doubleBtn.style.display   = 'none';
+      btnBegin.style.display    = 'block';
+      battleLog.style.display   = 'none';
       selectedChar = null;
       document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
       updateStatus();

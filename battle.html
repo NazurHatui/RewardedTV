@@ -46,6 +46,7 @@
     .btn-pass img { height:1em; margin-right:0.5em; }
 
     /* —— Live Bets Feed —— */
+    h2.section-title { color:#f39c12; text-align:center; margin:2rem 0 1rem; }
     #fakeBets {
       background:#111; margin:0 2rem 1rem; padding:1rem; border-radius:8px;
       max-height:150px; overflow-y:auto;
@@ -112,7 +113,7 @@
       background:linear-gradient(45deg,#e74c3c,#9b59b6);
     }
 
-    /* —— Fight Controls (under items) —— */
+    /* —— Fight Controls —— */
     #fightControls {
       display:flex; gap:1rem; justify-content:center;
       align-items:center; margin:1rem 2rem;
@@ -190,23 +191,13 @@
     </button>
   </div>
 
-  <!-- Centered Live Feed title -->
-  <h2 style="color:#f39c12; text-align:center; margin:2rem 0 1rem;">
-    Live Feed
-  </h2>
-  <div id="fakeBets">
-    <h3>Live Bets</h3>
-  </div>
+  <h2 class="section-title">Live Feed</h2>
+  <div id="fakeBets"><h3>Live Bets</h3></div>
 
-  <!-- Centered Character Selection title -->
-  <h2 style="color:#f39c12; text-align:center; margin:2rem 0 1rem;">
-    Character Selection
-  </h2>
+  <h2 class="section-title">Character Selection</h2>
   <div id="charGrid"></div>
 
-  <h2 style="color:#f39c12; text-align:center; margin:2rem 0 1rem;">
-    Battle Items
-  </h2>
+  <h2 class="section-title">Battle Items</h2>
   <div id="itemGrid"></div>
 
   <div id="fightControls">
@@ -267,7 +258,7 @@
     const logoutBtn   = document.getElementById('logout');
 
     let userRef, userData, selectedChar = null;
-    let lastStake=0, doubleClicks=0, tournamentCount=0;
+    let lastStake=0, doubleClicks=0;
     const chars = Array.from({length:12},(_,i)=>`assets/char${i+1}.jpeg`);
     const items = [
       { name:'Shield', stat:'Protection +50', price:15, asset:'assets/shield.jpeg' },
@@ -303,16 +294,12 @@
 
     function updateStatus(){
       balanceEl.textContent = `Balance: $${(userData.balance||0).toLocaleString()}`;
-
-      // only enable once a character is selected,
-      // and tournament also requires at least $500
       btnBegin.disabled  = !selectedChar;
-      tournyBtn.disabled = !selectedChar || (userData.balance||0) < 500;
-
+      tournyBtn.disabled = !selectedChar || (userData.balance||0)<500;
       btnPass.disabled   = userData.battlePass || (userData.balance||0)<1000;
-      btnPass.textContent = userData.battlePass
-        ? 'Battle Pass Owned'
-        : 'Buy Battle Pass – $1,000';
+      btnPass.innerHTML  = userData.battlePass
+        ? '<img src="assets/battlepass.png"/>Battle Pass Owned'
+        : '<img src="assets/battlepass.png"/>Buy Battle Pass – $1,000';
     }
 
     btnPass.onclick = async ()=>{
@@ -365,24 +352,21 @@
 
     btnBegin.onclick = () => {
       const bet = Math.max(1,Number(betInput.value)||1);
-      let winChance=0.10;
+      let winChance = 0.10;
       if (petCheckbox.checked && (userData.balance||0)>=200) {
         userRef.update({ balance:firebase.firestore.FieldValue.increment(-200) });
-        winChance+=0.10;
+        winChance += 0.10;
       }
       if ((userData.itemsOwned?.Sword||0)>=1 && (userData.itemsOwned?.Shield||0)>=1) {
-        winChance+=0.10;
+        winChance += 0.10;
       }
-      winChance=Math.min(winChance,0.55);
-      runBattle(winChance,bet);
+      winChance = Math.min(winChance,0.55);
+      runBattle(winChance, bet);
     };
 
     tournyBtn.onclick = async ()=>{
       if ((userData.balance||0)<500) return alert('Need $500');
       await userRef.update({ balance:firebase.firestore.FieldValue.increment(-500) });
-      tournamentCount++;
-      const forceWin = tournamentCount % 3 === 0;
-
       loader.style.display='block';
       battleLog.style.display='none';
       resultPanel.style.display='none';
@@ -390,9 +374,8 @@
       loader.style.display='none';
 
       battleLog.innerHTML=''; battleLog.style.display='block';
-      let allWin=true;
       for (let i=1;i<=20;i++){
-        const p1 = i%2? selectedChar : chars[Math.floor(Math.random()*chars.length)];
+        const p1 = (i%2)? selectedChar : chars[Math.floor(Math.random()*chars.length)];
         const p2 = chars[Math.floor(Math.random()*chars.length)];
         battleLog.innerHTML += `
           <div class="vs-panel">
@@ -400,16 +383,12 @@
             <div class="panel"><h3>R${i}B</h3><img src="${p2}"/></div>
           </div>`;
         await new Promise(r=>setTimeout(r,1200));
-        const win = forceWin || Math.random()<0.5;
+        const win = Math.random() < 0.5;
         const line = document.createElement('p');
         line.style.color = win?'#9b39b6':'#e74c3c';
         line.textContent = `Round ${i}: ${win?'Win':'Loss'}`;
         battleLog.appendChild(line);
-        if (!win) { alert(`Eliminated round ${i}`); allWin=false; break; }
-      }
-      if (allWin) {
-        await userRef.update({ balance:firebase.firestore.FieldValue.increment(10000) });
-        alert('You won the tournament! $10,000');
+        if (!win) { alert(`Eliminated round ${i}`); break; }
       }
     };
 
@@ -427,12 +406,12 @@
       const cpu=chars[Math.floor(Math.random()*chars.length)];
       youImg.src=selectedChar; oppImg.src=cpu;
       resultPanel.style.display='block';
-      const win=Math.random()<winChance;
-      const delta=win?bet:-bet;
-      outcomeEl.textContent=win?`Victory! +$${bet}`:`Defeat… -$${bet}`;
+      const win = Math.random()<winChance;
+      const delta = win?bet:-bet;
+      outcomeEl.textContent = win? `🏆 +$${bet}` : `☠️ -$${bet}`;
       await userRef.update({ balance:firebase.firestore.FieldValue.increment(delta) });
       if (win) {
-        lastStake=bet; doubleClicks=0;
+        lastStake = bet; doubleClicks = 0;
         doubleBtn.style.display='block'; doubleBtn.disabled=false;
       } else {
         doubleBtn.style.display='none';
@@ -449,7 +428,7 @@
       const win = Math.random()<0.5;
       if (win) {
         await userRef.update({ balance:firebase.firestore.FieldValue.increment(stake) });
-        lastStake=stake; alert(`Doubled to $${stake}`);
+        lastStake=stake; alert(`Doubled to $${stake}!`);
       } else {
         await userRef.update({ balance:firebase.firestore.FieldValue.increment(-stake) });
         alert(`Lost $${stake}`); doubleBtn.disabled=true;

@@ -213,7 +213,7 @@
     <input id="betAmount" type="number" min="1" value="1" placeholder="Bet $"/>
     <label><input type="checkbox" id="bringPet"/> Bring Pet ($200)</label>
     <button id="btnBegin" disabled>Begin Fight</button>
-    <button id="tournyBtn">🏟️ Tournament – $500</button>
+    <button id="tournyBtn" disabled>🏟️ Tournament – $500</button>
   </div>
 
   <div id="loader" style="display:none;">
@@ -303,10 +303,18 @@
 
     function updateStatus(){
       balanceEl.textContent = `Balance: $${(userData.balance||0).toLocaleString()}`;
-      btnBegin.disabled = !selectedChar;
-      btnPass.disabled = userData.battlePass || (userData.balance||0)<1000;
-      btnPass.textContent = userData.battlePass ? 'Battle Pass Owned' : 'Buy Battle Pass – $1,000';
+
+      // only enable once a character is selected,
+      // and tournament also requires at least $500
+      btnBegin.disabled  = !selectedChar;
+      tournyBtn.disabled = !selectedChar || (userData.balance||0) < 500;
+
+      btnPass.disabled   = userData.battlePass || (userData.balance||0)<1000;
+      btnPass.textContent = userData.battlePass
+        ? 'Battle Pass Owned'
+        : 'Buy Battle Pass – $1,000';
     }
+
     btnPass.onclick = async ()=>{
       if ((userData.balance||0)<1000) return alert('Not enough balance');
       await userRef.update({ battlePass:true, balance: firebase.firestore.FieldValue.increment(-1000) });
@@ -436,9 +444,7 @@
       const stake = lastStake*2;
       if (doubleClicks>=3) {
         await userRef.update({ balance:firebase.firestore.FieldValue.increment(-lastStake) });
-        alert(`Lost $${lastStake}`);
-        doubleBtn.disabled=true;
-        return;
+        alert(`Lost $${lastStake}`); doubleBtn.disabled=true; return;
       }
       const win = Math.random()<0.5;
       if (win) {

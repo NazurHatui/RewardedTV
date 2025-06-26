@@ -111,6 +111,12 @@
     .store-card .card-body button:disabled {
       opacity:0.5;cursor:default;box-shadow:none;
     }
+    /* ——— Stock badge ——— */
+    .stock-badge {
+      color:#ccc;
+      font-size:0.85rem;
+      margin-bottom:1rem;
+    }
   </style>
 </head>
 <body>
@@ -329,7 +335,7 @@
       <div class="card-body">
         <h2>Low Vesting</h2>
         <div class="price">$3250</div>
-        <div id="stock" style="color:#ccc;font-size:0.9rem;margin-bottom:1rem;">
+        <div class="stock-badge">
           Quantity Left: <span id="stock-count">10000</span>
         </div>
         <input class="quantity" type="number" min="1" value="1"/>
@@ -367,7 +373,6 @@
       </div>
     </div>
 
-    <!-- —— New Items —— -->
     <!-- Marathon Pass -->
     <div class="store-card">
       <img src="assets/marathon.png" alt="Marathon Pass"/>
@@ -398,6 +403,20 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
+    <!-- —— Pending Rewards (NEW) —— -->
+    <div class="store-card">
+      <img src="assets/pending.jpeg" alt="Pending Rewards"/>
+      <div class="card-body">
+        <h2>Pending Rewards</h2>
+        <div class="price">$5,500</div>
+        <div class="stock-badge">
+          Quantity Left: <span id="pending-stock-count">25,000</span>
+        </div>
+        <input class="quantity" type="number" min="1" value="1"/>
+        <button class="buy-button" id="pending-buy">Buy Now</button>
+      </div>
+    </div>
   </section>
 
   <!-- Firebase SDKs -->
@@ -415,21 +434,27 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // reference to lowVesting stock doc
-    const stockRef = db.collection('store').doc('lowVesting');
-
-    stockRef.get().then(doc => {
-      if (!doc.exists) {
-        return stockRef.set({ stock: 10000 });
-      }
-    }).catch(console.error);
-
-    stockRef.onSnapshot(doc => {
-      const count = (doc.data() && doc.data().stock) || 0;
-      document.getElementById('stock-count').innerText = count;
-      // disable sold-out button (index 18)
+    // lowVesting stock
+    const lowRef = db.collection('store').doc('lowVesting');
+    lowRef.get().then(doc => {
+      if (!doc.exists) lowRef.set({ stock: 10000 });
+    });
+    lowRef.onSnapshot(doc => {
+      const c = (doc.data() && doc.data().stock) || 0;
+      document.getElementById('stock-count').innerText = c;
       document.querySelectorAll('.store-card')[18]
-        .querySelector('.buy-button').disabled = count <= 0;
+        .querySelector('.buy-button').disabled = c <= 0;
+    });
+
+    // pendingRewards stock
+    const pendRef = db.collection('store').doc('pendingRewards');
+    pendRef.get().then(doc => {
+      if (!doc.exists) pendRef.set({ stock: 25000 });
+    });
+    pendRef.onSnapshot(doc => {
+      const c = (doc.data() && doc.data().stock) || 0;
+      document.getElementById('pending-stock-count').innerText = c.toLocaleString();
+      document.getElementById('pending-buy').disabled = c <= 0;
     });
 
     auth.onAuthStateChanged(user => {
@@ -438,50 +463,47 @@
         return;
       }
 
-      // updated prices & boosts arrays
+      // prices array includes all items in order + pendingRewards at the end
       const prices = [
         800,1200,1850,2000,3500,4500,
         100,500,1000,2000,
         1850,1100,20000,900,
         60,55,45,40,
         3250,1000,1500,25000,
-        1000,2000,3800
-      ];
-      const boosts = [
-        10,20,50,100,200,500,
-        0,0,0,0,
-        0,0,0,0,
-        0,0,0,0,
-        0,0,0,0,
-        0,0,0
+        1000,2000,3800,
+        /* pendingRewards */ 5500
       ];
 
-      const qtyInputs = document.querySelectorAll(".quantity");
-      const buyButtons = document.querySelectorAll(".buy-button");
+      // boosts array if any (zero for most, adjust as before)
+      const boosts = new Array(prices.length).fill(0);
 
-      buyButtons.forEach((btn,i) => {
+      const qtys    = document.querySelectorAll(".quantity");
+      const buttons = document.querySelectorAll(".buy-button");
+
+      buttons.forEach((btn,i) => {
         btn.onclick = async () => {
-          const qty = Math.max(1, Number(qtyInputs[i].value) || 1);
-          const totalPrice = prices[i] * qty;
-
-          const userRef = db.collection("users").doc(user.uid);
-          const snap    = await userRef.get();
-          const data    = snap.data()||{};
-          if ((data.balance||0) < totalPrice) {
-            return alert(`❌ Not enough balance for ${qty} item(s).`);
+          const qty = Math.max(1, Number(qtys[i].value) || 1);
+          const total = prices[i] * qty;
+          const uRef  = db.collection("users").doc(user.uid);
+          const snap  = await uRef.get();
+          const data  = snap.data()||{};
+          if ((data.balance||0) < total) {
+            return alert(`❌ Not enough balance for ${qty}× item.`);
           }
 
-          const updates = { balance: data.balance - totalPrice };
-          if (boosts[i]) updates.boost = (data.boost||0) + boosts[i] * qty;
-          if (i >= 14 && i < 18) {
-            updates.food = firebase.firestore.FieldValue.increment(qty);
-          }
+          // deduct balance
+          await uRef.update({ balance: firebase.firestore.FieldValue.increment(-total) });
+
+          // if purchasing lowVesting
           if (i === 18) {
-            await stockRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
+            await lowRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
+          }
+          // if purchasing pendingRewards
+          if (i === buttons.length - 1) {
+            await pendRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
           }
 
-          await userRef.update(updates);
-          alert(`✅ Purchased ${qty} x item(s) successfully!`);
+          alert(`✅ Purchased ${qty}× item successfully!`);
         };
       });
     });

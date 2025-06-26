@@ -47,7 +47,7 @@
       padding:0 2rem;
     }
 
-    /* ——— Marketplace‐style Card ——— */
+    /* ——— Marketplace-style Card ——— */
     .store-card {
       background:#1c1c1c;
       border-radius:10px;
@@ -155,6 +155,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 20% Reward Boost -->
     <div class="store-card">
       <img src="assets/boost-icon.jpeg" alt="20% Reward Boost"/>
@@ -165,6 +166,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 50% Reward Boost -->
     <div class="store-card">
       <img src="assets/boost-icon.jpeg" alt="50% Reward Boost"/>
@@ -175,6 +177,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 100% Reward Boost -->
     <div class="store-card">
       <img src="assets/boost-icon.jpeg" alt="100% Reward Boost"/>
@@ -185,6 +188,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 200% Reward Boost -->
     <div class="store-card">
       <img src="assets/boost-icon.jpeg" alt="200% Reward Boost"/>
@@ -195,6 +199,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 500% Reward Boost -->
     <div class="store-card">
       <img src="assets/boost-icon.jpeg" alt="500% Reward Boost"/>
@@ -216,6 +221,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 200 CAP -->
     <div class="store-card">
       <img src="assets/cap-icon.jpeg" alt="200 CAP"/>
@@ -226,6 +232,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 500 CAP -->
     <div class="store-card">
       <img src="assets/cap-icon.jpeg" alt="500 CAP"/>
@@ -236,6 +243,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- 2000 CAP -->
     <div class="store-card">
       <img src="assets/cap-icon.jpeg" alt="2000 CAP"/>
@@ -257,6 +265,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Remove Comments -->
     <div class="store-card">
       <img src="assets/remove-comments-icon.jpeg" alt="Remove Comments"/>
@@ -267,6 +276,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Reset Watches -->
     <div class="store-card">
       <img src="assets/reset-watches-icon.jpeg" alt="Reset Watches"/>
@@ -277,6 +287,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Boost Helper -->
     <div class="store-card">
       <img src="assets/boost-helper-icon.jpeg" alt="Boost Helper"/>
@@ -298,6 +309,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Circuit Crunch -->
     <div class="store-card">
       <img src="assets/Food2.jpeg" alt="Circuit Crunch"/>
@@ -308,6 +320,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Midnight Munch -->
     <div class="store-card">
       <img src="assets/Food3.jpeg" alt="Midnight Munch"/>
@@ -318,6 +331,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Neon Nibbles -->
     <div class="store-card">
       <img src="assets/Food4.jpeg" alt="Neon Nibbles"/>
@@ -342,6 +356,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Twitchboost -->
     <div class="store-card">
       <img src="assets/twitchboost.png" alt="Twitchboost"/>
@@ -352,6 +367,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- StreamBoost -->
     <div class="store-card">
       <img src="assets/streamboost.png" alt="StreamBoost"/>
@@ -362,6 +378,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Remove Vesting -->
     <div class="store-card">
       <img src="assets/removevesting.png" alt="Remove Vesting"/>
@@ -383,6 +400,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- Ultra Marathon Pass -->
     <div class="store-card">
       <img src="assets/marathonultra.png" alt="Ultra Marathon Pass"/>
@@ -393,6 +411,7 @@
         <button class="buy-button">Buy Now</button>
       </div>
     </div>
+
     <!-- AutoPilot -->
     <div class="store-card">
       <img src="assets/autopilot.png" alt="AutoPilot"/>
@@ -404,7 +423,7 @@
       </div>
     </div>
 
-    <!-- —— Pending Rewards (NEW) —— -->
+    <!-- Pending Rewards -->
     <div class="store-card">
       <img src="assets/pending.jpeg" alt="Pending Rewards"/>
       <div class="card-body">
@@ -417,6 +436,21 @@
         <button class="buy-button" id="pending-buy">Buy Now</button>
       </div>
     </div>
+
+    <!-- VIP Pending HNI -->
+    <div class="store-card">
+      <img src="assets/vippending.png" alt="Vip Pending HNI"/>
+      <div class="card-body">
+        <h2>Vip Pending HNI</h2>
+        <div class="price">$500</div>
+        <div class="stock-badge">
+          Quantity Left: <span id="vip-stock-count">5,000</span>
+        </div>
+        <input class="quantity" type="number" min="1" value="1"/>
+        <button class="buy-button" id="vip-buy">Buy Now</button>
+      </div>
+    </div>
+
   </section>
 
   <!-- Firebase SDKs -->
@@ -434,36 +468,37 @@
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // lowVesting stock
-    const lowRef = db.collection('store').doc('lowVesting');
-    lowRef.get().then(doc => {
-      if (!doc.exists) lowRef.set({ stock: 10000 });
-    });
-    lowRef.onSnapshot(doc => {
-      const c = (doc.data() && doc.data().stock) || 0;
+    // stock refs
+    const lowRef  = db.collection('store').doc('lowVesting');
+    const pendRef = db.collection('store').doc('pendingRewards');
+    const vipRef  = db.collection('store').doc('vipPendingHni');
+
+    // init stocks
+    lowRef.get().then(d=>{ if(!d.exists) lowRef.set({stock:10000}); });
+    pendRef.get().then(d=>{ if(!d.exists) pendRef.set({stock:25000}); });
+    vipRef.get().then(d=>{ if(!d.exists) vipRef.set({stock:5000}); });
+
+    // realtime updates
+    lowRef.onSnapshot(d=>{
+      const c = d.data().stock||0;
       document.getElementById('stock-count').innerText = c;
       document.querySelectorAll('.store-card')[18]
-        .querySelector('.buy-button').disabled = c <= 0;
+        .querySelector('.buy-button').disabled = c<=0;
     });
-
-    // pendingRewards stock
-    const pendRef = db.collection('store').doc('pendingRewards');
-    pendRef.get().then(doc => {
-      if (!doc.exists) pendRef.set({ stock: 25000 });
-    });
-    pendRef.onSnapshot(doc => {
-      const c = (doc.data() && doc.data().stock) || 0;
+    pendRef.onSnapshot(d=>{
+      const c = d.data().stock||0;
       document.getElementById('pending-stock-count').innerText = c.toLocaleString();
-      document.getElementById('pending-buy').disabled = c <= 0;
+      document.getElementById('pending-buy').disabled = c<=0;
+    });
+    vipRef.onSnapshot(d=>{
+      const c = d.data().stock||0;
+      document.getElementById('vip-stock-count').innerText = c.toLocaleString();
+      document.getElementById('vip-buy').disabled = c<=0;
     });
 
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        alert("Please log in to make purchases.");
-        return;
-      }
-
-      // prices array includes all items in order + pendingRewards at the end
+    auth.onAuthStateChanged(user=>{
+      if(!user){ alert("Please log in to make purchases."); return; }
+      // full prices array matching every card in order
       const prices = [
         800,1200,1850,2000,3500,4500,
         100,500,1000,2000,
@@ -471,38 +506,29 @@
         60,55,45,40,
         3250,1000,1500,25000,
         1000,2000,3800,
-        /* pendingRewards */ 5500
+        5500, // pendingRewards
+        500    // vipPendingHni
       ];
 
-      // boosts array if any (zero for most, adjust as before)
-      const boosts = new Array(prices.length).fill(0);
+      const qtyEls = document.querySelectorAll('.quantity');
+      const btnEls = document.querySelectorAll('.buy-button');
 
-      const qtys    = document.querySelectorAll(".quantity");
-      const buttons = document.querySelectorAll(".buy-button");
-
-      buttons.forEach((btn,i) => {
-        btn.onclick = async () => {
-          const qty = Math.max(1, Number(qtys[i].value) || 1);
-          const total = prices[i] * qty;
-          const uRef  = db.collection("users").doc(user.uid);
-          const snap  = await uRef.get();
-          const data  = snap.data()||{};
-          if ((data.balance||0) < total) {
-            return alert(`❌ Not enough balance for ${qty}× item.`);
-          }
-
-          // deduct balance
-          await uRef.update({ balance: firebase.firestore.FieldValue.increment(-total) });
-
-          // if purchasing lowVesting
-          if (i === 18) {
-            await lowRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
-          }
-          // if purchasing pendingRewards
-          if (i === buttons.length - 1) {
+      btnEls.forEach((btn,i)=>{
+        btn.onclick = async ()=>{
+          const qty = Math.max(1,Number(qtyEls[i].value)||1);
+          const cost = prices[i]*qty;
+          const uRef = db.collection('users').doc(user.uid);
+          const snap = await uRef.get();
+          const bal  = (snap.data().balance)||0;
+          if(bal<cost) return alert(`❌ Not enough balance for ${qty}× item.`);
+          await uRef.update({ balance: firebase.firestore.FieldValue.increment(-cost) });
+          // stock decrements
+          if(btn.id==='pending-buy'){
             await pendRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
           }
-
+          if(btn.id==='vip-buy'){
+            await vipRef.update({ stock: firebase.firestore.FieldValue.increment(-qty) });
+          }
           alert(`✅ Purchased ${qty}× item successfully!`);
         };
       });
